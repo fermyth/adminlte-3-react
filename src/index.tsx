@@ -5,6 +5,7 @@ import store from '@store/store';
 
 import './utils/i18n';
 import './index.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import * as serviceWorker from './serviceWorker';
 import { BrowserRouter } from 'react-router-dom';
 import ReactGA from 'react-ga4';

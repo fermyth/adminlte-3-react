@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { MenuItem } from '@components';
 import { Image } from '@profabric/react-components';
 import styled from 'styled-components';
-import { SidebarSearch } from '@app/components/sidebar-search/SidebarSearch';
+// import { SidebarSearch } from '@app/components/sidebar-search/SidebarSearch';
 import i18n from '@app/utils/i18n';
 import { useAppSelector } from '@app/store/store';
 
@@ -21,25 +21,23 @@ export const MENU: IMenuItem[] = [
   },
   {
     name: i18n.t('menusidebar.label.blank'),
-    icon: 'fas fa-wrench nav-icon',
-    path: '/blank',
+    icon: 'fas fa-tachometer-alt nav-icon',
+    path: '/admin/report_awh',
   },
   {
-    name: i18n.t('menusidebar.label.mainMenu'),
-    icon: 'far fa-caret-square-down nav-icon',
-    children: [
-      {
-        name: i18n.t('menusidebar.label.subMenu'),
-        icon: 'fas fa-hammer nav-icon',
-        path: '/sub-menu-1',
-      },
-
-      {
-        name: i18n.t('menusidebar.label.blank'),
-        icon: 'fas fa-cogs nav-icon',
-        path: '/sub-menu-2',
-      },
-    ],
+    name: i18n.t('menusidebar.label.driver'),
+    icon: 'fas fa-solid fa-id-card nav-icon',
+    path: 'admin/driver',
+  },
+  {
+    name: i18n.t('menusidebar.label.bla'),
+    icon: 'fas fa-solid fa-book nav-icon',
+    path: '/admin/sigaps_company',
+  },
+  {
+    name: i18n.t('menusidebar.label.laporan'),
+    icon: 'fas fa-solid fa-user-ninja nav-icon',
+    path: '/admin/sigaps_driver',
   },
 ];
 
@@ -64,21 +62,21 @@ const MenuSidebar = () => {
 
   return (
     <aside className={`main-sidebar elevation-4 ${sidebarSkin}`}>
-      <Link to="/" className="brand-link">
+      <Link to="/" className="brand-link bg-primary">
         <StyledBrandImage
-          src="img/logo.png"
+          src="https://portal.sigapdriver.com/icon_admin.png"
           alt="AdminLTE Logo"
           width={33}
           height={33}
           rounded
         />
-        <span className="brand-text font-weight-light">AdminLTE 3</span>
+        <span className="brand-text font-weight-light">SIGAP PORTAL</span>
       </Link>
       <div className="sidebar">
-        <div className="user-panel mt-3 pb-3 mb-3 d-flex">
+        <div className="user-panel mt-3 mb-3 d-flex">
           <div className="image">
             <StyledUserImage
-              src={currentUser?.photoURL}
+              src='https://portal.sigapdriver.com/icon_admin.png'
               fallbackSrc="/img/default-profile.png"
               alt="User"
               width={34}
@@ -87,14 +85,12 @@ const MenuSidebar = () => {
             />
           </div>
           <div className="info">
-            <Link to={'/profile'} className="d-block">
-              {currentUser?.email}
-            </Link>
+            <p className="d-block text-light" style={{ fontSize: '20px' }}>Keyence Indonesia</p>
           </div>
         </div>
 
         <div className="form-inline">
-          <SidebarSearch />
+          {/* <SidebarSearch /> */}
         </div>
 
         <nav className="mt-2" style={{ overflowY: 'hidden' }}>

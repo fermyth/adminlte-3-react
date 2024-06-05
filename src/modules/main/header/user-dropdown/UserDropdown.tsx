@@ -36,7 +36,7 @@ const UserDropdown = () => {
       <StyledSmallUserImage
         slot="head"
         src={currentUser?.photoURL}
-        fallbackSrc="/img/default-profile.png"
+        fallbackSrc="https://portal.sigapdriver.com/icon_admin.png"
         alt="User"
         width={25}
         height={25}
@@ -46,7 +46,7 @@ const UserDropdown = () => {
         <UserHeader className=" bg-primary">
           <StyledBigUserImage
             src={currentUser?.photoURL}
-            fallbackSrc="/img/default-profile.png"
+            fallbackSrc="https://portal.sigapdriver.com/icon_admin.png"
             alt="User"
             width={90}
             height={90}

@@ -1,178 +1,89 @@
-import React from "react";
-import { InfoBox } from "@app/components/info-box/InfoBox";
-import { ContentHeader } from "@components";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  ArcElement,
-  Title,
-  Tooltip,
-  Legend,
-} from "chart.js";
-import { Bar, Pie } from "react-chartjs-2";
+import { useEffect, useState } from "react";
+import MyChart from "./Cart";
+import axios from "axios";
 
-// Registrasi komponen yang diperlukan
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  ArcElement,
-  Title,
-  Tooltip,
-  Legend
-);
 
 
 const Dashboard = () => {
-  const data = {
-    labels: ["January", "February", "March", "April", "May", "June", "July"],
-    datasets: [
-      {
-        label: "My First dataset",
-        backgroundColor: "rgba(75,192,192,0.2)",
-        borderColor: "rgba(75,192,192,1)",
-        borderWidth: 1,
-        hoverBackgroundColor: "rgba(75,192,192,0.4)",
-        hoverBorderColor: "rgba(75,192,192,1)",
-        data: [65, 59, 80, 81, 56, 55, 40],
-      },
-    ],
+  const data = [12, 19, 3, 5, 2, 3 ];
+  const labels = ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'];
+ 
+  const [companyInfo, setCompanyInfo] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+
+  const getPortal = async () => {
+    try {
+      const response = await axios.get("http://operation.sigapps.com/api/getCompanyInfo?company_info=33");
+     console.log("hahaha",response);
+    } catch (error) {
+      console.error("Error fetching company info with fetch:", error);
+    }
+  
   };
 
-  const datapie = {
-    labels: ["January", "February", "March", "April", "May", "June", "July"],
-    datasets: [
-      {
-        label: "Monthly Sales",
-        data: [65, 59, 80, 81, 56, 55, 40],
-        backgroundColor: [
-          "rgba(255, 99, 132, 0.2)",
-          "rgba(54, 162, 235, 0.2)",
-          "rgba(255, 206, 86, 0.2)",
-          "rgba(75, 192, 192, 0.2)",
-          "rgba(153, 102, 255, 0.2)",
-          "rgba(255, 159, 64, 0.2)",
-          "rgba(255, 99, 132, 0.2)",
-        ],
-        borderColor: [
-          "rgba(255, 99, 132, 1)",
-          "rgba(54, 162, 235, 1)",
-          "rgba(255, 206, 86, 1)",
-          "rgba(75, 192, 192, 1)",
-          "rgba(153, 102, 255, 1)",
-          "rgba(255, 159, 64, 1)",
-          "rgba(255, 99, 132, 1)",
-        ],
-        borderWidth: 1,
-      },
-    ],
-  };
+  useEffect(() => {
+    getPortal();
+  }, []);
+
+  // if (isLoading) {
+  //   return <div>Loading...</div>;
+  // }
+
+  // if (!companyInfo) {
+  //   return <div>Error loading company info</div>;
+  // }
 
   return (
     <div>
-      <ContentHeader title="Dashboard" />
 
-      <section className="content">
-        <div className="container-fluid">
-          <div className="row">
-            <div className="col-lg-3 col-6">
-              <div className="small-box bg-info">
-                <div className="inner">
-                  <h3>150</h3>
-                  <p>New Orders</p>
-                </div>
-                <div className="icon">
-                  <i className="ion ion-bag" />
-                </div>
-                <a href="/" className="small-box-footer">
-                  More info <i className="fas fa-arrow-circle-right" />
-                </a>
-              </div>
+      <div className="d-flex  ">  
+        <div className="info-box w-50 d-flex flex-column mr-4 ">
+          <div className="d-flex  ml-3  ">
+            <p className=" font-weight-bold text-black text-uppercase ">
+              Nama PT
+            </p>
+            <p className="ml-4 font-weight-bold text-black text-uppercase ">
+              PT.KEYENCE INDONESIA 
+            </p>
+          </div>  
+          <div className="d-flex  ml-3 ">
+            <p className=" font-weight-bold text-black text-uppercase ">
+              Alamat
+            </p>
+            <div>
+            <p className="ml-4 font-weight-bold text-black text-uppercase ">
+            ALAMANDA OFFICE TOWER 
+            </p>
+            <p className="ml-4 font-weight-bold text-black text-uppercase ">
+            LANTAI 20 UNIT D
+            </p>
+            <p className="ml-4 font-weight-bold text-black text-uppercase ">
+            JL. TB SIMATUPANG KAV 23-24
+            </p>
+            <p className="ml-4 font-weight-bold text-black text-uppercase ">
+            CILANDAK BARAT, JAKARTA 12430
+            </p>
             </div>
-            <div className="col-lg-3 col-6">
-              <div className="small-box bg-success">
-                <div className="inner">
-                  <h3>
-                    53<sup style={{ fontSize: "20px" }}>%</sup>
-                  </h3>
-                  <p>Bounce Rate</p>
-                </div>
-                <div className="icon">
-                  <i className="ion ion-stats-bars" />
-                </div>
-                <a href="/" className="small-box-footer">
-                  More info <i className="fas fa-arrow-circle-right" />
-                </a>
-              </div>
-            </div>
-            <div className="col-lg-3 col-6">
-              <div className="small-box bg-warning">
-                <div className="inner">
-                  <h3>44</h3>
-                  <p>User Registrations</p>
-                </div>
-                <div className="icon">
-                  <i className="ion ion-person-add" />
-                </div>
-                <a href="/" className="small-box-footer">
-                  More info <i className="fas fa-arrow-circle-right" />
-                </a>
-              </div>
-            </div>
-            <div className="col-lg-3 col-6">
-              <div className="small-box bg-danger">
-                <div className="inner">
-                  <h3>65</h3>
-                  <p>Unique Visitors</p>
-                </div>
-                <div className="icon">
-                  <i className="ion ion-pie-graph" />
-                </div>
-                <a href="/" className="small-box-footer">
-                  More info <i className="fas fa-arrow-circle-right" />
-                </a>
-              </div>
-            </div>
-          </div>
-          <div className="row">
-            <div className="col-lg-3 col-6">
-              <InfoBox variant="warning" title="Messages" text="1,410" />
-            </div>
-            <div className="col-lg-9 col-12">
-              <div className="card">
-                <div className="card-header">
-                  <h3 className="card-title">Sales Data - Bar Chart</h3>
-                </div>
-                <div className="card-body">
-                  <Bar
-                    data={data}
-                    options={{
-                      maintainAspectRatio: false,
-                    }}
-                  />
-                </div>
-              </div>
-            </div>
-            <div className="col-12">
-              <div className="card">
-                <div className="card-header">
-                  <h3 className="card-title">Sales Data - Pie Chart</h3>
-                </div>
-                <div className="card-body">
-                  <Pie
-                    data={datapie}
-                    options={{
-                      maintainAspectRatio: false,
-                    }}
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
+          </div>   
+        </div> 
+        <div className="info-box w-50 mr-2 bg-black -d-flex flex-column align-items-center justify-content-center">
+          <p className=" font-weight-bold text-light text-uppercase">
+          26 Apr 2024 - 25 May 2024
+          </p>
+          <h1 className="font-weight-bold text-light text-uppercase">
+          203,816,597
+          </h1>
+          <h1 className="text-light " style={{ fontSize: "25px", fontWeight: "bold" }}>
+          Jumlah Invoice Tarakhir
+          </h1>
         </div>
-      </section>
+      </div>
+      <div className="pt-4 pb-3">
+        <h2 className="font-weight-bold text-black text-uppercase ml-3">Nilai Invoice 6 Terakhir</h2>
+      </div>
+      <MyChart data={data} labels={labels} />
+
     </div>
   );
 };

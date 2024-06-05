@@ -15,7 +15,7 @@ const Main = () => {
     (state) => state.ui.menuSidebarCollapsed
   );
   const controlSidebarCollapsed = useAppSelector(
-    (state) => state.ui.controlSidebarCollapsed
+    (state ) => state.ui.controlSidebarCollapsed
   );
   const screenSize = useAppSelector((state) => state.ui.screenSize);
   const currentUser = useAppSelector((state) => state.auth.currentUser);

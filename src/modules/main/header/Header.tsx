@@ -1,13 +1,9 @@
 import { useCallback } from 'react';
-import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
   toggleControlSidebar,
   toggleSidebarMenu,
 } from '@app/store/reducers/ui';
-import MessagesDropdown from '@app/modules/main/header/messages-dropdown/MessagesDropdown';
-import NotificationsDropdown from '@app/modules/main/header/notifications-dropdown/NotificationsDropdown';
-import LanguagesDropdown from '@app/modules/main/header/languages-dropdown/LanguagesDropdown';
 import UserDropdown from '@app/modules/main/header/user-dropdown/UserDropdown';
 import { useAppDispatch, useAppSelector } from '@app/store/store';
 
@@ -34,8 +30,10 @@ const Header = () => {
   }, [navbarVariant, headerBorder]);
 
   return (
-    <nav className={getContainerClasses()}>
-      <ul className="navbar-nav">
+    <>
+    <div className="">
+    <nav className={getContainerClasses()} style={{backgroundColor:"#e1eefa"}} >
+      <ul className="navbar-nav  d-flex align-items-center">
         <li className="nav-item">
           <button
             onClick={handleToggleMenuSidebar}
@@ -45,21 +43,15 @@ const Header = () => {
             <i className="fas fa-bars" />
           </button>
         </li>
-        <li className="nav-item d-none d-sm-inline-block">
-          <Link to="/" className="nav-link">
-            {t('header.label.home')}
-          </Link>
-        </li>
-        <li className="nav-item d-none d-sm-inline-block">
-          <Link to="/" className="nav-link">
-            {t('header.label.contact')}
-          </Link>
+        <li className="nav-item d-sm-inline-block mt-3">
+          <div className="">
+            <p className="" style={{ border : "none", padding: "5px 15px", borderRadius: "15px", backgroundColor: "white", fontWeight: "bold" }}>
+              Dashboard
+            </p>
+          </div>  
         </li>
       </ul>
       <ul className="navbar-nav ml-auto">
-        <MessagesDropdown />
-        <NotificationsDropdown />
-        <LanguagesDropdown />
         <UserDropdown />
         <li className="nav-item">
           <button
@@ -72,6 +64,8 @@ const Header = () => {
         </li>
       </ul>
     </nav>
+    </div>
+    </>
   );
 };
 

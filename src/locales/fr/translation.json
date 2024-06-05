@@ -77,7 +77,10 @@
     "label": {
       "dashboard": "Dashboard",
       "profile": "Profile",
-      "blank": "Blank",
+      "blank": "Laporan Jam Kerja",
+      "driver": "Driver",
+      "bla": "Laporan Driver",
+      "laporan": "Laporan Harian",
       "mainMenu": "Main Menu",
       "subMenu": "Sub Menu"
     }

@@ -12,7 +12,6 @@ import { setWindowSize } from '@app/store/reducers/ui';
 import ReactGA from 'react-ga4';
 
 import Dashboard from '@pages/Dashboard';
-import Blank from '@pages/Blank';
 import SubMenu from '@pages/SubMenu';
 import Profile from '@pages/profile/Profile';
 
@@ -23,6 +22,10 @@ import { setCurrentUser } from './store/reducers/auth';
 import { firebaseAuth } from './firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 import { useAppDispatch, useAppSelector } from './store/store';
+import Driver from './pages/Driver/Driver';
+import LaporanJamKerja from '@app/pages/Laporan-Jam-Kerja/Laporan_Jam_Kerja';
+import LaporanDriver from './pages/Laporan-driver/Laporan_Driver';
+import LaporanHarian from './pages/Laporan-Harian/Laporan_Harian';
 
 const { VITE_NODE_ENV } = import.meta.env;
 
@@ -90,9 +93,12 @@ const App = () => {
         </Route>
         <Route path="/" element={<PrivateRoute />}>
           <Route path="/" element={<Main />}>
-            <Route path="/sub-menu-2" element={<Blank />} />
+            <Route path="/sub-menu-2" element={<LaporanJamKerja />} />
             <Route path="/sub-menu-1" element={<SubMenu />} />
-            <Route path="/blank" element={<Blank />} />
+            <Route path="/admin/report_awh" element={<LaporanJamKerja />} />
+            <Route path="/admin/driver" element={<Driver />} />
+            <Route path="/admin/sigaps_company" element={<LaporanDriver />} />
+            <Route path="/admin/sigaps_driver" element={<LaporanHarian />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/" element={<Dashboard />} />
           </Route>

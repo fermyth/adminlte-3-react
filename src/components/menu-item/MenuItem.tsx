@@ -7,7 +7,7 @@ import { IMenuItem } from '@app/modules/main/menu-sidebar/MenuSidebar';
 const MenuItem = ({ menuItem }: { menuItem: IMenuItem }) => {
   const [t] = useTranslation();
   const [isMenuExtended, setIsMenuExtended] = useState(false);
-  const [isExpandable, setIsExpandable] = useState(false);
+  const [isExpandable, setIsExpandable] = useState(false); 
   const [isMainActive, setIsMainActive] = useState(false);
   const [isOneOfChildrenActive, setIsOneOfChildrenActive] = useState(false);
   const navigate = useNavigate();
