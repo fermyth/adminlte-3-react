@@ -86,8 +86,8 @@ const Login = () => {
       <div className="card card-outline card-primary">
         <div className="card-header text-center">
           <Link to="/" className="h1">
-            <b>Admin</b>
-            <span>LTE</span>
+            <b>PORTAL</b>
+            <span>SIGAPS</span>
           </Link>
         </div>
         <div className="card-body">
@@ -164,7 +164,7 @@ const Login = () => {
               </div>
             </div>
           </form>
-          <div className="social-auth-links text-center mt-2 mb-3">
+          {/* <div className="social-auth-links text-center mt-2 mb-3">
             <Button
               className="mb-2"
               onClick={loginByFacebook}
@@ -185,15 +185,15 @@ const Login = () => {
               <i className="fab fa-google mr-2" />
               {t('login.button.signIn.social', { what: 'Google' })}
             </Button>
-          </div>
-          <p className="mb-1">
+          </div> */}
+          {/* <p className="mb-1">
             <Link to="/forgot-password">{t('login.label.forgotPass')}</Link>
           </p>
           <p className="mb-0">
             <Link to="/register" className="text-center">
               {t('login.label.registerNew')}
             </Link>
-          </p>
+          </p> */}
         </div>
       </div>
     </div>
