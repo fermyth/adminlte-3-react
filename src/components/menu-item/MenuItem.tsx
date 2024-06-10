@@ -66,10 +66,10 @@ const MenuItem = ({ menuItem }: { menuItem: IMenuItem }) => {
         }`}
         role="link"
         onClick={handleMainMenuAction}
-        style={{ cursor: 'pointer' }}
+        style={{ cursor: 'pointer'}}
       >
-        <i className={`${menuItem.icon}`} />
-        <p>{t(menuItem.name)}</p>
+        <i className={`${menuItem.icon}`} style={{ marginRight: '10px', color: '#007bff   ',  }} />
+        <p className=" font-weight-bold" style= {{color : '333333     '}} >{t(menuItem.name)}</p>
         {isExpandable ? <i className="right fas fa-angle-left" /> : null}
       </a>
 

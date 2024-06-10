@@ -32,7 +32,7 @@ const Header = () => {
   return (
     <>
     <div className="">
-    <nav className={getContainerClasses()} style={{backgroundColor:"#e1eefa"}} >
+    <nav className={getContainerClasses()} style={{backgroundColor:"black"}} >
       <ul className="navbar-nav  d-flex align-items-center">
         <li className="nav-item">
           <button
@@ -40,26 +40,26 @@ const Header = () => {
             type="button"
             className="nav-link"
           >
-            <i className="fas fa-bars" />
+            <i className="fas fa-bars" style={{ color: "white" }} />
           </button>
         </li>
         <li className="nav-item d-sm-inline-block mt-3">
           <div className="">
-            <p className="" style={{ border : "none", padding: "5px 15px", borderRadius: "15px", backgroundColor: "white", fontWeight: "bold" }}>
-              Dashboard
+            <p className="" style={{ fontWeight: "bold", color: "white", fontSize: "20px" }}>
+              --------
             </p>
           </div>  
         </li>
       </ul>
       <ul className="navbar-nav ml-auto">
         <UserDropdown />
-        <li className="nav-item">
+        <li className="nav-item ">
           <button
             type="button"
-            className="nav-link"
+            className="nav-link "
             onClick={handleToggleControlSidebar}
           >
-            <i className="fas fa-th-large" />
+            <i className="fas fa-th-large" style={{ color: "white" }} />
           </button>
         </li>
       </ul>

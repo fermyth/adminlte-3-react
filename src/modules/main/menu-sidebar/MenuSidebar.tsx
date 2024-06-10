@@ -61,16 +61,16 @@ const MenuSidebar = () => {
   const menuChildIndent = useAppSelector((state) => state.ui.menuChildIndent);
 
   return (
-    <aside className={`main-sidebar elevation-4 ${sidebarSkin}`}>
-      <Link to="/" className="brand-link bg-primary">
+    <aside className={`main-sidebar elevation-4 `} style={{ backgroundColor: '#FFFFFF  ' }}>
+      <Link to="/" className="brand-link " style={{ backgroundColor: '#009879', padding: '25px 0' }}>
         <StyledBrandImage
-          src="https://portal.sigapdriver.com/icon_admin.png"
+          src="https://www.freepik.com/free-vector/light-bulb-rocket-design_1130795.htm#fromView=search&page=1&position=37&uuid=bee3cde6-714d-41df-99b2-d0353ae6cd72"
           alt="AdminLTE Logo"
           width={33}
           height={33}
           rounded
         />
-        <span className="brand-text font-weight-light">SIGAP PORTAL</span>
+        <span className="brand-text font-weight-light text-light">SIGAP PORTAL</span>
       </Link>
       <div className="sidebar">
         <div className="user-panel mt-3 mb-3 d-flex">
@@ -85,7 +85,7 @@ const MenuSidebar = () => {
             />
           </div>
           <div className="info">
-            <p className="d-block text-light" style={{ fontSize: '20px' }}>Keyence Indonesia</p>
+            <p className="d-block text-black font-weight-bold" style={{ fontSize: '20px' }}>Keyence Indonesia</p>
           </div>
         </div>
 

@@ -4,18 +4,15 @@ import { toggleSidebarMenu } from '@app/store/reducers/ui';
 import { addWindowClass, removeWindowClass } from '@app/utils/helpers';
 import ControlSidebar from '@app/modules/main/control-sidebar/ControlSidebar';
 import Header from '@app/modules/main/header/Header';
-import MenuSidebar from '@app/modules/main/menu-sidebar/MenuSidebar';
-import Footer from '@app/modules/main/footer/Footer';
 import { Image } from '@profabric/react-components';
 import { useAppDispatch, useAppSelector } from '@app/store/store';
+import MenuSidebar from '@app/modules/main/menu-sidebar/MenuSidebar';
+import styled from 'styled-components';
 
 const Main = () => {
   const dispatch = useAppDispatch();
   const menuSidebarCollapsed = useAppSelector(
     (state) => state.ui.menuSidebarCollapsed
-  );
-  const controlSidebarCollapsed = useAppSelector(
-    (state ) => state.ui.controlSidebarCollapsed
   );
   const screenSize = useAppSelector((state) => state.ui.screenSize);
   const currentUser = useAppSelector((state) => state.auth.currentUser);
@@ -56,13 +53,16 @@ const Main = () => {
     }
   }, [screenSize, menuSidebarCollapsed]);
 
-  useEffect(() => {
-    if (controlSidebarCollapsed) {
-      removeWindowClass('control-sidebar-slide-open');
-    } else {
-      addWindowClass('control-sidebar-slide-open');
-    }
-  }, [screenSize, controlSidebarCollapsed]);
+  const StyledMenuSidebar = styled(MenuSidebar)`
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 250px; 
+    background-color: #343a5f; 
+    z-index: 1000;
+  
+  `;
 
   const getAppTemplate = useCallback(() => {
     if (!isAppLoaded) {
@@ -81,16 +81,13 @@ const Main = () => {
     return (
       <>
         <Header />
-
-        <MenuSidebar />
-
-        <div className="content-wrapper">
+        <StyledMenuSidebar />
+        <div className="content-wrapper bg-white" >
           <div className="pt-3" />
           <section className="content">
             <Outlet />
           </section>
         </div>
-        <Footer />
         <ControlSidebar />
         <div
           id="sidebar-overlay"
@@ -106,7 +103,7 @@ const Main = () => {
     );
   }, [isAppLoaded, menuSidebarCollapsed, screenSize]);
 
-  return <div className="wrapper">{getAppTemplate()}</div>;
+  return <>{getAppTemplate()}</>;
 };
 
 export default Main;

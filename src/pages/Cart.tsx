@@ -8,17 +8,21 @@ interface ChartProps {
 
 const MyChart: React.FC<ChartProps> = ({ data, labels }) => {
   const chartRef = useRef<HTMLCanvasElement>(null);
+  const chartInstance = useRef<Chart | null>(null);
 
   useEffect(() => {
     if (chartRef.current) {
       const ctx = chartRef.current.getContext('2d');
       if (ctx) {
-        new Chart(ctx, {
+        if (chartInstance.current) {
+          chartInstance.current.destroy();
+        }
+        chartInstance.current = new Chart(ctx, {
           type: 'bar',
           data: {
             labels: labels,
             datasets: [{
-              label: '# of Votes',
+              label: 'Total Invoice Value',
               data: data,
               backgroundColor: [
                 'rgba(255, 99, 132, 0.2)',
@@ -49,6 +53,12 @@ const MyChart: React.FC<ChartProps> = ({ data, labels }) => {
         });
       }
     }
+
+    return () => {
+      if (chartInstance.current) {
+        chartInstance.current.destroy();
+      }
+    };
   }, [data, labels]);
 
   return <canvas ref={chartRef} />;

@@ -1,11 +1,10 @@
 import * as React from 'react';
-import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import CircularProgress from '@mui/material/CircularProgress';
-import { Button } from '@mui/material';
-// import SendIcon from '@mui/icons-material/Send';
+import { Box, Button } from '@mui/material';
+import SendIcon from '@mui/icons-material/Send';
 
 interface Film {
   title: string;
@@ -29,6 +28,10 @@ const style = {
   backgroundColor: 'white',
   border: '2px solid #000',
   boxShadow: 24,
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  alignItems: 'center',
   p: 4,
 };
 
@@ -93,7 +96,7 @@ export default function ModalKlaim() {
             renderInput={(params) => (
               <TextField
                 {...params}
-                label="Asynchronous"
+                label="Pilih"
                 InputProps={{
                   ...params.InputProps,
                   endAdornment: (
@@ -124,8 +127,10 @@ export default function ModalKlaim() {
             sx={{ width: 300 }}
             />
           </Box>
+          <Button variant="contained" sx={{ mt: 2 , width: 300 }}  endIcon={<SendIcon />}>
+        Send
+      </Button>
         </Box>
-         
       </Modal>
     </div>
   );
