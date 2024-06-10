@@ -39,7 +39,7 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({ data }) => {
   const allDates = Array.from(new Set(data.flatMap(item => Object.keys(item.timesheet))));
 
   return (
-    <div className="table-responsive" >
+    <div className="table-responsive">
       <style>
         {`
           .header-row {
@@ -72,10 +72,15 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({ data }) => {
             position: sticky;
             left: 0;
             background-color: #CCE2CB;
-            z-index: 2;
+            z-index: 3;
           }
-        
-          .table-bordered {
+          .sticky-header {
+            position: sticky;
+            top: 0;
+            z-index: 2;
+            background-color: #CCE2CB;
+          }
+          .table-bordered der {
             border-radius: 15px 15px 0 0;
             border-top: 1px solid #009879;
             overflow: hidden;
@@ -83,18 +88,21 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({ data }) => {
           .table tbody tr:last-of-type {
             border-bottom: 2px solid #009879;
           }
-            
         `}
       </style>
       <table className="table table-hover table-bordered">
         <thead>
           <tr className="header-row">
-            <th colSpan={allDates.length * 10 + 1} className="text-center " style={{ backgroundColor: "#009879", color: "white" }}>
-              Laporan Driver: {allDates.join(' - ')}
+            <th colSpan={1} rowSpan={2} className="der text-center sticky-column" style={{ backgroundColor: "#009879", color: "white" }}>
+              Nama
             </th>
+            {allDates.map(date => (
+              <React.Fragment key={date}>
+                <th colSpan={10} className="text-center" style={{ backgroundColor: "#009879", color: "white" }}>Tanggal {date}</th>
+              </React.Fragment>
+            ))}
           </tr>
           <tr className="sub-header-row text-center">
-            <th rowSpan={2} style={{ backgroundColor: "#009879", color: "white" }} className="sticky-column">Nama</th>
             {allDates.map(date => (
               <React.Fragment key={date}>
                 <th style={{ backgroundColor: "#009879", color: "white" }}>Jam Masuk</th>
@@ -163,3 +171,4 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({ data }) => {
 };
 
 export default DriverReportTable;
+
