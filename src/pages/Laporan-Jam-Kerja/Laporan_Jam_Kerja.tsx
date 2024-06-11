@@ -58,7 +58,6 @@ const ContentHeader = () => {
     const selectedDayIndex = startDate.getDay(); 
     const daysToAdd = selectedDayIndex === 0 ? -6 : 1 - selectedDayIndex;
     startDate.setDate(startDate.getDate() + daysToAdd);
-    
     const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     const newDates = daysOfWeek.map((day, index) => {
       const date = new Date(startDate);
@@ -167,7 +166,7 @@ const ContentHeader = () => {
                 {tableData.length > 0 ? (
                   tableData.map((driver, index) => (
                     <tr key={index}>
-                      <td className="align-middle sticky-column ">{driver.name}</td>
+                      <td className="align-middle                       sticky-column ">{driver.name}</td>
                       {driver.monday.map((time, idx) => (
                         <td key={`monday-${idx}`} className="text-center">{time}</td>
                       ))}
