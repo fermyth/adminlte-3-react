@@ -87,8 +87,8 @@ const Register = () => {
       <div className="card card-outline card-primary">
         <div className="card-header text-center">
           <Link to="/" className="h1">
-            <b>Admin</b>
-            <span>LTE</span>
+            <b>PORTAL</b>
+            <span>SIGAPS</span>
           </Link>
         </div>
         <div className="card-body">
@@ -193,7 +193,7 @@ const Register = () => {
               </div>
             </div>
           </form>
-          <div className="social-auth-links text-center">
+          {/* <div className="social-auth-links text-center">
             <Button
               className="mb-2"
               onClick={registerByFacebook}
@@ -214,7 +214,7 @@ const Register = () => {
               <i className="fab fa-google mr-2" />
               {t('login.button.signUp.social', { what: 'Google' })}
             </Button>
-          </div>
+          </div> */}
           <Link to="/login" className="text-center">
             {t('register.alreadyHave')}
           </Link>
