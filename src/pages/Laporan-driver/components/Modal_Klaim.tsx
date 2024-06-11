@@ -1,142 +1,131 @@
 import * as React from 'react';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
-import TextField from '@mui/material/TextField';
-import Autocomplete from '@mui/material/Autocomplete';
-import CircularProgress from '@mui/material/CircularProgress';
-import { Box, Button } from '@mui/material';
-import SendIcon from '@mui/icons-material/Send';
-
-interface Film {
-  title: string;
-  year: number;
-}
-
-function sleep(duration: number): Promise<void> {
-  return new Promise<void>((resolve) => {
-    setTimeout(() => {
-      resolve();
-    }, duration);
-  });
-}
+import axios from 'axios'; // Import axios for making HTTP requests
 
 const style = {
   position: 'absolute' as 'absolute',
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 400,
-  backgroundColor: 'white',
+  width: 800,
+  bgcolor: 'background.paper',
   border: '2px solid #000',
   boxShadow: 24,
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'center',
-  alignItems: 'center',
   p: 4,
 };
 
 export default function ModalKlaim() {
-  const [modalOpen, setModalOpen] = React.useState(false);
-  const handleOpen = () => setModalOpen(true);
-  const handleClose = () => setModalOpen(false);
-  const [autoCompleteOpen, setAutoCompleteOpen] = React.useState(false);
-  const [options, setOptions] = React.useState<readonly Film[]>([]);
-  const loading = autoCompleteOpen && options.length === 0;
+  const [open, setOpen] = React.useState(false);
+  const [claimsData, setClaimsData] = React.useState([]); // State to store claims data
 
-  React.useEffect(() => {
-    let active = true;
-
-    if (!loading) {
-      return undefined;
+  const fetchClaimsData = async () => {
+    try {
+      const response = await axios.get('https://backend.sigapdriver.com/api/pengeluaran/294/2024-06-05');
+      setClaimsData(response.data.data);
+    } catch (error) {
+      console.error('Error fetching claims data:', error);
     }
+  };
 
-    (async () => {
-      await sleep(1000); 
+  const handleOpen = () => {
+    setOpen(true);
+    fetchClaimsData(); 
+  };
 
-      if (active) {
-        setOptions([...topFilms]);
-      }
-    })();
+  const handleClose = () => setOpen(false);
 
-    return () => {
-      active = false;
-    };
-  }, [loading]);
-
-  React.useEffect(() => {
-    if (!autoCompleteOpen) {
-      setOptions([]);
-    }
-  }, [autoCompleteOpen]);
+  const modalContent = (
+    <Box sx={style}>
+      <Typography id="modal-modal-title" variant="h6" component="h2">
+        <Box>
+          Nama :
+        </Box>
+        <Box>
+          Total :
+        </Box>
+      </Typography>
+      <div className="table-responsive">
+        <style>
+          {`
+            .table {
+              width: 100%;
+              background-color: #f8f9fa;
+              border-collapse: collapse;
+              border-radius: 0.25em;
+              overflow: hidden;
+              box-shadow: 0 0 0 1px #e0e0e0 inset;
+              border-radius: 0.5em;
+            }
+            .table th,
+            .table td {
+              padding: 0.5em 1em;
+              border-bottom: 1px solid #e0e0e0;
+              border-right: 1px solid #e0e0e0;
+              text-align: left;
+              vertical-align: middle;
+            }
+            .table th {
+              background-color: #009879;
+              color: white;
+              font-weight: bold;
+            }
+            .table td {
+              background-color: #ffffff;
+            }
+          `}
+        </style>
+        <table className="table">
+          <thead>
+            <tr>
+              <th>Nominal</th>
+              <th>Foto</th>
+              <th>Keterangan</th>
+            </tr>
+          </thead>
+          <tbody>
+            {/* Render claims data here */}
+            {claimsData.map((claim, index) => (
+              <tr key={index}>
+                <td>{claim.nominal}</td>
+                <td><img src={claim.foto} alt="Claim" style={{ width: '50px', height: '50px' }} /></td>
+                <td>{claim.keterangan}</td>
+              </tr>
+            ))}
+            <tr>
+              <td>Rp 10.000.000</td>
+              <td><img src="link_gambar_modal_1.jpg" alt="Modal 1" style={{ width: '50px', height: '50px' }} /></td>
+              <td>Modal awal yang disiapkan untuk memulai usaha.</td>
+            </tr>
+            <tr>
+              <td>Rp 20.000.000</td>
+              <td><img src="link_gambar_modal_2.jpg" alt="Modal 2" style={{ width: '50px', height: '50px' }} /></td>
+              <td>Penambahan modal untuk ekspansi dan pengembangan usaha.</td>
+            </tr>
+            <tr>
+              <td>Rp 15.000.000</td>
+              <td><img src="link_gambar_modal_3.jpg" alt="Modal 3" style={{ width: '50px', height: '50px' }} /></td>
+              <td>Investasi untuk pembelian peralatan dan perlengkapan usaha.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </Box>
+  );
 
   return (
     <div>
-      <button onClick={handleOpen} className="btn btn-custom btn-sm">Klaim</button>
+      <Button onClick={handleOpen}>Klaim</Button>
       <Modal
-        open={modalOpen}
+        open={open}
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={style}>
-          <Autocomplete
-            id="asynchronous-demo"
-            sx={{ width: 300 }}
-            open={autoCompleteOpen}
-            onOpen={() => {
-              setAutoCompleteOpen(true);
-            }}
-            onClose={() => {
-              setAutoCompleteOpen(false);
-            }}
-            isOptionEqualToValue={(option, value) => option.title === value.title}
-            getOptionLabel={(option) => option.title}
-            options={options}
-            loading={loading}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                label="Pilih"
-                InputProps={{
-                  ...params.InputProps,
-                  endAdornment: (
-                    <React.Fragment>
-                      {loading ? <CircularProgress color="inherit" size={20} /> : null}
-                      {params.InputProps.endAdornment}
-                    </React.Fragment>
-                  ),
-                }}
-              />
-            )}
-          />
-          <Box mt={2} >
-       <TextField
-          id="outlined-multiline-flexible"
-          label="Nominal"
-          multiline
-          maxRows={4}
-          sx={{ width: 300 }}
-          />
-          </Box>
-          <Box mt={2} >
-        <TextField
-            id="outlined-multiline-flexible"
-            label="Deskripsi"
-            multiline
-            maxRows={4}
-            sx={{ width: 300 }}
-            />
-          </Box>
-          <Button variant="contained" sx={{ mt: 2 , width: 300 }}  endIcon={<SendIcon />}>
-        Send
-      </Button>
-        </Box>
+        {modalContent}
       </Modal>
     </div>
   );
 }
-
-const topFilms: readonly Film[] = [
-  { title: 'The Shawshank Redemption', year: 1994 },
-  { title: 'The Godfather', year: 1972 },
-];

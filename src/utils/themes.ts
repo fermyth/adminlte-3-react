@@ -28,7 +28,7 @@ export const NAVBAR_DARK_VARIANTS: Array<Option> = [
 ];
 
 export const SIDEBAR_DARK_SKINS: Array<Option> = [
-  { value: 'sidebar-dark-primary', label: 'Primary' },
+  { value: 'sidebar-dark-danger', label: 'Primary' },
   { value: 'sidebar-dark-warning', label: 'Warning' },
   { value: 'sidebar-dark-info', label: 'Info' },
   { value: 'sidebar-dark-danger', label: 'Danger' },
