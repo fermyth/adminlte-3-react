@@ -59,7 +59,7 @@ const Main = () => {
     left: 0;
     height: 100%;
     width: 250px; 
-    background-color: #343a5f; 
+    background-color: #red; 
     z-index: 1000;
   
   `;

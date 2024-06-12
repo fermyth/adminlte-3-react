@@ -103,11 +103,7 @@ const ContentHeader = () => {
       <div className="table-responsive" style={{ overflowX: 'auto' }}>
         <style>
           {`
-            .table-container {
-              border-radius: 15px 15px 0 0;
-              border-top: 1px solid #009879;
-              border-top: none;
-            }
+         
             .table-bordered th,
             .table-bordered td {
               border: 1px solid #ccc !important;
@@ -125,9 +121,12 @@ const ContentHeader = () => {
             .table tbody tr:last-of-type {
               border-bottom: 2px solid #009879;
             }
-            .table-bordered der {
-              border-radius: 15px 15px 0 0;
-              border-top: 1px solid #009879;
+            .sticky-column  {
+              border-radius: 15px 0 0 0;
+              overflow: hidden;
+            }
+            .sticky  {
+              border-radius: 0 15px  0 0;
               overflow: hidden;
             }
             .table tbody tr:last-of-type {
@@ -148,9 +147,9 @@ const ContentHeader = () => {
             <table className="table table-bordered" style={{ minWidth: '150%' }}>
               <thead>
                 <tr>
-                  <th rowSpan={2} className="der align-middle text-center sticky-column" style={{ width: '200px' }}>Nama</th>
+                  <th rowSpan={2} className="align-middle text-center sticky-column" style={{ width: '200px' }}>Nama</th>
                   <th colSpan={14} className="text-center">Work Hours</th>
-                  <th colSpan={2} className="text-center">Total Hours</th>
+                  <th colSpan={2} className="text-center sticky">Total Hours</th>
                 </tr>
                 <tr>
                   {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map((day, index) => (

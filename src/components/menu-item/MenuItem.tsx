@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import { NavLink, useNavigate, useLocation, Location } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { IMenuItem } from '@app/modules/main/menu-sidebar/MenuSidebar';
-import './style.css'
 
 const MenuItem = ({ menuItem }: { menuItem: IMenuItem }) => {
   const [t] = useTranslation();
@@ -61,16 +60,27 @@ const MenuItem = ({ menuItem }: { menuItem: IMenuItem }) => {
 
   return (
     <li className={`nav-item${isMenuExtended ? ' menu-open' : ''}`}>
+     <style>
+      {`
+      .nav-item .active {
+        background-color: #009879;
+        color: white;
+        border-radius: 7px;
+      }
+      .nav-item .active p  {
+        color: white;
+      }
+
+      `}
+      </style>
       <a
-        className={`nav-link${
-          isMainActive || isOneOfChildrenActive ? ' active' : ''
-        }`}
+         className={isMainActive ? 'd-flex text-black ml-3 active' : 'd-flex text-black ml-3'}
         role="link"
         onClick={handleMainMenuAction}
         style={{ cursor: 'pointer',}}
       >
-        <i className={`${menuItem.icon}`} style={{ marginRight: '10px', color: '#007bff   ',  }} />
-        <p className=" font-weight-bold" style= {{color : '333333     '}} >{t(menuItem.name)}</p>
+        <i className={`${menuItem.icon}`} style={{ marginRight: '10px', color: '#009879', marginTop : '13px', marginLeft : '15px'  }} />
+        <p className=" font-weight-bold" style= {{color : '333333' , marginTop : '10px'}} >{t(menuItem.name)}</p>
         {isExpandable ? <i className="right fas fa-angle-left" /> : null}
       </a>
 
