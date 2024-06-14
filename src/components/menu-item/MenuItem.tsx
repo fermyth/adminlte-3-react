@@ -60,44 +60,50 @@ const MenuItem = ({ menuItem }: { menuItem: IMenuItem }) => {
 
   return (
     <li className={`nav-item${isMenuExtended ? ' menu-open' : ''}`}>
-     <style>
-      {`
-      .nav-item .active {
-        background-color: #009879;
-        color: white;
-        border-radius: 7px;
+  <style>
+    {`
+    .nav-item .active {
+      background-color: #009879;
+      color: white;
+      border-radius: 9px;
+    }
+    .nav-item .active p {
+      color: white;
+    }
+      .nav-item p{
+       color: #333333,
       }
-      .nav-item .active p  {
-        color: white;
-      }
+    .nav-item .active i {
+      color: white;
+    }
+    .nav-item i {
+      color: #009879;
+    }
+    `}
+  </style>
+  <a
+    className={isMainActive ? 'd-flex text-black ml-3 active' : 'd-flex text-black ml-3'}
+    role="link"
+    onClick={handleMainMenuAction}
+    style={{ cursor: 'pointer' }}
+  >
+    <i className={`${menuItem.icon}`} style={{ marginRight: '20px', marginTop: '15px' }} />
+    <p className="font-weight-bold" style={{ marginTop: '14px' }}>{t(menuItem.name)}</p>
+    {isExpandable ? <i className="right fas fa-angle-left" /> : null}
+  </a>
 
-      `}
-      </style>
-      <a
-         className={isMainActive ? 'd-flex text-black ml-3 active' : 'd-flex text-black ml-3'}
-        role="link"
-        onClick={handleMainMenuAction}
-        style={{ cursor: 'pointer',}}
-      >
-        <i className={`${menuItem.icon}`} style={{ marginRight: '10px', color: '#009879', marginTop : '13px', marginLeft : '15px'  }} />
-        <p className=" font-weight-bold" style= {{color : '333333' , marginTop : '10px'}} >{t(menuItem.name)}</p>
-        {isExpandable ? <i className="right fas fa-angle-left" /> : null}
-      </a>
+  {isExpandable && menuItem && menuItem.children && menuItem.children.map((item) => (
+    <ul key={item.name} className="nav nav-treeview">
+      <li className="nav-item">
+        <NavLink className="nav-link" to={`${item.path}`}>
+          <i className={`${item.icon}`} />
+          <p>{t(item.name)}</p>
+        </NavLink>
+      </li>
+    </ul>
+  ))}
+</li>
 
-      {isExpandable &&
-        menuItem &&
-        menuItem.children &&
-        menuItem.children.map((item) => (
-          <ul key={item.name} className="nav nav-treeview">
-            <li className="nav-item">
-              <NavLink className="nav-link" to={`${item.path}`}>
-                <i className={`${item.icon}`} />
-                <p>{t(item.name)}</p>
-              </NavLink>
-            </li>
-          </ul>
-        ))}
-    </li>
   );
 };
 

@@ -69,7 +69,7 @@ const Driver: React.FC = () => {
     } else if (age > 55) {
       return 'red';
     } else {
-      return 'transparent';
+      return 'black';  
     }
   };
 
@@ -77,7 +77,7 @@ const Driver: React.FC = () => {
     setCurrentPage(pageNumber);
   };
 
-  const itemsPerPage = 5;
+  const itemsPerPage = 10;
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
@@ -115,6 +115,39 @@ const Driver: React.FC = () => {
           #driver50 {
             background-color: #009879;
           }
+              .pagination {
+            display: flex;
+            justify-content: center;
+            padding-bottom: 20px;
+          }
+
+          .page-item .page-link {
+            color: #009879;
+            border: 1px solid #009879;
+          }
+
+          .page-item.active .page-link {
+            background-color: #009879;
+            border-color: #009879;
+          }
+          .info-box {
+            background-color: #009879;
+            border-radius: 10px;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            width: 100%;
+            margin: 10px;
+            transition: transform 0.3s ease-in-out;
+          }
+
+          .info-box:hover {
+            transform: scale(1.05);
+          }
+
+          .table-bordered th, .table-bordered td {
+            vertical-align: middle;
+          } 
         `}
       </style>
       <div className="d-flex mt-3 ml-4 mb-3 ">
@@ -159,20 +192,29 @@ const Driver: React.FC = () => {
                     <td className="text-center align-middle nowrap">{item.namaLengkap}</td>
                     <td className="text-center align-middle nowrap" style={{ fontWeight: 'bold', color: getAgeColor(item.usia) }}>{item.usia}</td>
                     <td className="text-center align-middle nowrap">{item.handphone}</td>
-                    <td className="align-middle nowrap">{item.alamatLengkap}</td>
+                    <td className="align-middle ">{item.alamatLengkap}</td>
                   </tr>
                 ))
               )}
             </tbody>
           </table>
           {/* Pagination */}
-          <div className="d-flex justify-content-center pb-4">
+          <div className="pagination">
             <Pagination>
               <Pagination.Prev onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} />
-              <Pagination.Item>{currentPage}</Pagination.Item>
+              {[...Array(Math.ceil(data.length / itemsPerPage)).keys()].map(number => (
+                <Pagination.Item
+                  key={number + 1}
+                  active={number + 1 === currentPage}
+                  onClick={() => handlePageChange(number + 1)}
+                >
+                  {number + 1}
+                </Pagination.Item>
+              ))}
               <Pagination.Next onClick={() => handlePageChange(currentPage + 1)} disabled={indexOfLastItem >= data.length} />
             </Pagination>
           </div>
+
         </div>
       </div>
     </>

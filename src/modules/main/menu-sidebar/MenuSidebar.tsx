@@ -62,7 +62,7 @@ const MenuSidebar = () => {
 
   return (
     <aside className={`main-sidebar elevation-4 `} style={{ backgroundColor: '#FFFFFF  ' }}>
-      <Link to="/" className="brand-link " style={{ backgroundColor: '#009879', padding: '25px 0' }}>
+      <Link to="/" className="brand-link " style={{ backgroundColor: '#009879', padding: '25px 13px' }}>
         <StyledBrandImage
           src="https://www.freepik.com/free-vector/light-bulb-rocket-design_1130795.htm#fromView=search&page=1&position=37&uuid=bee3cde6-714d-41df-99b2-d0353ae6cd72"
           alt="AdminLTE Logo"
@@ -70,10 +70,10 @@ const MenuSidebar = () => {
           height={33}
           rounded
         />
-        <span className="brand-text font-weight-light text-light">SIGAP PORTAL</span>
+        <span className="brand-text font-weight-bold text-light">SIGAP PORTAL</span>
       </Link>
       <div className="sidebar">
-        <div className="user-panel mt-3 mb-3 d-flex">
+        <div className="user-panel mt-3 mb-1 d-flex">
           <div className="image">
             <StyledUserImage
               src='https://portal.sigapdriver.com/icon_admin.png'
@@ -89,11 +89,11 @@ const MenuSidebar = () => {
           </div>
         </div>
 
-        <div className="form-inline">
-          {/* <SidebarSearch /> */}
-        </div>
+        {/* <div className="form-inline">
+          <SidebarSearch />
+        </div> */}
 
-        <nav className="mt-2" style={{ overflowY: 'hidden' }}>
+        <nav className="" style={{ overflowY: 'hidden' }}>
           <ul
             className={`nav nav-pills nav-sidebar flex-column${
               menuItemFlat ? ' nav-flat' : ''

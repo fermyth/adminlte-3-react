@@ -7,7 +7,6 @@ import * as Yup from 'yup';
 import { setWindowClass } from '@app/utils/helpers';
 import { Form, InputGroup } from 'react-bootstrap';
 import { Checkbox } from '@profabric/react-components';
-
 import { setCurrentUser } from '@app/store/reducers/auth';
 import { Button } from '@app/styles/common';
 import { registerWithEmail, signInByGoogle } from '@app/services/auth';
@@ -28,7 +27,7 @@ const Register = () => {
       const result = await registerWithEmail(email, password);
       dispatch(setCurrentUser(result?.user as any));
       toast.success('Registration is success');
-      navigate('/');
+      navigate('/login');
     } catch (error: any) {
       toast.error(error.message || 'Failed');
       setAuthLoading(false);
