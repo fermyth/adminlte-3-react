@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import Main from '@modules/main/Main';
@@ -73,7 +73,11 @@ const App = () => {
   }, [location]);
 
   if (isAppLoading) {
-    return <p>Loading</p>;
+    return (
+      <div style={styles.spinnerContainer}>
+        <div style={styles.spinner}></div>
+      </div>
+    );
   }
 
   return (
@@ -116,6 +120,27 @@ const App = () => {
       />
     </>
   );
+};
+
+const styles = {
+  spinnerContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '100vh',
+  },
+  spinner: {
+    border: '8px solid rgba(0, 0, 0, 0.1)',
+    borderTop: '8px solid #009879',
+    borderRadius: '50%',
+    width: '40px',
+    height: '40px',
+    animation: 'spin 1s linear infinite',
+  },
+  '@keyframes spin': {
+    '0%': { transform: 'rotate(0deg)' },
+    '100%': { transform: 'rotate(360deg)' },
+  },
 };
 
 export default App;
