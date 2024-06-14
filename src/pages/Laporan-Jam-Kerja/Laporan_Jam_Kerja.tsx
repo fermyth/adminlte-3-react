@@ -95,15 +95,23 @@ const ContentHeader = () => {
               onChange={(e) => setStartDate(e.target.value)}
               placeholder="Pilih Tanggal"
             />
-            <button type="submit" className="btn btn-primary ml-3">Pilih Tanggal</button>
-            <button type="button" className="btn btn-success ml-3" onClick={() => alert('Export to Excel feature is not implemented yet.')}>Export Excel</button>
+            <button type="submit" className="btn btn-dark ml-3">Pilih Tanggal</button>
+            <button type="button" className="btn btn-success custom-btn ml-3" onClick={() => alert('Export to Excel feature is not implemented yet.')}>Export Excel</button>
           </div>
         </form>
       </div>
       <div className="table-responsive" style={{ overflowX: 'auto' }}>
         <style>
           {`
-         
+             .btn-success.custom-btn {
+        background-color: #009879;
+        border-color: #009879;
+    }
+
+    .btn-success.custom-btn:hover {
+        background-color: #007f66; /* Warna yang sedikit lebih gelap untuk efek hover */
+        border-color: #007f66;
+    }
             .table-bordered th,
             .table-bordered td {
               border: 1px solid #ccc !important;

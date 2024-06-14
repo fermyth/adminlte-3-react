@@ -93,6 +93,21 @@ function LaporanDriver() {
 
   return (
     <>
+    <style>
+      {
+        `
+         .btn-success.custom-btn {
+        background-color: #009879;
+        border-color: #009879;
+    }
+
+    .btn-success.custom-btn:hover {
+        background-color: #007f66; /* Warna yang sedikit lebih gelap untuk efek hover */
+        border-color: #007f66;
+    } 
+        `
+      }
+    </style>
       <div className="container">
         <h1 className="text-center mb-4 font-weight-bold text-uppercase mb-3 mt-5">LAPORAN DRIVER</h1>
         <form onSubmit={handleSubmit} className='d-flex justify-content-center align-items-center'>
@@ -133,8 +148,8 @@ function LaporanDriver() {
             </div>
           </div>
           <div className="d-grid gap-2 d-md-flex justify-content-md-end ml-3 mt-3">
-            <button type="submit" className="btn btn-primary me-md-2">Filter</button>
-            <button type="button" className="btn btn-success" onClick={handleDownloadExcel}>Download Excel</button>
+            <button type="submit" className="btn btn-dark me-md-2">Filter</button>
+            <button type="button" className="btn btn-success custom-btn" onClick={handleDownloadExcel}>Download Excel</button>
           </div>
         </form>
       </div>
