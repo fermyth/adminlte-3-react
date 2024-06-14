@@ -1,6 +1,11 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import MyChart from "./Cart"; 
+import MyChart from "./Cart";
+import { useAppSelector } from '@app/store/store';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { EventEmitter } from 'events';
+
+const eventEmitter = new EventEmitter();
 
 interface InvoiceData {
   id: number;
@@ -8,7 +13,7 @@ interface InvoiceData {
   grand_total_value_inv_A: string;
   grand_total_value_inv_B: string;
 }
-
+ 
 interface CompanyInfo {
   id: number;
   company_name: string;
@@ -25,15 +30,57 @@ interface CompanyInfo {
   type_ppn: number;
   type_pph23: number;
 }
-
+ 
 const Dashboard = () => {
   const [companyInfo, setCompanyInfo] = useState<CompanyInfo | null>(null);
   const [invoiceData, setInvoiceData] = useState<InvoiceData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const currentUser = useAppSelector((state) => state.auth);
+  const [idCompany, setIdCompany] = useState<string | null>(null);
+  const [isDataChanged, setIsDataChanged] = useState(false);
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const id_company = await AsyncStorage.getItem('id_company');
+        if (id_company) {
+          console.log('Company ID:', id_company);
+          setIdCompany(id_company);
+        } else {
+          console.log('id_company is not available');
+          setIdCompany(null);
+        }
+      } catch (error) {
+        console.error('Error fetching id_company from AsyncStorage:', error);
+      } finally {
+        setIsLoading(false);  
+      }
+    };
 
-  const getPortal = async () => {
+    fetchData();
+
+    const handleStorageChange = () => {
+      fetchData();
+    };
+
+    eventEmitter.on('storageChange', handleStorageChange);
+
+    return () => {
+      eventEmitter.off('storageChange', handleStorageChange);
+    };
+  }, [currentUser]);
+  
+
+  useEffect(() => {
+    if (idCompany) {
+      getPortal(idCompany);
+      getInvoices(idCompany);
+    }
+  }, [idCompany]);
+
+  const getPortal = async (id_company: string) => {
     try {
-      const response = await axios.get("https://backend.sigapdriver.com/api/getCompanyInfo/33");
+      const response = await axios.get(`https://backend.sigapdriver.com/api/getCompanyInfo/${id_company}`);
       setCompanyInfo(response.data.data);
       setIsLoading(false);
     } catch (error) {
@@ -42,9 +89,9 @@ const Dashboard = () => {
     }
   };
 
-  const getInvoices = async () => {
+  const getInvoices = async (id_company: string) => {
     try {
-      const response = await axios.get("https://backend.sigapdriver.com/api/getLatestInvoice/33");
+      const response = await axios.get(`https://backend.sigapdriver.com/api/getLatestInvoice/${id_company}`);
       if (response.data.success) {
         setInvoiceData(response.data.data);
       }
@@ -53,11 +100,6 @@ const Dashboard = () => {
     }
   };
 
-  useEffect(() => {
-    getPortal();
-    getInvoices();
-  }, []);
-
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -65,9 +107,7 @@ const Dashboard = () => {
   if (!companyInfo) {
     return <div>Error loading company info</div>;
   }
-
   const addressLines = companyInfo.company_address.split('<p>').filter(line => line).map(line => line.replace('</p>', '').replace('\r\n', ''));
-
   const labels = invoiceData.map(invoice => invoice.periode);
   const data = invoiceData.map(invoice => 
     parseFloat(invoice.grand_total_value_inv_A) + parseFloat(invoice.grand_total_value_inv_B)
@@ -101,7 +141,7 @@ const Dashboard = () => {
                 </p>
               ))}
             </div>
-          </div>   
+          </div>    
         </div> 
         <div className="info-box w-50 mr-2 bg-black d-flex flex-column align-items-center justify-content-center">
           <p className="font-weight-bold text-light text-uppercase">

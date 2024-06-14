@@ -1,5 +1,6 @@
 import { FirebaseOptions, initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
+import { getFirestore } from 'firebase/firestore';
  
 // const { VITE_FIREBASE_CONFIG } = import.meta.env;
  
@@ -14,8 +15,14 @@ const firebaseConfig={
   storageBucket: "sigaps-c1531.appspot.com",
   messagingSenderId: "1052603529584",
   appId: "1:1052603529584:web:be3f6594b6428c12f677b5"};
+
+
+  const app = initializeApp(firebaseConfig);
+
+export const firebaseAuth = getAuth(app);
+export const db = getFirestore(app);
  
-const app = initializeApp(firebaseConfig);
+// const app = initializeApp(firebaseConfig);
 // const analytics = getAnalytics(app);
  
-export const firebaseAuth = getAuth(app);
+// export const firebaseAuth = getAuth(app);

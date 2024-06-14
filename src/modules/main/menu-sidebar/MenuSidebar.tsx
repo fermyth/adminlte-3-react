@@ -39,6 +39,11 @@ export const MENU: IMenuItem[] = [
     icon: 'fas fa-solid fa-user-ninja nav-icon',
     path: '/admin/sigaps_driver',
   },
+  {
+    name: i18n.t('menusidebar.label.service'),
+    icon: 'fas fa-solid fa-book nav-icon',
+    path: '/admin/service_report',
+  },
 ];
 
 const StyledBrandImage = styled(Image)`
@@ -55,7 +60,6 @@ const StyledUserImage = styled(Image)`
 `;
 
 const MenuSidebar = () => {
-  const currentUser = useAppSelector((state) => state.auth.currentUser);
   const sidebarSkin = useAppSelector((state) => state.ui.sidebarSkin);
   const menuItemFlat = useAppSelector((state) => state.ui.menuItemFlat);
   const menuChildIndent = useAppSelector((state) => state.ui.menuChildIndent);
