@@ -33,13 +33,7 @@ const ContentHeader: React.FC = () => {
       setIsLoading(true);
 
       try {
-        let tgl_sekarang;
-        if (!tglselect) {
-          tgl_sekarang = new Date().toISOString().split("T")[0];
-        } else {
-          tgl_sekarang = tglselect;
-        }
-      //  alert(tgl_sekarang)
+        let tgl_sekarang = tglselect || startDate;
 
         const userData = await AsyncStorage.getItem("userData");
 
@@ -57,7 +51,15 @@ const ContentHeader: React.FC = () => {
       }
     };
 
+    const today = new Date();
+    let formattedDate = startDate;
+    if (!startDate) {
+      formattedDate = today.toISOString().split("T")[0]; // Format: YYYY-MM-DD
+      setStartDate(formattedDate);
+    }
+
     fetchData();
+    calculateDates(formattedDate);
 
     const handleStorageChange = () => {
       fetchData();
@@ -68,7 +70,7 @@ const ContentHeader: React.FC = () => {
     return () => {
       eventEmitter.off("storageChange", handleStorageChange);
     };
-  }, [tglselect]);
+  }, [tglselect, startDate]); // tambahkan startDate sebagai dependensi
 
   const fetchDatagreatday = async (start: string, idCompany: string) => {
     try {
@@ -322,7 +324,7 @@ const ContentHeader: React.FC = () => {
                       className="align-middle sticky-column text-center"
                       colSpan={17}
                     >
-                      Data tidak tersedia
+                      Memuat data...
                     </td>
                   </tr>
                 )}
