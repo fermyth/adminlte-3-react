@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Link } from 'react-router-dom';
 import { MenuItem } from '@components';
 import { Image } from '@profabric/react-components';
@@ -5,6 +6,10 @@ import styled from 'styled-components';
 // import { SidebarSearch } from '@app/components/sidebar-search/SidebarSearch';
 import i18n from '@app/utils/i18n';
 import { useAppSelector } from '@app/store/store';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { EventEmitter } from 'events';
+
+const eventEmitter = new EventEmitter();
 
 export interface IMenuItem {
   name: string;
@@ -63,6 +68,42 @@ const MenuSidebar = () => {
   const sidebarSkin = useAppSelector((state) => state.ui.sidebarSkin);
   const menuItemFlat = useAppSelector((state) => state.ui.menuItemFlat);
   const menuChildIndent = useAppSelector((state) => state.ui.menuChildIndent);
+  const currentUser = useAppSelector((state) => state.auth);
+  const [namapt, setnamapt] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const userData = await AsyncStorage.getItem('userData');
+        if (userData) { 
+          let getstorage = JSON.parse(userData);
+          console.log('userData:', getstorage);
+          setnamapt(getstorage.nama_perusahaan);
+        } else {
+          console.log('id_company is not available');
+          setnamapt(null);
+        }
+      } catch (error) {
+        console.error('Error fetching id_company from AsyncStorage:', error);
+      } finally {
+        setIsLoading(false);  
+      }
+    };
+
+    fetchData();
+
+    const handleStorageChange = () => {
+      fetchData();
+    };
+
+    eventEmitter.on('storageChange', handleStorageChange);
+
+    return () => {
+      eventEmitter.off('storageChange', handleStorageChange);
+    };
+  }, [currentUser]);
 
   return (
     <aside className={`main-sidebar elevation-4 `} style={{ backgroundColor: '#FFFFFF  ' }}>
@@ -89,7 +130,7 @@ const MenuSidebar = () => {
             />
           </div>
           <div className="info">
-            <p className="d-block text-black font-weight-bold" style={{ fontSize: '20px' }}>Keyence Indonesia</p>
+            <p className="d-block text-black font-weight-bold" style={{ fontSize: '20px' }}>{namapt}</p>
           </div>
         </div>
 

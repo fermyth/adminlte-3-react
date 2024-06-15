@@ -46,7 +46,7 @@ const Header = () => {
         <li className="nav-item d-sm-inline-block mt-3">
           <div className="">
             <p className="" style={{ fontWeight: "bold", color: "white", fontSize: "20px" }}>
-              --------
+              
             </p>
           </div>  
         </li>

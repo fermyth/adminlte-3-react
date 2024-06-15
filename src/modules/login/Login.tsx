@@ -46,11 +46,11 @@ const Login = () => {
  
       if (userDocSnap.exists()) {
         const userData = userDocSnap.data();
-        const id_company = userData.id_company;
+       // const id_company = userData;
+        console.log('cekuserData',userData)
+        dispatch(setCompanyId(userData));
  
-        dispatch(setCompanyId(id_company));
- 
-        await AsyncStorage.setItem("id_company", id_company);
+        await AsyncStorage.setItem("userData", JSON.stringify(userData));
       } else {
         console.log("User document not found");
       }

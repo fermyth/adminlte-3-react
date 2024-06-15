@@ -42,10 +42,11 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const id_company = await AsyncStorage.getItem('id_company');
-        if (id_company) {
-          console.log('Company ID:', id_company);
-          setIdCompany(id_company);
+        const userData = await AsyncStorage.getItem('userData');
+        if (userData) { 
+          let getstorage = JSON.parse(userData);
+          console.log('userData:', getstorage);
+          setIdCompany(getstorage.id_company);
         } else {
           console.log('id_company is not available');
           setIdCompany(null);
@@ -100,12 +101,12 @@ const Dashboard = () => {
     }
   };
 
-  if (isLoading) {
+  if (isLoading || !idCompany) {
     return <div>Loading...</div>;
   }
 
-  if (!companyInfo) {
-    return <div>Error loading company info</div>;
+  if (!companyInfo || !idCompany) {
+    return <div>Loading...</div>;
   }
   const addressLines = companyInfo.company_address.split('<p>').filter(line => line).map(line => line.replace('</p>', '').replace('\r\n', ''));
   const labels = invoiceData.map(invoice => invoice.periode);
