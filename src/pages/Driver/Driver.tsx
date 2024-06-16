@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Pagination } from 'react-bootstrap';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface DriverApiResponse {
   photo: string;
@@ -23,16 +24,32 @@ const Driver: React.FC = () => {
   const [data, setData] = useState<DriverData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [idCompany, setIdCompany] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [jumlahDriver50TahunKeAtas, setJumlahDriver50TahunKeAtas] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
+      setIsLoading(true);
       try {
-        const response = await axios.get('https://backend.sigapdriver.com/api/getAllDriver?company_info=33');
+
+        // get id company 
+        const userData = await AsyncStorage.getItem("userData");
+
+        if (userData) {
+          const getstorage = JSON.parse(userData);
+          setIdCompany(getstorage.id_company);
+        } else {
+          setIdCompany(null);
+        }
+
+        const response = await axios.get(`https://backend.sigapdriver.com/api/getAllDriver?company_info=${idCompany}`);
+
+        console.log(response);
+
         const drivers: DriverData[] = response.data.map((driver: DriverApiResponse, index: number): DriverData => ({
           no: index + 1,
-          foto: driver.photo || 'https://portal.sigapdriver.com/icon_admin.png',
+          foto: viewPhoto(driver.photo) || 'https://portal.sigapdriver.com/icon_admin.png',
           namaLengkap: driver.full_name,
           usia: calculateAge(driver.birthdate),
           handphone: driver.phone_number,
@@ -51,6 +68,16 @@ const Driver: React.FC = () => {
 
     fetchData();
   }, [currentPage]);
+
+  const viewPhoto = (photoAddress: string) => {
+    let finalPhoto = null;
+      if(photoAddress.indexOf("ttp")<0){
+        finalPhoto = 'http://operation.sigapps.com/'+photoAddress;
+      }else{
+        finalPhoto = photoAddress;
+      }
+      return finalPhoto;
+  }
 
   const calculateAge = (birthdate: string) => {
     const today = new Date();
@@ -77,7 +104,7 @@ const Driver: React.FC = () => {
     setCurrentPage(pageNumber);
   };
 
-  const itemsPerPage = 10;
+  const itemsPerPage = 20;
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
