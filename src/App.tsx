@@ -60,7 +60,7 @@ const CarAnimation: React.FC = () => {
 
   return (
     <div style={{ position: 'relative', overflow: 'hidden', width: '100%', height: '100vh' }}>
-      <motion.img
+      {/* <motion.img
         src="https://img.freepik.com/free-vector/modern-urban-adventure-suv-vehicle-illustration_1344-200.jpg?t=st=1718352949~exp=1718356549~hmac=60b96437281d838f7d123677a17db16977bb2a8fed66ab66f60ad425730f84cc&w=740"
         alt="Car"
         style={{
@@ -73,7 +73,7 @@ const CarAnimation: React.FC = () => {
         animate={{ left: 'calc(100vw + 200px)' }} 
         transition={{ duration: 4, ease: 'linear', repeat: Infinity }}
       />
-      <audio ref={audioRef} src={carSoundUrl} loop />
+      <audio ref={audioRef} src={carSoundUrl} loop /> */}
     </div>
   );
 };
