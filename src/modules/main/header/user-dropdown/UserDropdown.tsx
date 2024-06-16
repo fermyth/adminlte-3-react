@@ -43,7 +43,7 @@ const UserDropdown = () => {
         rounded
       />
       <div slot="body">
-        <UserHeader className=" bg-primary">
+        <UserHeader style={{backgroundColor:"rgb(0, 152, 121)"}}>
           <StyledBigUserImage
             src={currentUser?.photoURL}
             fallbackSrc="https://portal.sigapdriver.com/icon_admin.png"
@@ -52,7 +52,7 @@ const UserDropdown = () => {
             height={90}
             rounded
           />
-          <p>
+          <p style={{color:"white"}}>
             {currentUser?.email}
             <small>
               <span>Member since </span>
@@ -66,7 +66,7 @@ const UserDropdown = () => {
             </small>
           </p>
         </UserHeader>
-        <UserBody>
+        {/* <UserBody>
           <div className="row">
             <div className="col-4 text-center">
               <Link to="/">{t('header.user.followers')}</Link>
@@ -78,15 +78,15 @@ const UserDropdown = () => {
               <Link to="/">{t('header.user.friends')}</Link>
             </div>
           </div>
-        </UserBody>
+        </UserBody> */}
         <UserFooter>
-          <button
+          {/* <button
             type="button"
             className="btn btn-default btn-flat"
             onClick={navigateToProfile}
           >
             {t('header.user.profile')}
-          </button>
+          </button> */}
           <button
             type="button"
             className="btn btn-default btn-flat float-right"
