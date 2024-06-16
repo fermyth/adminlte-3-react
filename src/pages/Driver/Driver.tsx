@@ -28,25 +28,21 @@ const Driver: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [jumlahDriver50TahunKeAtas, setJumlahDriver50TahunKeAtas] = useState(0);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      try {
+  useEffect(()=>{
+    // const checkData = () => {
+      console.log("open the use effect");
+    // }
+  }, []);
 
-        // get id company 
-        const userData = await AsyncStorage.getItem("userData");
-
-        if (userData) {
-          const getstorage = JSON.parse(userData);
-          setIdCompany(getstorage.id_company);
-        } else {
-          setIdCompany(null);
-        }
-
+  useEffect(()=>{
+    // const checkData = () => {
+      console.log("open the use effect after ID");
+      const getDataDriver = async () => {
+        setIsLoading(true);
         const response = await axios.get(`https://backend.sigapdriver.com/api/getAllDriver?company_info=${idCompany}`);
 
         console.log(response);
-
+      if(response){
         const drivers: DriverData[] = response.data.map((driver: DriverApiResponse, index: number): DriverData => ({
           no: index + 1,
           foto: viewPhoto(driver.photo) || 'https://portal.sigapdriver.com/icon_admin.png',
@@ -60,6 +56,30 @@ const Driver: React.FC = () => {
         setData(drivers);
         setJumlahDriver50TahunKeAtas(jumlahDriver50TahunKeAtas);
         setIsLoading(false);
+      }
+      }
+      
+      getDataDriver();  
+    // }
+  }, [idCompany]);
+
+  useEffect(() => {
+    
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+
+        // get id company 
+        const userData = await AsyncStorage.getItem("userData");
+
+        if (userData) {
+          const getstorage = JSON.parse(userData);
+          setIdCompany(getstorage.id_company);
+        } else {
+          setIdCompany(null);
+        }
+        setIsLoading(false);
+        
       } catch (error) {
         setError('Failed to fetch data');
         setIsLoading(false);
@@ -68,6 +88,8 @@ const Driver: React.FC = () => {
 
     fetchData();
   }, [currentPage]);
+
+
 
   const viewPhoto = (photoAddress: string) => {
     let finalPhoto = null;
