@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { Pagination } from 'react-bootstrap';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { Pagination } from "react-bootstrap";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface DriverApiResponse {
@@ -28,48 +28,56 @@ const Driver: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [jumlahDriver50TahunKeAtas, setJumlahDriver50TahunKeAtas] = useState(0);
 
-  useEffect(()=>{
-    // const checkData = () => {
-      console.log("open the use effect");
-    // }
+  useEffect(() => {
+    console.log("open the use effect");
   }, []);
 
-  useEffect(()=>{
-    // const checkData = () => {
-      console.log("open the use effect after ID");
-      const getDataDriver = async () => {
-        setIsLoading(true);
-        const response = await axios.get(`https://backend.sigapdriver.com/api/getAllDriver?company_info=${idCompany}`);
+  useEffect(() => {
+    console.log("open the use effect after ID");
+    const getDataDriver = async () => {
+      setIsLoading(true);
+      try {
+        const response = await axios.get(
+          `https://backend.sigapdriver.com/api/getAllDriver?company_info=${idCompany}`
+        );
 
-        console.log(response);
-      if(response){
-        const drivers: DriverData[] = response.data.map((driver: DriverApiResponse, index: number): DriverData => ({
-          no: index + 1,
-          foto: viewPhoto(driver.photo) || 'https://portal.sigapdriver.com/icon_admin.png',
-          namaLengkap: driver.full_name,
-          usia: calculateAge(driver.birthdate),
-          handphone: driver.phone_number,
-          alamatLengkap: driver.ktp_address || '',
-        }));
-        const jumlahDriver50TahunKeAtas = drivers.filter(driver => driver.usia >= 50).length;
+        if (response) {
+          const drivers: DriverData[] = response.data.map(
+            (driver: DriverApiResponse, index: number): DriverData => ({
+              no: index + 1,
+              foto:
+                viewPhoto(driver.photo) ||
+                "https://portal.sigapdriver.com/icon_admin.png",
+              namaLengkap: driver.full_name,
+              usia: calculateAge(driver.birthdate),
+              handphone: driver.phone_number,
+              alamatLengkap: driver.ktp_address || "",
+            })
+          );
+          const jumlahDriver50TahunKeAtas = drivers.filter(
+            (driver) => driver.usia >= 50
+          ).length;
 
-        setData(drivers);
-        setJumlahDriver50TahunKeAtas(jumlahDriver50TahunKeAtas);
+          setData(drivers);
+          setJumlahDriver50TahunKeAtas(jumlahDriver50TahunKeAtas);
+          setIsLoading(false);
+        }
+      } catch (err) {
+        setError("Failed to fetch data");
         setIsLoading(false);
       }
-      }
-      
-      getDataDriver();  
-    // }
+    };
+
+    if (idCompany) {
+      getDataDriver();
+    }
   }, [idCompany]);
 
   useEffect(() => {
-    
     const fetchData = async () => {
       setIsLoading(true);
       try {
-
-        // get id company 
+        // get id company
         const userData = await AsyncStorage.getItem("userData");
 
         if (userData) {
@@ -79,9 +87,8 @@ const Driver: React.FC = () => {
           setIdCompany(null);
         }
         setIsLoading(false);
-        
       } catch (error) {
-        setError('Failed to fetch data');
+        setError("Failed to fetch data");
         setIsLoading(false);
       }
     };
@@ -89,17 +96,17 @@ const Driver: React.FC = () => {
     fetchData();
   }, [currentPage]);
 
+  const viewPhoto = (photoAddress: string | null) => {
+    if (photoAddress === null || typeof photoAddress !== "string") {
+      return "https://portal.sigapdriver.com/icon_admin.png";
+    }
 
-
-  const viewPhoto = (photoAddress: string) => {
-    let finalPhoto = null;
-      if(photoAddress.indexOf("ttp")<0){
-        finalPhoto = 'http://operation.sigapps.com/'+photoAddress;
-      }else{
-        finalPhoto = photoAddress;
-      }
-      return finalPhoto;
-  }
+    if (photoAddress.indexOf("ttp") < 0) {
+      return "http://operation.sigapps.com/" + photoAddress;
+    } else {
+      return photoAddress;
+    }
+  };
 
   const calculateAge = (birthdate: string) => {
     const today = new Date();
@@ -114,11 +121,11 @@ const Driver: React.FC = () => {
 
   const getAgeColor = (age: number) => {
     if (age >= 50 && age <= 55) {
-      return 'orange';
+      return "orange";
     } else if (age > 55) {
-      return 'red';
+      return "red";
     } else {
-      return 'black';  
+      return "black";
     }
   };
 
@@ -200,13 +207,27 @@ const Driver: React.FC = () => {
         `}
       </style>
       <div className="d-flex mt-3 ml-4 mb-3 ">
-        <div className="info-box d-flex flex-column align-items-center hover py-4" id="driver">
-          <h1 className="font-weight-bold text-uppercase text-light">{data.length}</h1>
-          <p className="font-weight-bold text-uppercase text-light">Jumlah Driver</p>
+        <div
+          className="info-box d-flex flex-column align-items-center hover py-4"
+          id="driver"
+        >
+          <h1 className="font-weight-bold text-uppercase text-light">
+            {data.length}
+          </h1>
+          <p className="font-weight-bold text-uppercase text-light">
+            Jumlah Driver
+          </p>
         </div>
-        <div className="info-box d-flex flex-column align-items-center hover py-4 ml-4" id="driver50">
-          <h1 className="text-light font-weight-bold text-uppercase">{jumlahDriver50TahunKeAtas}</h1>
-          <p className="text-light font-weight-bold text-uppercase">Jumlah Driver 50 Tahun Ke atas</p>
+        <div
+          className="info-box d-flex flex-column align-items-center hover py-4 ml-4"
+          id="driver50"
+        >
+          <h1 className="text-light font-weight-bold text-uppercase">
+            {jumlahDriver50TahunKeAtas}
+          </h1>
+          <p className="text-light font-weight-bold text-uppercase">
+            Jumlah Driver 50 Tahun Ke atas
+          </p>
         </div>
       </div>
       <div className="container">
@@ -214,33 +235,92 @@ const Driver: React.FC = () => {
           <table className="table table-bordered">
             <thead>
               <tr>
-                <th scope="col" className="text-center align-middle nowrap" style={{ backgroundColor: "#009879", color: "white" }}>No</th>
-                <th scope="col" className="text-center align-middle nowrap" style={{ backgroundColor: "#009879", color: "white" }}>Foto</th>
-                <th scope="col" className="text-center align-middle nowrap" style={{ backgroundColor: "#009879", color: "white" }}>Nama Lengkap</th>
-                <th scope="col" className="text-center align-middle nowrap" style={{ backgroundColor: "#009879", color: "white" }}>Usia</th>
-                <th scope="col" className="text-center align-middle nowrap" style={{ backgroundColor: "#009879", color: "white" }}>Nomor Handphone</th>
-                <th scope="col" className="text-center align-middle nowrap" style={{ backgroundColor: "#009879", color: "white" }}>Alamat Lengkap</th>
+                <th
+                  scope="col"
+                  className="text-center align-middle nowrap"
+                  style={{ backgroundColor: "#009879", color: "white" }}
+                >
+                  No
+                </th>
+                <th
+                  scope="col"
+                  className="text-center align-middle nowrap"
+                  style={{ backgroundColor: "#009879", color: "white" }}
+                >
+                  Foto
+                </th>
+                <th
+                  scope="col"
+                  className="text-center align-middle nowrap"
+                  style={{ backgroundColor: "#009879", color: "white" }}
+                >
+                  Nama Lengkap
+                </th>
+                <th
+                  scope="col"
+                  className="text-center align-middle nowrap"
+                  style={{ backgroundColor: "#009879", color: "white" }}
+                >
+                  Usia
+                </th>
+                <th
+                  scope="col"
+                  className="text-center align-middle nowrap"
+                  style={{ backgroundColor: "#009879", color: "white" }}
+                >
+                  Nomor Handphone
+                </th>
+                <th
+                  scope="col"
+                  className="text-center align-middle nowrap"
+                  style={{ backgroundColor: "#009879", color: "white" }}
+                >
+                  Alamat Lengkap
+                </th>
               </tr>
             </thead>
             <tbody>
               {isLoading ? (
                 <tr>
-                  <td colSpan={6} className="text-center">Loading...</td>
+                  <td colSpan={6} className="text-center">
+                    Loading...
+                  </td>
                 </tr>
               ) : error ? (
                 <tr>
-                  <td colSpan={6} className="text-center">{error}</td>
+                  <td colSpan={6} className="text-center">
+                    {error}
+                  </td>
                 </tr>
               ) : (
                 currentItems.map((item) => (
                   <tr key={item.no}>
-                    <th scope="row" className="text-center align-middle nowrap">{item.no}</th>
+                    <th scope="row" className="text-center align-middle nowrap">
+                      {item.no}
+                    </th>
                     <td className="text-center align-middle nowrap">
-                      <img src={item.foto} alt="Foto" className="img-fluid" style={{ width: '50px', height: '50px' }} />
+                      <img
+                        src={item.foto}
+                        alt="Foto"
+                        className="img-fluid"
+                        style={{ width: "50px", height: "50px" }}
+                      />
                     </td>
-                    <td className="text-center align-middle nowrap">{item.namaLengkap}</td>
-                    <td className="text-center align-middle nowrap" style={{ fontWeight: 'bold', color: getAgeColor(item.usia) }}>{item.usia}</td>
-                    <td className="text-center align-middle nowrap">{item.handphone}</td>
+                    <td className="text-center align-middle nowrap">
+                      {item.namaLengkap}
+                    </td>
+                    <td
+                      className="text-center align-middle nowrap"
+                      style={{
+                        fontWeight: "bold",
+                        color: getAgeColor(item.usia),
+                      }}
+                    >
+                      {item.usia}
+                    </td>
+                    <td className="text-center align-middle nowrap">
+                      {item.handphone}
+                    </td>
                     <td className="align-middle ">{item.alamatLengkap}</td>
                   </tr>
                 ))
@@ -250,20 +330,27 @@ const Driver: React.FC = () => {
           {/* Pagination */}
           <div className="pagination">
             <Pagination>
-              <Pagination.Prev onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} />
-              {[...Array(Math.ceil(data.length / itemsPerPage)).keys()].map(number => (
-                <Pagination.Item
-                  key={number + 1}
-                  active={number + 1 === currentPage}
-                  onClick={() => handlePageChange(number + 1)}
-                >
-                  {number + 1}
-                </Pagination.Item>
-              ))}
-              <Pagination.Next onClick={() => handlePageChange(currentPage + 1)} disabled={indexOfLastItem >= data.length} />
+              <Pagination.Prev
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage === 1}
+              />
+              {[...Array(Math.ceil(data.length / itemsPerPage)).keys()].map(
+                (number) => (
+                  <Pagination.Item
+                    key={number + 1}
+                    active={number + 1 === currentPage}
+                    onClick={() => handlePageChange(number + 1)}
+                  >
+                    {number + 1}
+                  </Pagination.Item>
+                )
+              )}
+              <Pagination.Next
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={indexOfLastItem >= data.length}
+              />
             </Pagination>
           </div>
-
         </div>
       </div>
     </>

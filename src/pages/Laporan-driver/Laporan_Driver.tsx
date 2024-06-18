@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import DriverReportTable from './components/Driver_Report_Table';
-import * as XLSX from 'xlsx';
+import React, { useState } from "react";
+import axios from "axios";
+import DriverReportTable from "./components/Driver_Report_Table";
+import * as XLSX from "xlsx";
 
-const apiUrl = 'https://backend.sigapdriver.com/api/greatday_sigaps_keyence_json';
+const apiUrl =
+  "https://backend.sigapdriver.com/api/greatday_sigaps_keyence_json";
 
 interface Timesheet {
   jam_masuk: string;
@@ -40,9 +41,9 @@ interface ApiResponse {
 }
 
 function LaporanDriver() {
-  const [type, setType] = useState<string>('');
-  const [startDate, setStartDate] = useState<string>('');
-  const [endDate, setEndDate] = useState<string>('');
+  const [type, setType] = useState<string>("");
+  const [startDate, setStartDate] = useState<string>("");
+  const [endDate, setEndDate] = useState<string>("");
   const [data, setData] = useState<DriverData[]>([]);
   const [isFiltered, setIsFiltered] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -53,7 +54,9 @@ function LaporanDriver() {
     setType(event.target.value);
   };
 
-  const handleStartDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleStartDateChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     setStartDate(event.target.value);
   };
 
@@ -68,8 +71,9 @@ function LaporanDriver() {
     setIsNoData(false);
 
     const url = `${apiUrl}/${startDate}/${endDate}/0/33`;
-    axios.get<ApiResponse>(url)
-      .then(response => {
+    axios
+      .get<ApiResponse>(url)
+      .then((response) => {
         setData(response.data.data);
         setIsFiltered(true);
         setIsLoading(false);
@@ -77,8 +81,8 @@ function LaporanDriver() {
           setIsNoData(true);
         }
       })
-      .catch(error => {
-        console.error('Error fetching data:', error);
+      .catch((error) => {
+        console.error("Error fetching data:", error);
         setIsError(true);
         setIsLoading(false);
       });
@@ -87,15 +91,14 @@ function LaporanDriver() {
   const handleDownloadExcel = () => {
     const worksheet = XLSX.utils.json_to_sheet(data);
     const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'Laporan');
-    XLSX.writeFile(workbook, 'Laporan_Driver.xlsx');
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Laporan");
+    XLSX.writeFile(workbook, "Laporan_Driver.xlsx");
   };
 
   return (
     <>
-    <style>
-      {
-        `
+      <style>
+        {`
          .btn-success.custom-btn {
         background-color: #009879;
         border-color: #009879;
@@ -105,42 +108,58 @@ function LaporanDriver() {
         background-color: #007f66; /* Warna yang sedikit lebih gelap untuk efek hover */
         border-color: #007f66;
     } 
-        `
-      }
-    </style>
-      <div className="container">
-        <h1 className="text-center mb-4 font-weight-bold text-uppercase mb-3 mt-5">LAPORAN DRIVER</h1>
-        <form onSubmit={handleSubmit} className='d-flex justify-content-center align-items-center'>
+        `}
+      </style>
+      <div className="containern mb-5">
+        <h1 className="text-center mb-4 font-weight-bold text-uppercase mb-3 mt-5">
+          LAPORAN DRIVER
+        </h1>
+        <form
+          onSubmit={handleSubmit}
+          className="d-flex justify-content-center align-items-center"
+        >
           <div className="row mb-3">
             <div className="col-md-4">
-              <label htmlFor="type" className="form-label">Type</label>
-              <select className="form-select" id="type" value={type} style={{ width: '200px' }} onChange={handleTypeChange}>
+              <label htmlFor="type" className="form-label">
+                Type
+              </label>
+              <select
+                className="form-select"
+                id="type"
+                value={type}
+                style={{ width: "200px" }}
+                onChange={handleTypeChange}
+              >
                 <option value="">Pilih</option>
                 <option value="daily">Job Holder</option>
                 <option value="weekly">Temporary</option>
               </select>
             </div>
             <div className="col-md-4">
-              <label htmlFor="startDate" className="form-label">Dari Tanggal</label>
+              <label htmlFor="startDate" className="form-label">
+                Dari Tanggal
+              </label>
               <div className="input-group">
                 <input
                   type="date"
                   className="form-control"
                   id="startDate"
-                  style={{ width: '200px' }}
+                  style={{ width: "200px" }}
                   value={startDate}
                   onChange={handleStartDateChange}
                 />
               </div>
             </div>
             <div className="col-md-4">
-              <label htmlFor="endDate" className="form-label">Sampai Tanggal</label>
+              <label htmlFor="endDate" className="form-label">
+                Sampai Tanggal
+              </label>
               <div className="input-group">
                 <input
                   type="date"
                   className="form-control"
                   id="endDate"
-                  style={{ width: '200px' }}
+                  style={{ width: "200px" }}
                   value={endDate}
                   onChange={handleEndDateChange}
                 />
@@ -148,13 +167,21 @@ function LaporanDriver() {
             </div>
           </div>
           <div className="d-grid gap-2 d-md-flex justify-content-md-end ml-3 mt-3">
-            <button type="submit" className="btn btn-dark me-md-2">Filter</button>
-            <button type="button" className="btn btn-success custom-btn" onClick={handleDownloadExcel}>Download Excel</button>
+            <button type="submit" className="btn btn-dark me-md-2">
+              Filter
+            </button>
+            <button
+              type="button"
+              className="btn btn-success custom-btn"
+              onClick={handleDownloadExcel}
+            >
+              Download Excel
+            </button>
           </div>
         </form>
       </div>
-      <div className="info-box mt-5">
-        {isLoading && <p>Sedang memuat...</p>}
+      {isLoading && <p>Sedang memuat...</p>}
+      <div className="info-box ">
         {isError && <p>Terjadi kesalahan saat mengambil data.</p>}
         {isNoData && <p>Tidak ada data yang ditemukan.</p>}
         {isFiltered && <DriverReportTable data={data} />}

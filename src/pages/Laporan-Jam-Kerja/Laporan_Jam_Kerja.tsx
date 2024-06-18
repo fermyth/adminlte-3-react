@@ -298,7 +298,7 @@ const ContentHeader: React.FC = () => {
                         "saturday",
                         "sunday",
                       ].flatMap((day) =>
-                        driver[day].map((time, idx) => (
+                        driver[day].map((time: any, idx: any) => (
                           <td key={`${day}-${idx}`} className="text-center">
                             {formatTime(time)}
                           </td>

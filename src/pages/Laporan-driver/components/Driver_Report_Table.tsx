@@ -1,6 +1,7 @@
-import React from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import ModalKlaim from './Modal_Klaim';
+import React from "react";
+import "bootstrap/dist/css/bootstrap.min.css";
+import ModalKlaim from "./Modal_Klaim";
+import ModalActivity from "./Modal_Activity";
 
 interface Timesheet {
   jam_masuk: string;
@@ -36,7 +37,9 @@ interface DriverReportTableProps {
 }
 
 const DriverReportTable: React.FC<DriverReportTableProps> = ({ data }) => {
-  const allDates = Array.from(new Set(data.flatMap(item => Object.keys(item.timesheet))));
+  const allDates = Array.from(
+    new Set(data.flatMap((item) => Object.keys(item.timesheet)))
+  );
 
   return (
     <div className="table-responsive">
@@ -93,28 +96,59 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({ data }) => {
       <table className="table table-hover table-bordered">
         <thead>
           <tr className="header-row">
-            <th colSpan={1} rowSpan={2} className="der text-center sticky-column" style={{ backgroundColor: "#009879", color: "white" }}>
+            <th
+              colSpan={1}
+              rowSpan={2}
+              className="der text-center sticky-column"
+              style={{ backgroundColor: "#009879", color: "white" }}
+            >
               Nama
             </th>
-            {allDates.map(date => (
+            {allDates.map((date) => (
               <React.Fragment key={date}>
-                <th colSpan={10} className="text-center" style={{ backgroundColor: "#009879", color: "white" }}>Tanggal {date}</th>
+                <th
+                  colSpan={10}
+                  className="text-center"
+                  style={{ backgroundColor: "#009879", color: "white" }}
+                >
+                  Tanggal {date}
+                </th>
               </React.Fragment>
             ))}
           </tr>
           <tr className="sub-header-row text-center">
-            {allDates.map(date => (
+            {allDates.map((date) => (
               <React.Fragment key={date}>
-                <th style={{ backgroundColor: "#009879", color: "white" }}>Jam Masuk</th>
-                <th style={{ backgroundColor: "#009879", color: "white" }}>Jam Keluar</th>
-                <th style={{ backgroundColor: "#009879", color: "white" }}>KM IN</th>
-                <th style={{ backgroundColor: "#009879", color: "white" }}>KM OUT</th>
-                <th style={{ backgroundColor: "#009879", color: "white" }}>LK PP</th>
-                <th style={{ backgroundColor: "#009879", color: "white" }}>LK INAP</th>
-                <th style={{ backgroundColor: "#009879", color: "white" }}>Images Km In</th>
-                <th style={{ backgroundColor: "#009879", color: "white" }}>Images Km Out</th>
-                <th style={{ backgroundColor: "#009879", color: "white" }}>Nama Users</th>
-                <th style={{ backgroundColor: "#009879", color: "white" }}>Laporan Opsi Detail</th>
+                <th style={{ backgroundColor: "#009879", color: "white" }}>
+                  Jam Masuk
+                </th>
+                <th style={{ backgroundColor: "#009879", color: "white" }}>
+                  Jam Keluar
+                </th>
+                <th style={{ backgroundColor: "#009879", color: "white" }}>
+                  KM IN
+                </th>
+                <th style={{ backgroundColor: "#009879", color: "white" }}>
+                  KM OUT
+                </th>
+                <th style={{ backgroundColor: "#009879", color: "white" }}>
+                  LK PP
+                </th>
+                <th style={{ backgroundColor: "#009879", color: "white" }}>
+                  LK INAP
+                </th>
+                <th style={{ backgroundColor: "#009879", color: "white" }}>
+                  Images Km In
+                </th>
+                <th style={{ backgroundColor: "#009879", color: "white" }}>
+                  Images Km Out
+                </th>
+                <th style={{ backgroundColor: "#009879", color: "white" }}>
+                  Nama Users
+                </th>
+                <th style={{ backgroundColor: "#009879", color: "white" }}>
+                  Laporan Opsi Detail
+                </th>
               </React.Fragment>
             ))}
           </tr>
@@ -123,7 +157,7 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({ data }) => {
           {data.map((item, index) => (
             <tr key={index}>
               <td className="sticky-column">{item.nama}</td>
-              {allDates.map(date => {
+              {allDates.map((date) => {
                 const timesheet = item.timesheet[date];
                 return timesheet ? (
                   <React.Fragment key={date}>
@@ -134,16 +168,26 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({ data }) => {
                     <td className="text-center">{timesheet.lk_pp}</td>
                     <td className="text-center">{timesheet.lk_inap}</td>
                     <td className="text-center">
-                      <img src={`https://backend.sigapdriver.com/storage/${timesheet.km_in_images || ''}`} alt="Km In" className="img-fluid" style={{ width: '50px', height: '50px' }} />
+                      <img
+                        src={`https://backend.sigapdriver.com/storage/${timesheet.km_in_images || ""}`}
+                        alt="Km In"
+                        className="img-fluid"
+                        style={{ width: "50px", height: "50px" }}
+                      />
                     </td>
                     <td className="text-center">
-                      <img src={`https://backend.sigapdriver.com/storage/${timesheet.km_out_images || ''}`} alt="Km Out" className="img-fluid" style={{ width: '50px', height: '50px' }} />
+                      <img
+                        src={`https://backend.sigapdriver.com/storage/${timesheet.km_out_images || ""}`}
+                        alt="Km Out"
+                        className="img-fluid"
+                        style={{ width: "50px", height: "50px" }}
+                      />
                     </td>
                     <td className="text-center">{timesheet.name_users}</td>
                     <td className="text-center">
                       <div className="d-flex justify-content-center gap-2">
                         <ModalKlaim />
-                        <button className="btn btn-custom btn-sm">Activity</button>
+                        <ModalActivity />
                       </div>
                     </td>
                   </React.Fragment>
@@ -171,4 +215,3 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({ data }) => {
 };
 
 export default DriverReportTable;
-
