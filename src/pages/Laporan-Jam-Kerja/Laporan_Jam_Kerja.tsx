@@ -1,7 +1,8 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { EventEmitter } from "events";
+import * as XLSX from "xlsx";
 
 const eventEmitter = new EventEmitter();
 
@@ -24,37 +25,41 @@ const ContentHeader: React.FC = () => {
   const [startDate, setStartDate] = useState<string>("");
   const [dates, setDates] = useState<string[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [idCompany, setIdCompany] = useState<string | null>(null);
   const [tglselect, settglselect] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
+  const fetchData = useCallback(async () => {
+    setLoading(true);
+    try {
+      const selectedDate = tglselect || startDate;
 
-      try {
-        let tgl_sekarang = tglselect || startDate;
-
-        const userData = await AsyncStorage.getItem("userData");
-
-        if (userData) {
-          const getstorage = JSON.parse(userData);
-          setIdCompany(getstorage.id_company);
-          await fetchDatagreatday(tgl_sekarang, getstorage.id_company);
-        } else {
-          setIdCompany(null);
-        }
-      } catch (error) {
-        console.error("Error fetching id_company from AsyncStorage:", error);
-      } finally {
-        setIsLoading(false);
+      if (!selectedDate) {
+        console.error("Selected date is invalid");
+        setLoading(false);
+        return;
       }
-    };
 
+      const userData = await AsyncStorage.getItem("userData");
+
+      if (userData) {
+        const getstorage = JSON.parse(userData);
+        setIdCompany(getstorage.id_company);
+        await fetchDatagreatday(selectedDate, getstorage.id_company);
+      } else {
+        setIdCompany(null);
+      }
+    } catch (error) {
+      console.error("Error fetching id_company from AsyncStorage:", error);
+    } finally {
+      setLoading(false);
+    }
+  }, [tglselect, startDate]);
+
+  useEffect(() => {
     const today = new Date();
     let formattedDate = startDate;
     if (!startDate) {
-      formattedDate = today.toISOString().split("T")[0]; // Format: YYYY-MM-DD
+      formattedDate = today.toISOString().split("T")[0];
       setStartDate(formattedDate);
     }
 
@@ -70,7 +75,7 @@ const ContentHeader: React.FC = () => {
     return () => {
       eventEmitter.off("storageChange", handleStorageChange);
     };
-  }, [tglselect, startDate]); // tambahkan startDate sebagai dependensi
+  }, [tglselect, startDate, fetchData]);
 
   const fetchDatagreatday = async (start: string, idCompany: string) => {
     try {
@@ -125,14 +130,14 @@ const ContentHeader: React.FC = () => {
 
   const formatTime = (time: string) => {
     if (typeof time !== "string" || !time.trim()) {
-      return "-"; // Return default value if time is not a non-empty string
+      return "-";
     }
 
     const [hours, minutes] = time.split(":");
     if (hours && minutes) {
       return `${hours.padStart(2, "0")}:${minutes.padStart(2, "0")}`;
     } else {
-      return "-"; // Return default value if time format is incorrect
+      return "-";
     }
   };
 
@@ -157,12 +162,19 @@ const ContentHeader: React.FC = () => {
     calculateDates(startDate);
   };
 
+  const handleDownloadExcel = () => {
+    const worksheet = XLSX.utils.json_to_sheet(tableData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Laporan Jam Kerja");
+    XLSX.writeFile(workbook, "Laporan_Jam_Kerja.xlsx");
+  };
+
   return (
     <section className="containers" style={{ padding: 20 }}>
       <div className="text-center mb-4">
         <h1 className="font-weight-bold text-uppercase">Laporan Jam Kerja</h1>
         <p className="font-weight-bold text-uppercase">
-          {startDate ? `${dates[0]} - ${dates[6]}` : "Pilih Tanggal"}
+          {startDate ? `  ${dates[0]}  - ${dates[6]} ` : "Pilih Tanggal"}
         </p>
       </div>
       <div className="mb-5 w-100 form-wrapper">
@@ -179,15 +191,13 @@ const ContentHeader: React.FC = () => {
               onChange={(e) => setStartDate(e.target.value)}
               placeholder="Pilih Tanggal"
             />
-            <button type="submit" className="btn btn-dark ml-3">
+            {/* <button type="submit" className="btn btn-dark ml-3">
               Pilih Tanggal
-            </button>
+            </button> */}
             <button
               type="button"
               className="btn btn-success custom-btn ml-3"
-              onClick={() =>
-                alert("Export to Excel feature is not implemented yet.")
-              }
+              onClick={handleDownloadExcel}
             >
               Export Excel
             </button>
@@ -244,7 +254,7 @@ const ContentHeader: React.FC = () => {
           `}
         </style>
         <div className="table-container">
-          {isLoading ? (
+          {loading ? (
             <div className="text-center my-4">Memuat data...</div>
           ) : (
             <table className="table table-bordered" style={{ width: "100%" }}>
@@ -300,7 +310,7 @@ const ContentHeader: React.FC = () => {
                       ].flatMap((day) =>
                         driver[day].map((time: any, idx: any) => (
                           <td key={`${day}-${idx}`} className="text-center">
-                            {formatTime(time)}
+                            {time}
                           </td>
                         ))
                       )}
@@ -324,7 +334,7 @@ const ContentHeader: React.FC = () => {
                       className="align-middle sticky-column text-center"
                       colSpan={17}
                     >
-                      Memuat data...
+                      Tidak ada data
                     </td>
                   </tr>
                 )}
