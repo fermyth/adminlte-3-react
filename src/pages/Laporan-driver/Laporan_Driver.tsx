@@ -242,7 +242,6 @@ function LaporanDriver() {
         </form>
       </div>
       {isLoading && <p>Sedang memuat...</p>}
-      {isError && <p>Terjadi kesalahan saat mengambil data.</p>}
       {isNoData && <p>Tidak ada data yang ditemukan.</p>}
       <div className="info-box ">
         {isFiltered && <DriverReportTable data={data} />}

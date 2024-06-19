@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import ModalKlaim from "./Modal_Klaim";
+import { Modal, Button } from "react-bootstrap";
 import ModalActivity from "./Modal_Activity";
 
 interface Timesheet {
@@ -37,7 +38,19 @@ interface DriverReportTableProps {
 }
 
 const DriverReportTable: React.FC<DriverReportTableProps> = ({ data }) => {
-  const defaultDates = [new Date().toISOString().split("T")[0]]; // Default to today
+  const [showModal, setShowModal] = useState(false);
+  const [modalImageUrl, setModalImageUrl] = useState("");
+
+  const openModal = (imageUrl: string) => {
+    setModalImageUrl(imageUrl);
+    setShowModal(true);
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+    setModalImageUrl("");
+  };
+  const defaultDates = [new Date().toISOString().split("T")[0]];
   const allDates =
     data.length > 0
       ? Array.from(new Set(data.flatMap((item) => Object.keys(item.timesheet))))
@@ -217,6 +230,11 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({ data }) => {
                             alt="Km In"
                             className="img-fluid"
                             style={{ width: "50px", height: "50px" }}
+                            onClick={() =>
+                              openModal(
+                                `https://backend.sigapdriver.com/storage/${timesheet.km_in_images}`
+                              )
+                            }
                           />
                         ) : (
                           "-"
@@ -230,6 +248,11 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({ data }) => {
                             alt="Km Out"
                             className="img-fluid"
                             style={{ width: "50px", height: "50px" }}
+                            onClick={() =>
+                              openModal(
+                                `https://backend.sigapdriver.com/storage/${timesheet.km_out_images}`
+                              )
+                            }
                           />
                         ) : (
                           "-"
@@ -269,6 +292,25 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({ data }) => {
           )}
         </tbody>
       </table>
+      {/* Modal untuk menampilkan gambar */}
+      <Modal show={showModal} onHide={closeModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Gambar Detail</Modal.Title>
+        </Modal.Header>
+        <Modal.Body className="text-center">
+          <img
+            src={modalImageUrl}
+            alt="Gambar Detail"
+            className="img-fluid"
+            style={{ maxWidth: "50%" }}
+          />
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={closeModal}>
+            Tutup
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };
