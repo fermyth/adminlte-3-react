@@ -106,7 +106,7 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({ data }) => {
             <th
               colSpan={1}
               rowSpan={2}
-              className="der text-center sticky-column"
+              className="der text-center sticky-column align-middle"
               style={{ backgroundColor: "#009879", color: "white" }}
             >
               Nama
@@ -126,40 +126,64 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({ data }) => {
           <tr className="sub-header-row text-center">
             {allDates.map((date) => (
               <React.Fragment key={date}>
-                <th style={{ backgroundColor: "#009879", color: "white" }}>
+                <th
+                  className="align-middle"
+                  style={{ backgroundColor: "#009879", color: "white" }}
+                >
                   Jam Masuk
                 </th>
-                <th style={{ backgroundColor: "#009879", color: "white" }}>
+                <th
+                  className="align-middle"
+                  style={{ backgroundColor: "#009879", color: "white" }}
+                >
                   Jam Keluar
                 </th>
-                <th style={{ backgroundColor: "#009879", color: "white" }}>
+                <th
+                  className="align-middle"
+                  style={{ backgroundColor: "#009879", color: "white" }}
+                >
                   KM IN
                 </th>
-                <th style={{ backgroundColor: "#009879", color: "white" }}>
+                <th
+                  className="align-middle"
+                  style={{ backgroundColor: "#009879", color: "white" }}
+                >
                   KM OUT
                 </th>
                 <th
-                  className="lk-pp-column"
+                  className="lk-pp-column align-middle"
                   style={{ backgroundColor: "#009879", color: "white" }}
                 >
                   LK PP
                 </th>
                 <th
-                  className="lk-pp-column"
+                  className="lk-pp-column align-middle"
                   style={{ backgroundColor: "#009879", color: "white" }}
                 >
                   LK INAP
                 </th>
-                <th style={{ backgroundColor: "#009879", color: "white" }}>
+                <th
+                  className="align-middle"
+                  style={{ backgroundColor: "#009879", color: "white" }}
+                >
                   Images Km In
                 </th>
-                <th style={{ backgroundColor: "#009879", color: "white" }}>
+                <th
+                  className="align-middle"
+                  style={{ backgroundColor: "#009879", color: "white" }}
+                >
                   Images Km Out
                 </th>
-                <th style={{ backgroundColor: "#009879", color: "white" }}>
+                <th
+                  className="align-middle"
+                  style={{ backgroundColor: "#009879", color: "white" }}
+                >
                   Nama Users
                 </th>
-                <th style={{ backgroundColor: "#009879", color: "white" }}>
+                <th
+                  className="align-middle"
+                  style={{ backgroundColor: "#009879", color: "white" }}
+                >
                   Laporan Opsi Detail
                 </th>
               </React.Fragment>
