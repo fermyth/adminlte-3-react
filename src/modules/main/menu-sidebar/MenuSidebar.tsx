@@ -30,9 +30,9 @@ export const MENU: IMenuItem[] = [
     path: "/admin/report_awh",
   },
   {
-    name: i18n.t("menusidebar.label.driver"),
+    name: i18n.t("menusidebar.label.driv"),
     icon: "fas fa-solid fa-id-card nav-icon",
-    path: "admin/driver",
+    path: "/admin/driver",
   },
   {
     name: i18n.t("menusidebar.label.bla"),

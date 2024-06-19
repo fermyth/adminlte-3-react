@@ -167,13 +167,13 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({ data }) => {
                   className="lk-pp-column align-middle"
                   style={{ backgroundColor: "#009879", color: "white" }}
                 >
-                  LK PP
+                  LK pp
                 </th>
                 <th
                   className="lk-pp-column align-middle"
                   style={{ backgroundColor: "#009879", color: "white" }}
                 >
-                  LK INAP
+                  LK inap
                 </th>
                 <th
                   className="align-middle"
