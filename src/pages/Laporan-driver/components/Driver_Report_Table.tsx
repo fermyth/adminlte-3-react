@@ -37,9 +37,11 @@ interface DriverReportTableProps {
 }
 
 const DriverReportTable: React.FC<DriverReportTableProps> = ({ data }) => {
-  const allDates = Array.from(
-    new Set(data.flatMap((item) => Object.keys(item.timesheet)))
-  );
+  const defaultDates = ["2023-06-17"];
+  const allDates =
+    data.length > 0
+      ? Array.from(new Set(data.flatMap((item) => Object.keys(item.timesheet))))
+      : defaultDates;
 
   return (
     <div className="table-responsive">
@@ -91,6 +93,11 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({ data }) => {
           .table tbody tr:last-of-type {
             border-bottom: 2px solid #009879;
           }
+             .lk-pp-column {
+                  word-wrap: break-word;
+                  white-space: normal;
+                  border : 1px solid red;
+                }
         `}
       </style>
       <table className="table table-hover table-bordered">
@@ -131,10 +138,16 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({ data }) => {
                 <th style={{ backgroundColor: "#009879", color: "white" }}>
                   KM OUT
                 </th>
-                <th style={{ backgroundColor: "#009879", color: "white" }}>
+                <th
+                  className="lk-pp-column"
+                  style={{ backgroundColor: "#009879", color: "white" }}
+                >
                   LK PP
                 </th>
-                <th style={{ backgroundColor: "#009879", color: "white" }}>
+                <th
+                  className="lk-pp-column"
+                  style={{ backgroundColor: "#009879", color: "white" }}
+                >
                   LK INAP
                 </th>
                 <th style={{ backgroundColor: "#009879", color: "white" }}>
@@ -154,60 +167,72 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({ data }) => {
           </tr>
         </thead>
         <tbody>
-          {data.map((item, index) => (
-            <tr key={index}>
-              <td className="sticky-column">{item.nama}</td>
-              {allDates.map((date) => {
-                const timesheet = item.timesheet[date];
-                return timesheet ? (
-                  <React.Fragment key={date}>
-                    <td className="text-center">{timesheet.jam_masuk}</td>
-                    <td className="text-center">{timesheet.jam_keluar}</td>
-                    <td className="text-center">{timesheet.km_in}</td>
-                    <td className="text-center">{timesheet.km_out}</td>
-                    <td className="text-center">{timesheet.lk_pp}</td>
-                    <td className="text-center">{timesheet.lk_inap}</td>
-                    <td className="text-center">
-                      <img
-                        src={`https://backend.sigapdriver.com/storage/${timesheet.km_in_images || ""}`}
-                        alt="Km In"
-                        className="img-fluid"
-                        style={{ width: "50px", height: "50px" }}
-                      />
-                    </td>
-                    <td className="text-center">
-                      <img
-                        src={`https://backend.sigapdriver.com/storage/${timesheet.km_out_images || ""}`}
-                        alt="Km Out"
-                        className="img-fluid"
-                        style={{ width: "50px", height: "50px" }}
-                      />
-                    </td>
-                    <td className="text-center">{timesheet.name_users}</td>
-                    <td className="text-center">
-                      <div className="d-flex justify-content-center gap-2">
-                        <ModalKlaim />
-                        <ModalActivity />
-                      </div>
-                    </td>
-                  </React.Fragment>
-                ) : (
-                  <React.Fragment key={date}>
-                    <td className="text-center">-</td>
-                    <td className="text-center">-</td>
-                    <td className="text-center">-</td>
-                    <td className="text-center">-</td>
-                    <td className="text-center">-</td>
-                    <td className="text-center">-</td>
-                    <td className="text-center">-</td>
-                    <td className="text-center">-</td>
-                    <td className="text-center">-</td>
-                    <td className="text-center">-</td>
-                  </React.Fragment>
-                );
-              })}
+          {data.length > 0 ? (
+            data.map((item, index) => (
+              <tr key={index}>
+                <td className="sticky-column">{item.nama}</td>
+                {allDates.map((date) => {
+                  const timesheet = item.timesheet[date];
+                  return timesheet ? (
+                    <React.Fragment key={date}>
+                      <td className="text-center">{timesheet.jam_masuk}</td>
+                      <td className="text-center">{timesheet.jam_keluar}</td>
+                      <td className="text-center">{timesheet.km_in}</td>
+                      <td className="text-center">{timesheet.km_out}</td>
+                      <td className="text-center lk-pp-column">
+                        {timesheet.lk_pp}
+                      </td>
+                      <td className="text-center lk-pp-column">
+                        {timesheet.lk_inap}
+                      </td>
+                      <td className="text-center">
+                        <img
+                          src={`https://backend.sigapdriver.com/storage/${timesheet.km_in_images || "-"}`}
+                          alt="Km In"
+                          className="img-fluid"
+                          style={{ width: "50px", height: "50px" }}
+                        />
+                      </td>
+                      <td className="text-center">
+                        <img
+                          src={`https://backend.sigapdriver.com/storage/${timesheet.km_out_images || "-"}`}
+                          alt="Km Out"
+                          className="img-fluid"
+                          style={{ width: "50px", height: "50px" }}
+                        />
+                      </td>
+                      <td className="text-center">{timesheet.name_users}</td>
+                      <td className="text-center">
+                        <div className="d-flex justify-content-center gap-2">
+                          <ModalKlaim />
+                          <ModalActivity />
+                        </div>
+                      </td>
+                    </React.Fragment>
+                  ) : (
+                    <React.Fragment key={date}>
+                      <td className="text-center">-</td>
+                      <td className="text-center">-</td>
+                      <td className="text-center">-</td>
+                      <td className="text-center">-</td>
+                      <td className="text-center">-</td>
+                      <td className="text-center">-</td>
+                      <td className="text-center">-</td>
+                      <td className="text-center">-</td>
+                      <td className="text-center">-</td>
+                      <td className="text-center">-</td>
+                    </React.Fragment>
+                  );
+                })}
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td className="text-center" colSpan={allDates.length * 10 + 1}>
+                Mohon untuk isi form date nya ..
+              </td>
             </tr>
-          ))}
+          )}
         </tbody>
       </table>
     </div>
