@@ -115,8 +115,11 @@ function LaporanDriver() {
 
   const fetchLaporanDriver = async (companyId: string) => {
     const url = `${apiUrl}/${startDate}/${endDate}/0/${companyId}`;
+
     try {
       const response = await axios.get<ApiResponse>(url);
+      console.log("Response:", response.data.data);
+
       setData(response.data.data);
       setIsFiltered(true);
       if (response.data.data.length === 0) {
@@ -240,8 +243,8 @@ function LaporanDriver() {
       </div>
       {isLoading && <p>Sedang memuat...</p>}
       {isError && <p>Terjadi kesalahan saat mengambil data.</p>}
+      {isNoData && <p>Tidak ada data yang ditemukan.</p>}
       <div className="info-box ">
-        {isNoData && <p>Tidak ada data yang ditemukan.</p>}
         {isFiltered && <DriverReportTable data={data} />}
       </div>
     </>

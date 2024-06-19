@@ -37,7 +37,7 @@ interface DriverReportTableProps {
 }
 
 const DriverReportTable: React.FC<DriverReportTableProps> = ({ data }) => {
-  const defaultDates = ["2023-06-17"];
+  const defaultDates = [new Date().toISOString().split("T")[0]]; // Default to today
   const allDates =
     data.length > 0
       ? Array.from(new Set(data.flatMap((item) => Object.keys(item.timesheet))))
@@ -93,11 +93,11 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({ data }) => {
           .table tbody tr:last-of-type {
             border-bottom: 2px solid #009879;
           }
-             .lk-pp-column {
-                  word-wrap: break-word;
-                  white-space: normal;
-                  border : 1px solid red;
-                }
+          .lk-pp-column {
+            word-wrap: break-word;
+            white-space: normal;
+            border: 1px solid red;
+          }
         `}
       </style>
       <table className="table table-hover table-bordered">
@@ -180,26 +180,36 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({ data }) => {
                       <td className="text-center">{timesheet.km_in}</td>
                       <td className="text-center">{timesheet.km_out}</td>
                       <td className="text-center lk-pp-column">
-                        {timesheet.lk_pp}
+                        {timesheet.lk_pp || "-"}
                       </td>
                       <td className="text-center lk-pp-column">
                         {timesheet.lk_inap}
                       </td>
                       <td className="text-center">
-                        <img
-                          src={`https://backend.sigapdriver.com/storage/${timesheet.km_in_images || "-"}`}
-                          alt="Km In"
-                          className="img-fluid"
-                          style={{ width: "50px", height: "50px" }}
-                        />
+                        {timesheet.km_in_images &&
+                        timesheet.km_in_images !== "-" ? (
+                          <img
+                            src={`https://backend.sigapdriver.com/storage/${timesheet.km_in_images}`}
+                            alt="Km In"
+                            className="img-fluid"
+                            style={{ width: "50px", height: "50px" }}
+                          />
+                        ) : (
+                          "-"
+                        )}
                       </td>
                       <td className="text-center">
-                        <img
-                          src={`https://backend.sigapdriver.com/storage/${timesheet.km_out_images || "-"}`}
-                          alt="Km Out"
-                          className="img-fluid"
-                          style={{ width: "50px", height: "50px" }}
-                        />
+                        {timesheet.km_out_images &&
+                        timesheet.km_out_images !== "-" ? (
+                          <img
+                            src={`https://backend.sigapdriver.com/storage/${timesheet.km_out_images}`}
+                            alt="Km Out"
+                            className="img-fluid"
+                            style={{ width: "50px", height: "50px" }}
+                          />
+                        ) : (
+                          "-"
+                        )}
                       </td>
                       <td className="text-center">{timesheet.name_users}</td>
                       <td className="text-center">
