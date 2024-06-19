@@ -138,7 +138,7 @@ const LaporanHarian: React.FC = () => {
                   onClick={() => handleFilter(date, idCompany || "")}
                   disabled={loading || !date || !idCompany}
                 >
-                  {loading ? "Loading..." : "Filter"}
+                  {loading ? "Memuat data..." : "Filter"}
                 </Button>
               </Col>
               <Col xs="auto" className="mb-3">
@@ -314,7 +314,7 @@ const LaporanHarian: React.FC = () => {
                 {loading ? (
                   <tr>
                     <td colSpan={14} className="text-center">
-                      Loading...
+                      Memuat data...
                     </td>
                   </tr>
                 ) : error ? (

@@ -54,7 +54,7 @@ function LaporanDriver() {
   const [isError, setIsError] = useState<boolean>(false);
   const [isNoData, setIsNoData] = useState<boolean>(false);
 
-  // Mengatur tanggal default ke hari ini
+  // Set default date to today
   useEffect(() => {
     const today = new Date().toISOString().split("T")[0];
     setStartDate(today);
@@ -75,6 +75,33 @@ function LaporanDriver() {
     setEndDate(event.target.value);
   };
 
+  const fetchLaporanDriver = useCallback(
+    async (companyId: string) => {
+      let url = `${apiUrl}/${startDate}/${endDate}/0/${companyId}`;
+      if (type !== "") {
+        url += `/${type}`;
+      }
+      setIsLoading(true);
+      setIsError(false);
+      setIsNoData(false);
+
+      try {
+        const response = await axios.get<ApiResponse>(url);
+        setData(response.data.data);
+        setIsFiltered(true);
+        if (response.data.data.length === 0) {
+          setIsNoData(true);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setIsError(true);
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [startDate, endDate, type]
+  );
+
   const fetchData = useCallback(async () => {
     setIsLoading(true);
     setIsError(false);
@@ -86,7 +113,7 @@ function LaporanDriver() {
       if (userData) {
         const parsedData = JSON.parse(userData);
         setIdCompany(parsedData.id_company);
-        await fetchLaporanDriver(parsedData.id_company);
+        fetchLaporanDriver(parsedData.id_company);
       } else {
         setIdCompany(null);
         setIsError(true);
@@ -97,7 +124,7 @@ function LaporanDriver() {
     } finally {
       setIsLoading(false);
     }
-  }, [startDate, endDate]);
+  }, [fetchLaporanDriver]);
 
   useEffect(() => {
     fetchData();
@@ -113,32 +140,8 @@ function LaporanDriver() {
     };
   }, [fetchData]);
 
-  const fetchLaporanDriver = async (companyId: string) => {
-    const url = `${apiUrl}/${startDate}/${endDate}/0/${companyId}`;
-
-    try {
-      const response = await axios.get<ApiResponse>(url);
-      console.log("Response:", response.data.data);
-
-      setData(response.data.data);
-      setIsFiltered(true);
-      if (response.data.data.length === 0) {
-        setIsNoData(true);
-      }
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      setIsError(true);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setIsLoading(true);
-    setIsError(false);
-    setIsNoData(false);
-
     if (idCompany) {
       fetchLaporanDriver(idCompany);
     } else {
@@ -158,17 +161,17 @@ function LaporanDriver() {
       <style>
         {`
          .btn-success.custom-btn {
-        background-color: #009879;
-        border-color: #009879;
-    }
+          background-color: #009879;
+          border-color: #009879;
+        }
 
-    .btn-success.custom-btn:hover {
-        background-color: #007f66; /* Warna yang sedikit lebih gelap untuk efek hover */
-        border-color: #007f66;
-    } 
+        .btn-success.custom-btn:hover {
+          background-color: #007f66;
+          border-color: #007f66;
+        } 
         `}
       </style>
-      <div className="containern mb-5">
+      <div className="container mb-5">
         <h1 className="text-center mb-4 font-weight-bold text-uppercase mb-3 mt-5">
           LAPORAN DRIVER
         </h1>
@@ -189,8 +192,8 @@ function LaporanDriver() {
                 onChange={handleTypeChange}
               >
                 <option value="">Pilih</option>
-                <option value="daily">Job Holder</option>
-                <option value="weekly">Temporary</option>
+                <option value="no_temporary">Job Holder</option>
+                <option value="temporary">Temporary</option>
               </select>
             </div>
             <div className="col-md">
@@ -241,9 +244,14 @@ function LaporanDriver() {
           </div>
         </form>
       </div>
-      {isLoading && <p>Sedang memuat...</p>}
-      {isNoData && <p>Tidak ada data yang ditemukan.</p>}
-      <div className="info-box ">
+      <center>
+        {isLoading && <p>Sedang memuat...</p>}
+        {isNoData && <p>Tidak ada data yang ditemukan.</p>}
+        {isError && data.length === 0 && (
+          <p>Sedang memuat...</p>
+        )}
+      </center>
+      <div className="info-box">
         {isFiltered && <DriverReportTable data={data} />}
       </div>
     </>
