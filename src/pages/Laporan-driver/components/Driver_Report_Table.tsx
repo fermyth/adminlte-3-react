@@ -1,8 +1,23 @@
 import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import ModalKlaim from "./Modal_Klaim";
 import { Modal, Button } from "react-bootstrap";
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
+import ModalKlaim from "./Modal_Klaim";
 import ModalActivity from "./Modal_Activity";
+import axios from "axios";
+
+const style = {
+  position: "absolute" as "absolute",
+  top: "0%",
+  left: "0%",
+  transform: "translate(-20%, -0%)",
+  width: 800,
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 1,
+};
 
 interface Timesheet {
   jam_masuk: string;
@@ -40,6 +55,18 @@ interface DriverReportTableProps {
 const DriverReportTable: React.FC<DriverReportTableProps> = ({ data }) => {
   const [showModal, setShowModal] = useState(false);
   const [modalImageUrl, setModalImageUrl] = useState("");
+  const [open, setOpen] = useState(false);
+  const [openklaim, setOpenklim] = useState(false);
+  const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
+  const [selectedUserIdklaim, setSelectedUserIdklaim] = useState<number | null>(
+    null
+  );
+  const [activity, setactifity] = useState(null);
+  const [loading, setloading] = useState(true);
+  const [loadingklaim, setloadingklaim] = useState(true);
+  const [namedriver, setnamedriver] = useState(null);
+  const [dataklaim, setklaim] = useState(null);
+  const [totalklaim, settotalklaim] = useState(null);
 
   const openModal = (imageUrl: string) => {
     setModalImageUrl(imageUrl);
@@ -50,6 +77,52 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({ data }) => {
     setShowModal(false);
     setModalImageUrl("");
   };
+
+  const handleOpen = async (
+    userId: number | null,
+    date: string | null,
+    name: string | null
+  ) => {
+    try {
+      const response = await axios.get(
+        `https://backend.sigapdriver.com/api/detail_activity/${userId}/${date}`
+      );
+      console.log("cekdancek", response.data.data);
+      setactifity(response.data.data);
+      setloading(false);
+      setSelectedUserId(userId);
+      setnamedriver(name);
+    } catch (error) {
+      console.error("Error fetching company info:", error);
+    }
+    setOpen(true);
+  };
+
+  const handleClose = () => setOpen(false);
+
+  const handleOpenklaim = async (
+    userId: number | null,
+    date: string | null,
+    name: string | null
+  ) => {
+    try {
+      const response = await axios.get(
+        `https://backend.sigapdriver.com/api/pengeluaran/${userId}/${date}`
+      );
+      console.log("cekdancek", response.data);
+      setklaim(response.data.data);
+      setloadingklaim(false);
+      setSelectedUserIdklaim(userId);
+      setnamedriver(name);
+      settotalklaim(response.data.total[0].sum_expenses);
+    } catch (error) {
+      console.error("Error fetching company info:", error);
+    }
+    setOpenklim(true);
+  };
+
+  const handleCloseklaim = () => setOpenklim(false);
+
   const defaultDates = [new Date().toISOString().split("T")[0]];
   const allDates =
     data.length > 0
@@ -98,7 +171,7 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({ data }) => {
             z-index: 2;
             background-color: #CCE2CB;
           }
-          .table-bordered der {
+          .table-bordered {
             border-radius: 15px 15px 0 0;
             border-top: 1px solid #009879;
             overflow: hidden;
@@ -261,8 +334,178 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({ data }) => {
                       <td className="text-center">{timesheet.name_users}</td>
                       <td className="text-center">
                         <div className="d-flex justify-content-center gap-2">
-                          <ModalKlaim />
-                          <ModalActivity />
+                          <Button
+                            onClick={() =>
+                              handleOpen(item.user_id, date, item.nama)
+                            }
+                            className="btn btn-dark btn-sm"
+                          >
+                            Activity
+                          </Button>
+
+                          <Modal
+                            show={open && selectedUserId === item.user_id}
+                            onHide={handleClose}
+                          >
+                            <Box sx={style}>
+                              <Typography
+                                id="modal-modal-title"
+                                variant="h6"
+                                component="h2"
+                              >
+                                <Box>Nama : {namedriver}</Box>
+                              </Typography>
+                              <div className="table-responsive">
+                                <style>
+                                  {`
+            .table {
+              width: 100%;
+              background-color: #f8f9fa;
+              border-collapse: collapse;
+              border-radius: 0.25em;
+              overflow: hidden;
+              box-shadow: 0 0 0 1px #e0e0e0 inset;
+              border-radius: 0.5em;
+            }
+            .table th,
+            .table td {
+              padding: 0.5em 1em;
+              border-bottom: 1px solid #e0e0e0;
+              border-right: 1px solid #e0e0e0;
+              text-align: left;
+              vertical-align: middle;
+            }
+            .table th {
+              background-color: #009879;
+              color: white;
+              font-weight: bold;
+            }
+            .table td {
+              background-color: #ffffff;
+            }
+          `}
+                                </style>
+                                <table className="table">
+                                  <thead>
+                                    <tr>
+                                      <th>Kota</th>
+                                      <th>Type</th>
+                                      {/* <th>Lokasi</th> */}
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    {!loading ? (
+                                      activity.map((val, index) => (
+                                        <tr key={index}>
+                                          <td>{val.city}</td>
+                                          <td>{val.type}</td>
+                                          {/* <td>{val.description}</td> */}
+                                        </tr>
+                                      ))
+                                    ) : (
+                                      <tr>
+                                        <td colSpan="3">Loading...</td>
+                                      </tr>
+                                    )}
+                                  </tbody>
+                                </table>
+                              </div>
+                            </Box>
+                          </Modal>
+
+                          <Button
+                            onClick={() =>
+                              handleOpenklaim(item.user_id, date, item.nama)
+                            }
+                            className="btn btn-dark btn-sm"
+                          >
+                            Klaim
+                          </Button>
+
+                          <Modal
+                            show={
+                              openklaim && selectedUserIdklaim === item.user_id
+                            }
+                            onHide={handleCloseklaim}
+                          >
+                            <Box sx={style}>
+                              <Typography
+                                id="modal-modal-title"
+                                variant="h6"
+                                component="h2"
+                              >
+                                <Box>Nama : {namedriver}</Box>
+                                <Box>Total : {new Intl.NumberFormat('id-ID').format(totalklaim)}</Box>
+                              </Typography>
+                              <div className="table-responsive">
+                                <style>
+                                  {`
+            .table {
+              width: 100%;
+              background-color: #f8f9fa;
+              border-collapse: collapse;
+              border-radius: 0.25em;
+              overflow: hidden;
+              box-shadow: 0 0 0 1px #e0e0e0 inset;
+              border-radius: 0.5em;
+            }
+            .table th,
+            .table td {
+              padding: 0.5em 1em;
+              border-bottom: 1px solid #e0e0e0;
+              border-right: 1px solid #e0e0e0;
+              text-align: left;
+              vertical-align: middle;
+            }
+            .table th {
+              background-color: #009879;
+              color: white;
+              font-weight: bold;
+            }
+            .table td {
+              background-color: #ffffff;
+            }
+          `}
+                                </style>
+                                <table className="table">
+                                  <thead>
+                                    <tr>
+                                      <th>Tipe</th>
+                                      <th>Nominal</th>
+                                      <th>Keterangan</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    {!loadingklaim ? (
+                                      dataklaim.map((val, index) => (
+                                        <tr key={index}>
+                                          <td>
+                                            {val.expenses_type === 0 &&
+                                              "Parkir Umum"}
+                                            {val.expenses_type === 1 && "Toll"}
+                                            {val.expenses_type === 2 &&
+                                              "Isi Bensin"}
+                                            {val.expenses_type === 3 &&
+                                              "Lain Lain"}
+                                            {val.expenses_type === 4 &&
+                                              "Parkir Liar"}
+                                          </td>
+                                          <td>
+                                          {new Intl.NumberFormat('id-ID').format(val.expenses_value)}
+                                          </td>
+                                          <td>{val.expenses_notes}</td>
+                                        </tr>
+                                      ))
+                                    ) : (
+                                      <tr>
+                                        <td colSpan="3">Loading...</td>
+                                      </tr>
+                                    )}
+                                  </tbody>
+                                </table>
+                              </div>
+                            </Box>
+                          </Modal>
                         </div>
                       </td>
                     </React.Fragment>

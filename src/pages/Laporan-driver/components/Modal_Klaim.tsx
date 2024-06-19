@@ -1,9 +1,8 @@
-import * as React from "react";
+import React, { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
-import axios from "axios";
 
 const style = {
   position: "absolute" as "absolute",
@@ -17,8 +16,20 @@ const style = {
   p: 4,
 };
 
-export default function ModalKlaim() {
-  const [open, setOpen] = React.useState(false);
+interface ModalKlaimProps {
+  data: string;
+}
+
+const ModalKlaim: React.FC<ModalKlaimProps> = ({ data }) => {
+  const [open, setOpen] = useState(false);
+  const [userId, setUserId] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (data) {
+      setUserId(data);
+      console.log("User ID:", data);
+    }
+  }, [data]);
 
   const handleOpen = () => {
     setOpen(true);
@@ -114,8 +125,8 @@ export default function ModalKlaim() {
 
   return (
     <div>
-      <Button onClick={handleOpen}>
-        <button className="btn btn-dark btn-sm">Klaim</button>
+      <Button onClick={handleOpen} className="btn btn-dark btn-sm">
+        Klaim
       </Button>
       <Modal
         open={open}
@@ -127,4 +138,6 @@ export default function ModalKlaim() {
       </Modal>
     </div>
   );
-}
+};
+
+export default ModalKlaim;
