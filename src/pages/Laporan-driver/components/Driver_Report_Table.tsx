@@ -6,6 +6,19 @@ import Box from "@mui/material/Box";
 import ModalKlaim from "./Modal_Klaim";
 import ModalActivity from "./Modal_Activity";
 import axios from "axios";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
+import L from "leaflet";
+
+const icon = L.icon({
+  iconUrl: "/img/mobil.png",
+  shadowUrl: "https://leafletjs.com/examples/custom-icons/leaf-shadow.png",
+  iconSize: [50, 50],
+  shadowSize: [50, 50],
+  iconAnchor: [25, 50],
+  shadowAnchor: [25, 50],
+  popupAnchor: [0, -50],
+});
 
 const style = {
   position: "absolute" as "absolute",
@@ -54,6 +67,7 @@ interface DriverReportTableProps {
 
 const DriverReportTable: React.FC<DriverReportTableProps> = ({ data }) => {
   const [showModal, setShowModal] = useState(false);
+  const [show, setShow] = useState(false);
   const [modalImageUrl, setModalImageUrl] = useState("");
   const [open, setOpen] = useState(false);
   const [openklaim, setOpenklim] = useState(false);
@@ -61,12 +75,30 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({ data }) => {
   const [selectedUserIdklaim, setSelectedUserIdklaim] = useState<number | null>(
     null
   );
-  const [activity, setactifity] = useState(null);
+  const [activity, setactifity] = useState<any | null>(null);
   const [loading, setloading] = useState(true);
   const [loadingklaim, setloadingklaim] = useState(true);
-  const [namedriver, setnamedriver] = useState(null);
-  const [dataklaim, setklaim] = useState(null);
-  const [totalklaim, settotalklaim] = useState(null);
+  const [namedriver, setnamedriver] = useState<string | null>(null);
+  const [dataklaim, setklaim] = useState<any | any>(null);
+  const [totalklaim, settotalklaim] = useState<any | any>(null);
+  const [selectedLocation, setSelectedLocation] = useState<{
+    lat: any;
+    long: any;
+  } | null>({ lat: 0, long: 0 });
+
+  const handleLokasiClick = (lat: any, long: any) => {
+    if (lat && long) {
+      setSelectedLocation({ lat, long });
+      setShow(true);
+    } else {
+      alert("Data lokasi tidak tersedia");
+    }
+  };
+
+  const handleCloseModal = () => {
+    setShow(false);
+    setSelectedLocation(null);
+  };
 
   const openModal = (imageUrl: string) => {
     setModalImageUrl(imageUrl);
@@ -171,7 +203,7 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({ data }) => {
             z-index: 2;
             background-color: #CCE2CB;
           }
-          .table-bordered {
+          .der {
             border-radius: 15px 15px 0 0;
             border-top: 1px solid #009879;
             overflow: hidden;
@@ -188,11 +220,11 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({ data }) => {
       </style>
       <table className="table table-hover table-bordered">
         <thead>
-          <tr className="header-row">
+          <tr className="header-row der">
             <th
               colSpan={1}
               rowSpan={2}
-              className="der text-center sticky-column align-middle"
+              className=" text-center sticky-column align-middle"
               style={{ backgroundColor: "#009879", color: "white" }}
             >
               Nama
@@ -358,58 +390,107 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({ data }) => {
                               <div className="table-responsive">
                                 <style>
                                   {`
-            .table {
-              width: 100%;
-              background-color: #f8f9fa;
-              border-collapse: collapse;
-              border-radius: 0.25em;
-              overflow: hidden;
-              box-shadow: 0 0 0 1px #e0e0e0 inset;
-              border-radius: 0.5em;
-            }
-            .table th,
-            .table td {
-              padding: 0.5em 1em;
-              border-bottom: 1px solid #e0e0e0;
-              border-right: 1px solid #e0e0e0;
-              text-align: left;
-              vertical-align: middle;
-            }
-            .table th {
-              background-color: #009879;
-              color: white;
-              font-weight: bold;
-            }
-            .table td {
-              background-color: #ffffff;
-            }
-          `}
+                                      .table {
+                                        width: 100%;
+                                        background-color: #f8f9fa;
+                                        border-collapse: collapse;
+                                        border-radius: 0.25em;
+                                        overflow: hidden;
+                                        box-shadow: 0 0 0 1px #e0e0e0 inset;
+                                        border-radius: 0.5em;
+                                      }
+                                      .table th,
+                                      .table td {
+                                        padding: 0.5em 1em;
+                                        border-bottom: 1px solid #e0e0e0;
+                                        border-right: 1px solid #e0e0e0;
+                                        text-align: left;
+                                        vertical-align: middle;
+                                      }
+                                      .table th {
+                                        background-color: #009879;
+                                        color: white;
+                                        font-weight: bold;
+                                      }
+                                      .table td {
+                                        background-color: #ffffff;
+                                      }
+                                    `}
                                 </style>
                                 <table className="table">
                                   <thead>
                                     <tr>
                                       <th>Kota</th>
                                       <th>Type</th>
-                                      {/* <th>Lokasi</th> */}
+                                      <th>Lokasi</th>
                                     </tr>
                                   </thead>
                                   <tbody>
                                     {!loading ? (
-                                      activity.map((val, index) => (
+                                      activity.map((val: any, index: any) => (
                                         <tr key={index}>
                                           <td>{val.city}</td>
                                           <td>{val.type}</td>
-                                          {/* <td>{val.description}</td> */}
+                                          <td>
+                                            <Button
+                                              className="btn btn-dark btn-sm"
+                                              onClick={() =>
+                                                handleLokasiClick(
+                                                  val.lat,
+                                                  val.long
+                                                )
+                                              }
+                                            >
+                                              {val.lat && val.long
+                                                ? "Lihat Lokasi"
+                                                : "Lokasi Tidak Tersedia"}
+                                            </Button>
+                                          </td>
                                         </tr>
                                       ))
                                     ) : (
                                       <tr>
-                                        <td colSpan="3">Loading...</td>
+                                        <td colSpan={3}>Loading...</td>
                                       </tr>
                                     )}
                                   </tbody>
                                 </table>
                               </div>
+                              <Modal show={show} onHide={handleCloseModal}>
+                                <Modal.Header closeButton>
+                                  <Modal.Title>Lokasi</Modal.Title>
+                                </Modal.Header>
+                                <Modal.Body>
+                                  {selectedLocation && (
+                                    <MapContainer
+                                      center={[
+                                        selectedLocation.lat,
+                                        selectedLocation.long,
+                                      ]}
+                                      zoom={13}
+                                      style={{ height: "400px", width: "100%" }}
+                                    >
+                                      <TileLayer
+                                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                                      />
+                                      <Marker
+                                        position={[
+                                          selectedLocation.lat,
+                                          selectedLocation.long,
+                                        ]}
+                                        icon={icon}
+                                      >
+                                        <Popup>
+                                          Lokasi Koordinat:{" "}
+                                          {selectedLocation.lat},{" "}
+                                          {selectedLocation.long}
+                                        </Popup>
+                                      </Marker>
+                                    </MapContainer>
+                                  )}
+                                </Modal.Body>
+                              </Modal>
                             </Box>
                           </Modal>
 
@@ -435,37 +516,42 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({ data }) => {
                                 component="h2"
                               >
                                 <Box>Nama : {namedriver}</Box>
-                                <Box>Total : {new Intl.NumberFormat('id-ID').format(totalklaim)}</Box>
+                                <Box>
+                                  Total :{" "}
+                                  {new Intl.NumberFormat("id-ID").format(
+                                    totalklaim
+                                  )}
+                                </Box>
                               </Typography>
                               <div className="table-responsive">
                                 <style>
                                   {`
-            .table {
-              width: 100%;
-              background-color: #f8f9fa;
-              border-collapse: collapse;
-              border-radius: 0.25em;
-              overflow: hidden;
-              box-shadow: 0 0 0 1px #e0e0e0 inset;
-              border-radius: 0.5em;
-            }
-            .table th,
-            .table td {
-              padding: 0.5em 1em;
-              border-bottom: 1px solid #e0e0e0;
-              border-right: 1px solid #e0e0e0;
-              text-align: left;
-              vertical-align: middle;
-            }
-            .table th {
-              background-color: #009879;
-              color: white;
-              font-weight: bold;
-            }
-            .table td {
-              background-color: #ffffff;
-            }
-          `}
+                                        .table {
+                                          width: 100%;
+                                          background-color: #f8f9fa;
+                                          border-collapse: collapse;
+                                          border-radius: 0.25em;
+                                          overflow: hidden;
+                                          box-shadow: 0 0 0 1px #e0e0e0 inset;
+                                          border-radius: 0.5em;
+                                        }
+                                        .table th,
+                                        .table td {
+                                          padding: 0.5em 1em;
+                                          border-bottom: 1px solid #e0e0e0;
+                                          border-right: 1px solid #e0e0e0;
+                                          text-align: left;
+                                          vertical-align: middle;
+                                        }
+                                        .table th {
+                                          background-color: #009879;
+                                          color: white;
+                                          font-weight: bold;
+                                        }
+                                        .table td {
+                                          background-color: #ffffff;
+                                        }
+                                      `}
                                 </style>
                                 <table className="table">
                                   <thead>
@@ -477,7 +563,7 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({ data }) => {
                                   </thead>
                                   <tbody>
                                     {!loadingklaim ? (
-                                      dataklaim.map((val, index) => (
+                                      dataklaim.map((val: any, index: any) => (
                                         <tr key={index}>
                                           <td>
                                             {val.expenses_type === 0 &&
@@ -491,14 +577,16 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({ data }) => {
                                               "Parkir Liar"}
                                           </td>
                                           <td>
-                                          {new Intl.NumberFormat('id-ID').format(val.expenses_value)}
+                                            {new Intl.NumberFormat(
+                                              "id-ID"
+                                            ).format(val.expenses_value)}
                                           </td>
                                           <td>{val.expenses_notes}</td>
                                         </tr>
                                       ))
                                     ) : (
                                       <tr>
-                                        <td colSpan="3">Loading...</td>
+                                        <td colSpan={3}>Loading...</td>
                                       </tr>
                                     )}
                                   </tbody>
