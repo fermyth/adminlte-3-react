@@ -294,7 +294,7 @@ const ContentHeader: React.FC = () => {
               </thead>
               <tbody>
                 {tableData.length > 0 ? (
-                  tableData.map((driver, index) => (
+                  tableData.map((driver: any, index) => (
                     <tr key={index}>
                       <td className="align-middle sticky-column">
                         {driver.name}
