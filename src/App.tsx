@@ -26,6 +26,11 @@ import Driver from "./pages/Driver/Driver";
 import LaporanJamKerja from "@app/pages/Laporan-Jam-Kerja/Laporan_Jam_Kerja";
 import LaporanDriver from "./pages/Laporan-driver/Laporan_Driver";
 import LaporanHarian from "./pages/Laporan-Harian/Laporan_Harian";
+import DashboardPartner from "./pages/partner/Dashboard/Dashboard_Partner";
+import DetailCostumer from "./pages/partner/Dashboard/components/Detail_Costumer";
+import Sidebar from "./pages/partner/Sidebar/Sidebar";
+import Header from "./modules/main/header/Header";
+import VehicleData from "./pages/partner/Vehicle_Data/Vehicle";
 
 const { VITE_NODE_ENV } = import.meta.env;
 
@@ -105,6 +110,11 @@ const App = () => {
             <Route path="/admin/sigaps_driver" element={<LaporanHarian />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/" element={<Dashboard />} />
+          </Route>
+          <Route path="/partner-dashboard" element={<Sidebar />}>
+            <Route path="/partner-dashboard" element={<DashboardPartner />} />
+            <Route path="vehicle-data" element={<VehicleData />} />
+            <Route path="detail-costumer" element={<DetailCostumer />} />
           </Route>
         </Route>
       </Routes>

@@ -24,7 +24,13 @@ const Register = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const register = async (email: string, password : string, nama_perusahaan : string, id_company : any, role : any )  => {
+  const register = async (
+    email: any,
+    password: any,
+    nama_perusahaan: any,
+    id_company: any,
+    role: any
+  ) => {
     try {
       setAuthLoading(true);
       console.log("Registering user with email:", email);
@@ -42,7 +48,7 @@ const Register = () => {
         email,
         nama_perusahaan,
         id_company,
-        role
+        role,
       });
 
       dispatch(setCurrentUser(result?.user));
@@ -52,6 +58,7 @@ const Register = () => {
       console.error("Registration error:", error);
       const err = error as Error;
       toast.error(err.message || "Failed");
+    } finally {
       setAuthLoading(false);
     }
   };
@@ -89,7 +96,7 @@ const Register = () => {
         passwordRetype: "",
         nama_perusahaan: "",
         id_company: "",
-        role:""
+        role: "",
       },
       validationSchema: Yup.object({
         email: Yup.string().email("Invalid email address").required("Required"),
@@ -268,9 +275,9 @@ const Register = () => {
                   isInvalid={touched.role && !!errors.role}
                 >
                   <option value="">Select Role</option>
-                  <option value="1">Partner</option>
-                  <option value="2">Customer</option>
-                  <option value="3">Luteral</option>
+                  <option value="partner">Partner</option>
+                  <option value="customer">Customer</option>
+                  <option value="luteral">Luteral</option>
                 </Form.Control>
                 {touched.role && errors.role ? (
                   <Form.Control.Feedback type="invalid">

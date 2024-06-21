@@ -7,68 +7,64 @@ import { setAuthentication, setCompanyId } from "@store/reducers/auth";
 import { setWindowClass } from "@app/utils/helpers";
 import { Checkbox } from "@profabric/react-components";
 import * as Yup from "yup";
- 
+
 import { Form, InputGroup } from "react-bootstrap";
 import { Button } from "@app/styles/common";
 import { loginWithEmail, signInByGoogle } from "@app/services/auth";
 import { useAppDispatch } from "@app/store/store";
 import { db } from "../../firebase/index";
-import { doc, setDoc, getDoc } from "firebase/firestore"; // Import Firestore functions
+import { doc, getDoc } from "firebase/firestore"; // Import Firestore functions
 import AsyncStorage from "@react-native-async-storage/async-storage";
- 
+
 const Login = () => {
   const [isAuthLoading, setAuthLoading] = useState(false);
   const [isGoogleAuthLoading, setGoogleAuthLoading] = useState(false);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [t] = useTranslation();
- 
-  const login = async (email : string, password : string) => {
+
+  const login = async (email: any, password: any) => {
     try {
       setAuthLoading(true);
- 
+
       const result = await loginWithEmail(email, password);
- 
+
       dispatch(setAuthentication(result?.user));
- 
-      await setDoc(
-        doc(db, "db_users", result.user.uid),
-        {
-          email: result.user.email,
-          lastLogin: new Date(),
-        },
-        { merge: true }
-      );
- 
+
       // Fetch additional user data from Firestore
       const userDocRef = doc(db, "db_users", result.user.uid);
       const userDocSnap = await getDoc(userDocRef);
- 
+
       if (userDocSnap.exists()) {
         const userData = userDocSnap.data();
-       // const id_company = userData;
-        console.log('cekuserData',userData)
+        console.log("cekuserData", userData);
         dispatch(setCompanyId(userData));
- 
+
         await AsyncStorage.setItem("userData", JSON.stringify(userData));
+
+        // Redirect user based on role
+        if (userData.role === "customer") {
+          navigate("/"); // Redirect to home/dashboard for customer
+        } else if (userData.role === "partner") {
+          navigate("/partner-dashboard"); // Redirect to partner dashboard
+        } else {
+          navigate("/"); // Default redirect to home
+        }
+
+        toast.success("Login is successful!");
       } else {
         console.log("User document not found");
       }
- 
-      toast.success("Login is successful!");
     } catch (error) {
       const err = error as Error;
       toast.error(err.message || "Login failed");
     } finally {
       // Ensure that loading state is turned off
       setAuthLoading(false);
- 
-      // Navigate to the home page after login attempt
-      navigate("/");
     }
   };
- 
-  const { handleChange, values, handleSubmit , touched, errors }  = useFormik({
+
+  const { handleChange, values, handleSubmit, touched, errors } = useFormik({
     initialValues: {
       email: "",
       password: "",
@@ -84,9 +80,9 @@ const Login = () => {
       login(values.email, values.password);
     },
   });
- 
+
   setWindowClass("hold-transition login-page");
- 
+
   const loginByGoogle = async () => {
     try {
       setGoogleAuthLoading(true);
@@ -100,7 +96,7 @@ const Login = () => {
       toast.error(err.message || "Failed to login with Google");
     }
   };
- 
+
   return (
     <div className="login-box">
       <div className="card card-outline card-primary">
@@ -161,7 +157,7 @@ const Login = () => {
                 </InputGroup.Append>
               </InputGroup>
             </div>
- 
+
             <div className="row">
               <div className="col-8">
                 <div style={{ display: "flex", alignItems: "center" }}>
@@ -174,7 +170,7 @@ const Login = () => {
               <div className="col-4">
                 <Button
                   loading={isAuthLoading}
-                  onClick={handleSubmit as any}
+                  onClick={handleSubmit}
                   disabled={isGoogleAuthLoading}
                 >
                   {t("login.button.signIn.label")}
@@ -182,9 +178,9 @@ const Login = () => {
               </div>
             </div>
           </form>
- 
+
           {/* Google Login Button */}
-          {/* <Button
+          <Button
             variant="danger"
             onClick={loginByGoogle}
             loading={isGoogleAuthLoading}
@@ -192,9 +188,9 @@ const Login = () => {
             className="mt-3"
           >
             <i className="fab fa-google mr-2" />
-            {t('login.button.signIn.social', { what: 'Google' })}
-          </Button> */}
- 
+            {t("login.button.signIn.social", { what: "Google" })}
+          </Button>
+
           {/* Uncomment for Facebook Login Button when implemented */}
           {/* <Button
             className="mt-2"
@@ -205,20 +201,20 @@ const Login = () => {
             <i className="fab fa-facebook mr-2" />
             {t('login.button.signIn.social', { what: 'Facebook' })}
           </Button> */}
- 
+
           {/* Additional Links */}
-          {/* <p className="mb-1">
-            <Link to="/forgot-password">{t('login.label.forgotPass')}</Link>
+          <p className="mb-1">
+            <Link to="/forgot-password">{t("login.label.forgotPass")}</Link>
           </p>
           <p className="mb-0">
             <Link to="/register" className="text-center">
-              {t('login.label.registerNew')}
+              {t("login.label.registerNew")}
             </Link>
-          </p> */}
+          </p>
         </div>
       </div>
     </div>
   );
 };
- 
+
 export default Login;
