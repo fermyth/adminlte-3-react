@@ -1,17 +1,11 @@
 import React from "react";
-import {
-  BrowserRouter as Router,
-  Link,
-  Outlet,
-  useLocation,
-} from "react-router-dom";
+import { Link, Outlet, useLocation } from "react-router-dom";
 import { FaHome, FaCar } from "react-icons/fa";
 import "bootstrap/dist/css/bootstrap.min.css";
-import DashboardPartner from "../Dashboard/Dashboard_Partner";
-import VehicleData from "../Vehicle_Data/Vehicle";
 import Header from "@app/modules/main/header/Header";
 import styled from "styled-components";
 import { Image } from "@profabric/react-components";
+import { useAppSelector } from "@app/store/store";
 
 const StyledBrandImage = styled(Image)`
   float: left;
@@ -24,6 +18,9 @@ const StyledBrandImage = styled(Image)`
 
 const Sidebar = () => {
   const location = useLocation();
+  const isSidebarCollapsed = useAppSelector(
+    (state) => state.ui.menuSidebarCollapsed
+  );
 
   return (
     <>
@@ -66,16 +63,52 @@ const Sidebar = () => {
           .shadow {
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
           }
+
+          .sidebar {
+            transition: width 0.3s;
+          }
+
+          .sidebar.collapsed {
+            width: 80px;
+          }
+
+          .sidebar.collapsed .nav-link span {
+            display: none;
+          }
+
+          .sidebar.collapsed .nav-link {
+            text-align: center;
+          }
+
+          .sidebar.collapsed .icon {
+            margin-right: 0;
+          }
+
+          .content {
+            flex-grow: 1;
+            padding: 3rem;
+            margin-left: 80px;
+            overflow-x: hidden;
+            width: calc(100% - 80px);
+          }
+
+          .content-expanded {
+            margin-left: 250px;
+            width: calc(100% - 250px);
+          }
         `}
         </style>
 
         <div
-          className="bg-white text-dark position-fixed shadow top-0 left-0 "
-          style={{ width: "250px", height: "100vh" }}
+          className={`bg-white text-dark position-fixed shadow top-0 left-0 sidebar p-0 ${isSidebarCollapsed ? "collapsed" : ""}`}
+          style={{
+            width: isSidebarCollapsed ? "80px" : "250px",
+            height: "100vh",
+          }}
         >
           <Link
             to="/"
-            className="brand-link "
+            className="brand-link"
             style={{ backgroundColor: "#009879", padding: "14px 13px" }}
           >
             <StyledBrandImage
@@ -85,7 +118,7 @@ const Sidebar = () => {
               height={33}
               rounded
             />
-            <span className="brand-text font-weight-bold text-light">
+            <span className="brand-text ml-2 font-weight-bold text-light">
               SIGAP PORTAL
             </span>
           </Link>
@@ -94,30 +127,28 @@ const Sidebar = () => {
               <li className="nav-item mb-2">
                 <Link
                   to="/partner-dashboard"
-                  className={`nav-link ${
-                    location.pathname === "/partner-dashboard" ? "active" : ""
-                  }`}
+                  className={`nav-link ${location.pathname === "/partner-dashboard" ? "active" : ""}`}
                   style={{ fontWeight: "bold" }}
                 >
-                  <FaHome className="icon" /> Dashboard
+                  <FaHome className="icon" /> <span>Dashboard</span>
                 </Link>
               </li>
               <li className="nav-item">
                 <Link
                   to="vehicle-data"
-                  className={`nav-link ${
-                    location.pathname === "vehicle-data" ? "active" : ""
-                  }`}
+                  className={`nav-link ${location.pathname === "vehicle-data" ? "active" : ""}`}
                   style={{ fontWeight: "bold" }}
                 >
-                  <FaCar className="icon" /> Vehicle Data
+                  <FaCar className="icon" /> <span>Vehicle Data</span>
                 </Link>
               </li>
             </ul>
           </div>
         </div>
 
-        <div className="flex-grow-1 p-3" style={{ marginLeft: "250px" }}>
+        <div
+          className={`content ${isSidebarCollapsed ? "" : "content-expanded"}`}
+        >
           <Outlet />
         </div>
       </div>
