@@ -112,7 +112,7 @@ const MenuSidebar = () => {
       <Link
         to="/"
         className="brand-link "
-        style={{ backgroundColor: "#009879", padding: "25px 13px" }}
+        style={{ backgroundColor: "#009879", padding: "13px 13px" }}
       >
         <StyledBrandImage
           src="https://www.freepik.com/free-vector/light-bulb-rocket-design_1130795.htm#fromView=search&page=1&position=37&uuid=bee3cde6-714d-41df-99b2-d0353ae6cd72"

@@ -1,11 +1,11 @@
-import { useCallback } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useCallback } from "react";
+import { useTranslation } from "react-i18next";
 import {
   toggleControlSidebar,
   toggleSidebarMenu,
-} from '@app/store/reducers/ui';
-import UserDropdown from '@app/modules/main/header/user-dropdown/UserDropdown';
-import { useAppDispatch, useAppSelector } from '@app/store/store';
+} from "@app/store/reducers/ui";
+import UserDropdown from "@app/modules/main/header/user-dropdown/UserDropdown";
+import { useAppDispatch, useAppSelector } from "@app/store/store";
 
 const Header = () => {
   const [t] = useTranslation();
@@ -31,29 +31,37 @@ const Header = () => {
 
   return (
     <>
-    <div className="">
-    <nav className={getContainerClasses()} style={{backgroundColor:"black"}} >
-      <ul className="navbar-nav  d-flex align-items-center">
-        <li className="nav-item">
-          <button
-            onClick={handleToggleMenuSidebar}
-            type="button"
-            className="nav-link"
-          >
-            <i className="fas fa-bars" style={{ color: "white" }} />
-          </button>
-        </li>
-        <li className="nav-item d-sm-inline-block mt-3">
-          <div className="">
-            <p className="" style={{ fontWeight: "bold", color: "white", fontSize: "20px" }}>
-              
-            </p>
-          </div>  
-        </li>
-      </ul>
-      <ul className="navbar-nav ml-auto">
-        <UserDropdown />
-        {/* <li className="nav-item ">
+      <div className="">
+        <nav
+          className={getContainerClasses()}
+          style={{ backgroundColor: "black" }}
+        >
+          <ul className="navbar-nav  d-flex align-items-center">
+            <li className="nav-item">
+              <button
+                onClick={handleToggleMenuSidebar}
+                type="button"
+                className="nav-link"
+              >
+                <i className="fas fa-bars" style={{ color: "white" }} />
+              </button>
+            </li>
+            <li className="nav-item d-sm-inline-block mt-3">
+              <div className="">
+                <p
+                  className=""
+                  style={{
+                    fontWeight: "bold",
+                    color: "white",
+                    fontSize: "20px",
+                  }}
+                ></p>
+              </div>
+            </li>
+          </ul>
+          <ul className="navbar-nav ml-auto">
+            <UserDropdown />
+            {/* <li className="nav-item ">
           <button
             type="button"
             className="nav-link "
@@ -62,9 +70,9 @@ const Header = () => {
             <i className="fas fa-th-large" style={{ color: "white" }} />
           </button>
         </li> */}
-      </ul>
-    </nav>
-    </div>
+          </ul>
+        </nav>
+      </div>
     </>
   );
 };

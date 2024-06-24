@@ -1,17 +1,17 @@
-import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
-import { StyledBigUserImage, StyledSmallUserImage } from '@app/styles/common';
+import { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { StyledBigUserImage, StyledSmallUserImage } from "@app/styles/common";
 import {
   UserBody,
   UserFooter,
   UserHeader,
   UserMenuDropdown,
-} from '@app/styles/dropdown-menus';
-import { firebaseAuth } from '@app/firebase';
-import {} from '@app/index';
-import { useAppSelector } from '@app/store/store';
-import { DateTime } from 'luxon';
+} from "@app/styles/dropdown-menus";
+import { firebaseAuth } from "@app/firebase";
+import {} from "@app/index";
+import { useAppSelector } from "@app/store/store";
+import { DateTime } from "luxon";
 
 const UserDropdown = () => {
   const navigate = useNavigate();
@@ -28,7 +28,7 @@ const UserDropdown = () => {
   const navigateToProfile = (event: any) => {
     event.preventDefault();
     setDropdownOpen(false);
-    navigate('/profile');
+    navigate("/profile");
   };
 
   return (
@@ -43,7 +43,7 @@ const UserDropdown = () => {
         rounded
       />
       <div slot="body">
-        <UserHeader style={{backgroundColor:"rgb(0, 152, 121)"}}>
+        <UserHeader style={{ backgroundColor: "rgb(0, 152, 121)" }}>
           <StyledBigUserImage
             src={currentUser?.photoURL}
             fallbackSrc="https://portal.sigapdriver.com/icon_admin.png"
@@ -52,7 +52,7 @@ const UserDropdown = () => {
             height={90}
             rounded
           />
-          <p style={{color:"white"}}>
+          <p style={{ color: "white" }}>
             {currentUser?.email}
             <small>
               <span>Member since </span>
@@ -60,7 +60,7 @@ const UserDropdown = () => {
                 <span>
                   {DateTime.fromRFC2822(
                     currentUser?.metadata?.creationTime
-                  ).toFormat('dd LLL yyyy')}
+                  ).toFormat("dd LLL yyyy")}
                 </span>
               )}
             </small>
@@ -92,7 +92,7 @@ const UserDropdown = () => {
             className="btn btn-default btn-flat float-right"
             onClick={logOut}
           >
-            {t('login.button.signOut')}
+            {t("login.button.signOut")}
           </button>
         </UserFooter>
       </div>

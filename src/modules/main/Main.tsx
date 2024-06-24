@@ -1,13 +1,13 @@
-import { useState, useEffect, useCallback } from 'react';
-import { Outlet } from 'react-router-dom';
-import { toggleSidebarMenu } from '@app/store/reducers/ui';
-import { addWindowClass, removeWindowClass } from '@app/utils/helpers';
-import ControlSidebar from '@app/modules/main/control-sidebar/ControlSidebar';
-import Header from '@app/modules/main/header/Header';
-import { Image } from '@profabric/react-components';
-import { useAppDispatch, useAppSelector } from '@app/store/store';
-import MenuSidebar from '@app/modules/main/menu-sidebar/MenuSidebar';
-import styled from 'styled-components';
+import React, { useState, useEffect, useCallback } from "react";
+import { Outlet } from "react-router-dom";
+import { toggleSidebarMenu } from "@app/store/reducers/ui";
+import { addWindowClass, removeWindowClass } from "@app/utils/helpers";
+import ControlSidebar from "@app/modules/main/control-sidebar/ControlSidebar";
+import Header from "@app/modules/main/header/Header";
+import { Image } from "@profabric/react-components";
+import { useAppDispatch, useAppSelector } from "@app/store/store";
+import MenuSidebar from "@app/modules/main/menu-sidebar/MenuSidebar";
+import styled from "styled-components";
 
 const Main = () => {
   const dispatch = useAppDispatch();
@@ -27,29 +27,28 @@ const Main = () => {
   }, [currentUser]);
 
   useEffect(() => {
-    removeWindowClass('register-page');
-    removeWindowClass('login-page');
-    removeWindowClass('hold-transition');
+    removeWindowClass("register-page");
+    removeWindowClass("login-page");
+    removeWindowClass("hold-transition");
 
-    addWindowClass('sidebar-mini');
+    addWindowClass("sidebar-mini");
 
-    // fetchProfile();
     return () => {
-      removeWindowClass('sidebar-mini');
+      removeWindowClass("sidebar-mini");
     };
   }, []);
 
   useEffect(() => {
-    removeWindowClass('sidebar-closed');
-    removeWindowClass('sidebar-collapse');
-    removeWindowClass('sidebar-open');
-    if (menuSidebarCollapsed && screenSize === 'lg') {
-      addWindowClass('sidebar-collapse');
-    } else if (menuSidebarCollapsed && screenSize === 'xs') {
-      addWindowClass('sidebar-open');
-    } else if (!menuSidebarCollapsed && screenSize !== 'lg') {
-      addWindowClass('sidebar-closed');
-      addWindowClass('sidebar-collapse');
+    removeWindowClass("sidebar-closed");
+    removeWindowClass("sidebar-collapse");
+    removeWindowClass("sidebar-open");
+    if (menuSidebarCollapsed && screenSize === "lg") {
+      addWindowClass("sidebar-collapse");
+    } else if (menuSidebarCollapsed && screenSize === "xs") {
+      addWindowClass("sidebar-open");
+    } else if (!menuSidebarCollapsed && screenSize !== "lg") {
+      addWindowClass("sidebar-closed");
+      addWindowClass("sidebar-collapse");
     }
   }, [screenSize, menuSidebarCollapsed]);
 
@@ -58,10 +57,10 @@ const Main = () => {
     top: 0;
     left: 0;
     height: 100%;
-    width: 250px; 
-    background-color: #red; 
+    width: 250px;
+    background-color: red; /* Mengganti #red menjadi red */
     z-index: 1000;
-  
+    overflow-y: auto; /* Mengizinkan scroll vertikal jika diperlukan */
   `;
 
   const getAppTemplate = useCallback(() => {
@@ -82,23 +81,20 @@ const Main = () => {
       <>
         <Header />
         <StyledMenuSidebar />
-        <div className="content-wrapper bg-white" >
-          <div className="pt-3" />
+        <div className="content-wrapper bg-white">
           <section className="content">
             <Outlet />
           </section>
         </div>
         <ControlSidebar />
-        <div
-          id="sidebar-overlay"
-          role="presentation"
-          onClick={handleToggleMenuSidebar}
-          onKeyDown={() => {}}
-          style={{
-            display:
-              screenSize === 'sm' && menuSidebarCollapsed ? 'block' : undefined,
-          }}
-        />
+        {screenSize === "sm" && menuSidebarCollapsed && (
+          <div
+            id="sidebar-overlay"
+            role="presentation"
+            onClick={handleToggleMenuSidebar}
+            onKeyDown={() => {}}
+          />
+        )}
       </>
     );
   }, [isAppLoaded, menuSidebarCollapsed, screenSize]);

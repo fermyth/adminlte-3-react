@@ -55,7 +55,7 @@ const Driver: React.FC = () => {
             })
           );
           const jumlahDriver50TahunKeAtas = drivers.filter(
-            (driver) => driver.usia >= 50
+            (driver) => driver.usia >= 51
           ).length;
 
           setData(drivers);
@@ -120,7 +120,7 @@ const Driver: React.FC = () => {
   };
 
   const getAgeColor = (age: number) => {
-    if (age >= 50 && age <= 55) {
+    if (age >= 51 && age <= 55) {
       return "orange";
     } else if (age > 55) {
       return "red";

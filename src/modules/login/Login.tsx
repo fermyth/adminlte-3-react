@@ -180,7 +180,7 @@ const Login = () => {
           </form>
 
           {/* Google Login Button */}
-          <Button
+          {/* <Button
             variant="danger"
             onClick={loginByGoogle}
             loading={isGoogleAuthLoading}
@@ -189,7 +189,7 @@ const Login = () => {
           >
             <i className="fab fa-google mr-2" />
             {t("login.button.signIn.social", { what: "Google" })}
-          </Button>
+          </Button> */}
 
           {/* Uncomment for Facebook Login Button when implemented */}
           {/* <Button
@@ -203,14 +203,14 @@ const Login = () => {
           </Button> */}
 
           {/* Additional Links */}
-          <p className="mb-1">
+          {/* <p className="mb-1">
             <Link to="/forgot-password">{t("login.label.forgotPass")}</Link>
           </p>
           <p className="mb-0">
             <Link to="/register" className="text-center">
               {t("login.label.registerNew")}
             </Link>
-          </p>
+          </p> */}
         </div>
       </div>
     </div>

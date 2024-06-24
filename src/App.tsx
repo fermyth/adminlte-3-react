@@ -31,6 +31,7 @@ import DetailCostumer from "./pages/partner/Dashboard/components/Detail_Costumer
 import Sidebar from "./pages/partner/Sidebar/Sidebar";
 import Header from "./modules/main/header/Header";
 import VehicleData from "./pages/partner/Vehicle_Data/Vehicle";
+import Service from "./pages/servie_report/service";
 
 const { VITE_NODE_ENV } = import.meta.env;
 
@@ -108,6 +109,7 @@ const App = () => {
             <Route path="/admin/driver" element={<Driver />} />
             <Route path="/admin/sigaps_company" element={<LaporanDriver />} />
             <Route path="/admin/sigaps_driver" element={<LaporanHarian />} />
+            <Route path="/admin/service_report" element={<Service />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/" element={<Dashboard />} />
           </Route>
