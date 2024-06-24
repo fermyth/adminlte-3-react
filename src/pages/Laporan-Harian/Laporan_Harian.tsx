@@ -73,7 +73,7 @@ const LaporanHarian: React.FC = () => {
     setLoading(true);
     try {
       const response = await axios.get<{ data: any[] }>(
-        `https://backend.sigapdriver.com/api/get_data_timesheet_api/${selectedDate}/${idCompany}/1/33`
+        `https://backend.sigapdriver.com/api/get_data_timesheet_api/${selectedDate}/-/1/${idCompany}`
       );
 
       const mappedData: DataItem[] = response.data.data.map((item) => ({

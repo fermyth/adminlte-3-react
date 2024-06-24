@@ -87,7 +87,6 @@ function LaporanDriver() {
 
       try {
         const response = await axios.get<ApiResponse>(url);
-        console.log('cekdata',response)
         setData(response.data.data);
         setIsFiltered(true);
         if (response.data.data.length === 0) {
@@ -248,9 +247,7 @@ function LaporanDriver() {
       <center>
         {isLoading && <p>Sedang memuat...</p>}
         {isNoData && <p>Tidak ada data yang ditemukan.</p>}
-        {isError && data.length === 0 && (
-          <p>Sedang memuat...</p>
-        )}
+        {isError && data.length === 0 && <p>Sedang memuat...</p>}
       </center>
       <div className="info-box">
         {isFiltered && <DriverReportTable data={data} />}
