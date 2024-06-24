@@ -85,7 +85,7 @@ const ContentHeader: React.FC = () => {
       const data = response.data.data;
       const { drivers, jam_masuk, jam_keluar, awh, color_code } = data;
 
-      const formattedData = drivers.map((driver: string) => ({
+      const formattedData = drivers.map((driver: any) => ({
         name: driver,
         monday: [
           formatTime(jam_masuk[driver][0]),
@@ -115,12 +115,19 @@ const ContentHeader: React.FC = () => {
           formatTime(jam_masuk[driver][6]),
           formatTime(jam_keluar[driver][6]),
         ],
-        totalWorkHours: awh[driver].split(" || ")[0],
-        totalRestHours: awh[driver].split(" || ")[1],
+        totalWorkHours:
+          awh[driver] && awh[driver].split(" || ")[0] !== "00:00"
+            ? awh[driver].split(" || ")[0]
+            : "-",
+        totalRestHours:
+          awh[driver] && awh[driver].split(" || ")[1] !== "00:00"
+            ? awh[driver].split(" || ")[1]
+            : "-",
         colorCode: color_code[driver],
       }));
 
       setTableData(formattedData);
+      console.log("formattedData:", formattedData);
     } catch (error) {
       console.log("Error fetching data from API:", error);
     } finally {
@@ -318,13 +325,17 @@ const ContentHeader: React.FC = () => {
                         className="text-center"
                         style={{ backgroundColor: driver.colorCode }}
                       >
-                        {driver.totalWorkHours}
+                        {driver.totalWorkHours === "00:00"
+                          ? "-"
+                          : driver.totalWorkHours}
                       </td>
                       <td
                         className="text-center"
                         style={{ backgroundColor: driver.colorCode }}
                       >
-                        {driver.totalRestHours}
+                        {driver.totalRestHours === "00:00"
+                          ? "-"
+                          : driver.totalRestHours}
                       </td>
                     </tr>
                   ))

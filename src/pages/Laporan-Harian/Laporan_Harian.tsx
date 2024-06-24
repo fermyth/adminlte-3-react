@@ -65,6 +65,18 @@ const LaporanHarian: React.FC = () => {
     fetchData();
   }, []);
 
+  const formatTime = (time: string) => {
+    if (typeof time !== "string" || !time.trim()) {
+      return "-";
+    }
+
+    const [hours, minutes] = time.split(":");
+    if (hours && minutes) {
+      return `${hours.padStart(2, "0")}:${minutes.padStart(2, "0")}`;
+    } else {
+      return "-";
+    }
+  };
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setDate(e.target.value);
   };
@@ -337,8 +349,12 @@ const LaporanHarian: React.FC = () => {
                       <td className="text-center">{item.name}</td>
                       <td className="text-center">{item.name_users}</td>
                       <td className="text-center">{item.nopol}</td>
-                      <td className="text-center">{item.jamMasuk}</td>
-                      <td className="text-center">{item.jamKeluar}</td>
+                      <td className="text-center">
+                        {formatTime(item.jamMasuk)}
+                      </td>
+                      <td className="text-center">
+                        {formatTime(item.jamKeluar)}
+                      </td>
                       <td className="text-center">{item.km_in}</td>
                       <td className="text-center">{item.km_out}</td>
                       <td className="text-start lk-pp-column">{item.lk_pp}</td>
