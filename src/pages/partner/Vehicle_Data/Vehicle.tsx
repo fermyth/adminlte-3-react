@@ -8,8 +8,11 @@ import {
   Row,
   Col,
   Modal,
+  DropdownButton,
+  Dropdown,
 } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { AnyNaptrRecord } from "dns";
 
 function VehicleData() {
   const [customers, setCustomers] = useState([
@@ -48,8 +51,10 @@ function VehicleData() {
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [selectedCustomer, setSelectedCustomer] = useState(null);
+  const [dropdownValue1, setDropdownValue1] = useState("Nama Customers");
+  const [dropdownValue2, setDropdownValue2] = useState("Contains");
 
-  const handleSearch = (event) => {
+  const handleSearch = (event: any) => {
     setSearchTerm(event.target.value);
   };
 
@@ -60,18 +65,18 @@ function VehicleData() {
   const handleAddModalShow = () => setShowAddModal(true);
   const handleAddModalClose = () => setShowAddModal(false);
 
-  const handleEditModalShow = (customer) => {
+  const handleEditModalShow = (customer: any) => {
     setSelectedCustomer(customer);
     setShowEditModal(true);
   };
   const handleEditModalClose = () => setShowEditModal(false);
 
-  const handleAddCustomer = (newCustomer) => {
+  const handleAddCustomer = (newCustomer: any) => {
     setCustomers([...customers, newCustomer]);
     handleAddModalClose();
   };
 
-  const handleEditCustomer = (updatedCustomer) => {
+  const handleEditCustomer = (updatedCustomer: any) => {
     const updatedCustomers = customers.map((customer) =>
       customer.id === updatedCustomer.id ? updatedCustomer : customer
     );
@@ -79,7 +84,7 @@ function VehicleData() {
     handleEditModalClose();
   };
 
-  const handleDeleteCustomer = (id) => {
+  const handleDeleteCustomer = (id: any) => {
     const updatedCustomers = customers.filter((customer) => customer.id !== id);
     setCustomers(updatedCustomers);
   };
@@ -112,6 +117,28 @@ function VehicleData() {
           value={searchTerm}
           onChange={handleSearch}
         />
+        <DropdownButton
+          as={InputGroup.Append}
+          variant="outline-secondary"
+          title={dropdownValue1}
+          id="input-group-dropdown-1"
+          onSelect={(eventKey: any) => setDropdownValue1(eventKey)}
+        >
+          <Dropdown.Item eventKey="Option 1">Option 1</Dropdown.Item>
+          <Dropdown.Item eventKey="Option 2">Option 2</Dropdown.Item>
+          <Dropdown.Item eventKey="Option 3">Option 3</Dropdown.Item>
+        </DropdownButton>
+        <DropdownButton
+          as={InputGroup.Append}
+          variant="outline-secondary"
+          title={dropdownValue2}
+          id="input-group-dropdown-2"
+          onSelect={(eventKey: any) => setDropdownValue2(eventKey)}
+        >
+          <Dropdown.Item eventKey="Option A">Option A</Dropdown.Item>
+          <Dropdown.Item eventKey="Option B">Option B</Dropdown.Item>
+          <Dropdown.Item eventKey="Option C">Option C</Dropdown.Item>
+        </DropdownButton>
         <InputGroup.Append>
           <Button variant="outline-secondary">
             <i className="fas fa-search"></i>
