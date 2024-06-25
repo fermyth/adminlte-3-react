@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import {
   Table,
   Button,
@@ -12,41 +13,9 @@ import {
   Dropdown,
 } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { AnyNaptrRecord } from "dns";
 
 function VehicleData() {
-  const [customers, setCustomers] = useState([
-    {
-      id: "JJSHHD",
-      namaCustomer: "PT. JJSHHD",
-      jumlahKendaraan: 2,
-      status: "Aktif",
-    },
-    {
-      id: "GGHSG",
-      namaCustomer: "PT. GGHSG",
-      jumlahKendaraan: 2,
-      status: "Aktif",
-    },
-    {
-      id: "CDEFG",
-      namaCustomer: "PT. CDEFG",
-      jumlahKendaraan: 3,
-      status: "Aktif",
-    },
-    {
-      id: "ABCDS",
-      namaCustomer: "PT. ABCDS",
-      jumlahKendaraan: 10,
-      status: "Aktif",
-    },
-    {
-      id: "EPPSJ",
-      namaCustomer: "PT. EPPSJ",
-      jumlahKendaraan: 30,
-      status: "Aktif",
-    },
-  ]);
+  const [customers, setCustomers] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -54,11 +23,30 @@ function VehicleData() {
   const [dropdownValue1, setDropdownValue1] = useState("Nama Customers");
   const [dropdownValue2, setDropdownValue2] = useState("Contains");
 
+  useEffect(() => {
+    axios
+      .get(
+        "https://script.googleusercontent.com/macros/echo?user_content_key=7l50tKxm7LttPBwsKp-MF4f83WxvCkEoOIzH3o8yxBjwlJzi1DP9CRx5CAa02BlZiBC0MyRv7-up4QSk0FSvqfsGZfbnUEhpm5_BxDlH2jW0nuo2oDemN9CCS2h10ox_1xSncGQajx_ryfhECjZEnA6TbSQwDFUfgFv57b0G3tPh6pgILo1YeQNwRYadkWyi-zrouKT9cz6WJ4u5GLwbVmmq5NABqKJxetNufYzzpgifdKykPxaUEQ&lib=MfofOVY_nfGl5ZIOpjnzaaifRHul_JHjD"
+      )
+      .then((response) => {
+        const fetchedCustomers = response.data.map((customer: any) => ({
+          id: customer.customer_id,
+          namaCustomer: customer.nama_customer,
+          jumlahKendaraan: parseInt(customer.jumlah_kendaraan, 10) || 0,
+          status: customer.status,
+        }));
+        setCustomers(fetchedCustomers);
+      })
+      .catch((error) => {
+        console.error("Error fetching data from API", error);
+      });
+  }, []);
+
   const handleSearch = (event: any) => {
     setSearchTerm(event.target.value);
   };
 
-  const filteredCustomers = customers.filter((customer) =>
+  const filteredCustomers = customers.filter((customer: any) =>
     customer.namaCustomer.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -77,7 +65,7 @@ function VehicleData() {
   };
 
   const handleEditCustomer = (updatedCustomer: any) => {
-    const updatedCustomers = customers.map((customer) =>
+    const updatedCustomers = customers.map((customer: any) =>
       customer.id === updatedCustomer.id ? updatedCustomer : customer
     );
     setCustomers(updatedCustomers);
@@ -85,7 +73,9 @@ function VehicleData() {
   };
 
   const handleDeleteCustomer = (id: any) => {
-    const updatedCustomers = customers.filter((customer) => customer.id !== id);
+    const updatedCustomers = customers.filter(
+      (customer: any) => customer.id !== id
+    );
     setCustomers(updatedCustomers);
   };
 
@@ -179,7 +169,7 @@ function VehicleData() {
           </tr>
         </thead>
         <tbody>
-          {filteredCustomers.map((customer) => (
+          {filteredCustomers.map((customer: any) => (
             <tr key={customer.id}>
               <td>
                 <Form.Check type="checkbox" />
@@ -194,7 +184,7 @@ function VehicleData() {
                   className="mr-2"
                   onClick={() => handleEditModalShow(customer)}
                 >
-                  <i className="fa-regular fa-eye"></i>View
+                  <i className="fa-regular fa-eye"></i> View
                 </Button>
                 <Button
                   variant="primary"
