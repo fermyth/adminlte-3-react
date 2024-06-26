@@ -14,12 +14,22 @@ import {
 } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-function VehicleData() {
-  const [customers, setCustomers] = useState([]);
+interface Customer {
+  id: string;
+  namaCustomer: string;
+  jumlahKendaraan: number;
+  status: string;
+}
+
+const VehicleData: React.FC = () => {
+  const [customers, setCustomers] = useState<Customer[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
-  const [selectedCustomer, setSelectedCustomer] = useState(null);
+  const [showViewModal, setShowViewModal] = useState(false);
+  const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(
+    null
+  );
   const [dropdownValue1, setDropdownValue1] = useState("Nama Customers");
   const [dropdownValue2, setDropdownValue2] = useState("Contains");
 
@@ -42,40 +52,44 @@ function VehicleData() {
       });
   }, []);
 
-  const handleSearch = (event: any) => {
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
   };
 
-  const filteredCustomers = customers.filter((customer: any) =>
+  const filteredCustomers = customers.filter((customer) =>
     customer.namaCustomer.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const handleAddModalShow = () => setShowAddModal(true);
   const handleAddModalClose = () => setShowAddModal(false);
 
-  const handleEditModalShow = (customer: any) => {
+  const handleEditModalShow = (customer: Customer) => {
     setSelectedCustomer(customer);
     setShowEditModal(true);
   };
   const handleEditModalClose = () => setShowEditModal(false);
 
-  const handleAddCustomer = (newCustomer: any) => {
+  const handleViewModalShow = (customer: Customer) => {
+    setSelectedCustomer(customer);
+    setShowViewModal(true);
+  };
+  const handleViewModalClose = () => setShowViewModal(false);
+
+  const handleAddCustomer = (newCustomer: Customer) => {
     setCustomers([...customers, newCustomer]);
     handleAddModalClose();
   };
 
-  const handleEditCustomer = (updatedCustomer: any) => {
-    const updatedCustomers = customers.map((customer: any) =>
+  const handleEditCustomer = (updatedCustomer: Customer) => {
+    const updatedCustomers = customers.map((customer) =>
       customer.id === updatedCustomer.id ? updatedCustomer : customer
     );
     setCustomers(updatedCustomers);
     handleEditModalClose();
   };
 
-  const handleDeleteCustomer = (id: any) => {
-    const updatedCustomers = customers.filter(
-      (customer: any) => customer.id !== id
-    );
+  const handleDeleteCustomer = (id: string) => {
+    const updatedCustomers = customers.filter((customer) => customer.id !== id);
     setCustomers(updatedCustomers);
   };
 
@@ -137,12 +151,12 @@ function VehicleData() {
       </InputGroup>
       <style>
         {`
-            .table-bordered{
+          .table-bordered {
             border-radius: 15px 15px 0 0;
             border-top: 1px solid #009879;
             overflow: hidden;
           }
-             .table tbody tr:last-of-type {
+          .table tbody tr:last-of-type {
             border-bottom: 2px solid #009879;
           }
         `}
@@ -169,7 +183,7 @@ function VehicleData() {
           </tr>
         </thead>
         <tbody>
-          {filteredCustomers.map((customer: any) => (
+          {filteredCustomers.map((customer) => (
             <tr key={customer.id}>
               <td>
                 <Form.Check type="checkbox" />
@@ -182,9 +196,9 @@ function VehicleData() {
                 <Button
                   variant="warning"
                   className="mr-2"
-                  onClick={() => handleEditModalShow(customer)}
+                  onClick={() => handleViewModalShow(customer)}
                 >
-                  <i className="fa-regular fa-eye"></i> View
+                  <i className="fas fa-eye"></i> View
                 </Button>
                 <Button
                   variant="primary"
@@ -243,7 +257,17 @@ function VehicleData() {
           <Button variant="secondary" onClick={handleAddModalClose}>
             Close
           </Button>
-          <Button variant="success" onClick={() => handleAddCustomer()}>
+          <Button
+            variant="success"
+            onClick={() =>
+              handleAddCustomer({
+                id: "newId",
+                namaCustomer: "newCustomer",
+                jumlahKendaraan: 0,
+                status: "Aktif",
+              })
+            }
+          >
             Save Changes
           </Button>
         </Modal.Footer>
@@ -301,14 +325,89 @@ function VehicleData() {
           </Button>
           <Button
             variant="success"
-            onClick={() => handleEditCustomer(selectedCustomer)}
+            onClick={() => handleEditCustomer(selectedCustomer!)}
           >
             Save Changes
           </Button>
         </Modal.Footer>
       </Modal>
+
+      {/* View Modal */}
+      <Modal show={showViewModal} onHide={handleViewModalClose} centered>
+        <Modal.Header
+          closeButton
+          className=" text-white"
+          style={{ backgroundColor: "#009879" }}
+        >
+          <Modal.Title>Customer Details</Modal.Title>
+        </Modal.Header>
+        <Modal.Body className="p-4">
+          {selectedCustomer && (
+            <div className="customer-details">
+              <div className="detail-row">
+                <span className="detail-label">Nama Customer:</span>
+                <span className="detail-value">
+                  {selectedCustomer.namaCustomer}
+                </span>
+              </div>
+              <div className="detail-row">
+                <span className="detail-label">Customer Id:</span>
+                <span className="detail-value">{selectedCustomer.id}</span>
+              </div>
+              <div className="detail-row">
+                <span className="detail-label">Jumlah Kendaraan:</span>
+                <span className="detail-value">
+                  {selectedCustomer.jumlahKendaraan}
+                </span>
+              </div>
+              <div className="detail-row">
+                <span className="detail-label">Status:</span>
+                <span className="detail-value">{selectedCustomer.status}</span>
+              </div>
+            </div>
+          )}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleViewModalClose}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      <style>
+        {`
+    .customer-details {
+      background-color: #f8f9fa;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    .customer-details .detail-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid #e9ecef;
+    }
+    .customer-details .detail-row:last-child {
+      border-bottom: none;
+    }
+    .customer-details .detail-label {
+      font-weight: bold;
+      color: #495057;
+    }
+    .customer-details .detail-value {
+      color: #212529;
+    }
+    .modal-header.bg-primary {
+      background-color: #007bff;
+    }
+    .modal-header.bg-primary .modal-title {
+      color: white;
+    }
+  `}
+      </style>
     </div>
   );
-}
+};
 
 export default VehicleData;
