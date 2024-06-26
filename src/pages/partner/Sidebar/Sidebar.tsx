@@ -175,8 +175,8 @@ const Sidebar = () => {
               </li>
               <li className="nav-item">
                 <Link
-                  to="vehicle-data"
-                  className={`nav-link ${location.pathname === "vehicle-data" ? "active" : ""}`}
+                  to="/partner-dashboard/vehicle-data"
+                  className={`nav-link ${location.pathname === "/partner-dashboard/vehicle-data" ? "active" : ""}`}
                   style={{ fontWeight: "bold" }}
                 >
                   <FaCar className="icon" />{" "}
