@@ -38,11 +38,13 @@ const Driver: React.FC = () => {
       setIsLoading(true);
       try {
         const response = await axios.get(
-          `https://backend.sigapdriver.com/api/getAllDriver?company_info=${idCompany}`
+          `http://localhost:3000/api/v1/drivers/${idCompany}`
         );
 
+        console.log("response.data.data:", response.data.data);
+
         if (response) {
-          const drivers: DriverData[] = response.data.map(
+          const drivers: DriverData[] = response.data.data.map(
             (driver: DriverApiResponse, index: number): DriverData => ({
               no: index + 1,
               foto:

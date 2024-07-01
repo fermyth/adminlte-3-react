@@ -74,16 +74,16 @@ const Dashboard = () => {
   useEffect(() => {
     if (idCompany) {
       getPortal(idCompany);
-      getInvoices(idCompany);
+      getLatestInvoices(idCompany);
     }
   }, [idCompany]);
 
   const getPortal = async (id_company: string) => {
     try {
       const response = await axios.get(
-        `https://backend.sigapdriver.com/api/getCompanyInfo/${id_company}`
+        `http://localhost:3000/api/v1/mastercompanies/${id_company}`
       );
-      setCompanyInfo(response.data.data);
+      setCompanyInfo(response.data);
       setIsLoading(false);
     } catch (error) {
       console.error("Error fetching company info:", error);
@@ -91,30 +91,33 @@ const Dashboard = () => {
     }
   };
 
-  const getInvoices = async (id_company: string) => {
+  const getLatestInvoices = async (id_company: string) => {
     try {
       const response = await axios.get(
-        `https://backend.sigapdriver.com/api/getLatestInvoice/${id_company}`
+        `http://localhost:3000/api/v1/invoices/${id_company}`
       );
-      if (response.data.success) {
-        setInvoiceData(response.data.data);
+      console.log("response.data:", response.data);
+
+      if (Array.isArray(response.data) && response.data.length > 0) {
+        const latestInvoices = response.data.slice(0, 6);
+        setInvoiceData(latestInvoices);
+      } else {
+        console.log("Data invoices tidak ditemukan atau format tidak sesuai.");
       }
     } catch (error) {
-      console.error("Error fetching invoices:", error);
+      console.error("Error fetching latest invoices:", error);
     }
   };
 
-  if (isLoading || !idCompany) {
+  if (isLoading || !idCompany || !companyInfo) {
     return <div>Loading...</div>;
   }
 
-  if (!companyInfo || !idCompany) {
-    return <div>Loading...</div>;
-  }
   const addressLines = companyInfo.company_address
     .split("<p>")
     .filter((line) => line)
     .map((line) => line.replace("</p>", "").replace("\r\n", ""));
+
   const labels = invoiceData.map((invoice) => invoice.periode);
   const data = invoiceData.map(
     (invoice) =>
@@ -159,9 +162,7 @@ const Dashboard = () => {
             {latestInvoice ? latestInvoice.periode : "Loading..."}
           </p>
           <h1 className="font-weight-bold text-light text-uppercase">
-            {latestInvoice
-              ? latestTotalInvoiceValue.toLocaleString()
-              : "Loading..."}
+            {latestTotalInvoiceValue.toLocaleString()}
           </h1>
           <h1
             className="text-light"
