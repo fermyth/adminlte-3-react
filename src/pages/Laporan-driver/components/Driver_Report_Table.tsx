@@ -117,9 +117,8 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({ data }) => {
   ) => {
     try {
       const response = await axios.get(
-        `https://backend.sigapdriver.com/api/detail_activity/${userId}/${date}`
+        `http://localhost:3000/api/v1/activity/${userId}/${date}`
       );
-      console.log("cekdancek", response.data.data);
       setactifity(response.data.data);
       setloading(false);
       setSelectedUserId(userId);
@@ -127,6 +126,7 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({ data }) => {
     } catch (error) {
       console.error("Error fetching company info:", error);
     }
+    ``;
     setOpen(true);
   };
 
@@ -139,14 +139,14 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({ data }) => {
   ) => {
     try {
       const response = await axios.get(
-        `https://backend.sigapdriver.com/api/pengeluaran/${userId}/${date}`
+        `http://localhost:3000/api/v1/pengeluaran/${userId}/${date}`
       );
       console.log("cekdancek", response.data);
       setklaim(response.data.data);
       setloadingklaim(false);
       setSelectedUserIdklaim(userId);
       setnamedriver(name);
-      settotalklaim(response.data.total[0].sum_expenses);
+      settotalklaim(response.data.total_expenses);
     } catch (error) {
       console.error("Error fetching company info:", error);
     }
