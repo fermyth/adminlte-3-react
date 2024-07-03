@@ -32,6 +32,7 @@ import Sidebar from "./pages/partner/Sidebar/Sidebar";
 import Header from "./modules/main/header/Header";
 import VehicleData from "./pages/partner/Vehicle_Data/Vehicle";
 import Service from "./pages/servie_report/service";
+import Profil_Driver from "./pages/Driver/Profil_Driver";
 
 const { VITE_NODE_ENV } = import.meta.env;
 
@@ -101,12 +102,19 @@ const App = () => {
         <Route path="/recover-password" element={<PublicRoute />}>
           <Route path="/recover-password" element={<RecoverPassword />} />
         </Route>
+
+        {/* <Route path="/profil_driver" element={<PublicRoute />}>
+          <Route path="/profil_driver" element={<Profil_Driver />} />
+        </Route> */}
+
+
         <Route path="/" element={<PrivateRoute />}>
           <Route path="/" element={<Main />}>
             <Route path="/sub-menu-2" element={<LaporanJamKerja />} />
             <Route path="/sub-menu-1" element={<SubMenu />} />
             <Route path="/admin/report_awh" element={<LaporanJamKerja />} />
             <Route path="/admin/driver" element={<Driver />} />
+            <Route path="/admin/profil_driver" element={<Profil_Driver />} />
             <Route path="/admin/sigaps_company" element={<LaporanDriver />} />
             <Route path="/admin/sigaps_driver" element={<LaporanHarian />} />
             <Route path="/admin/service_report" element={<Service />} />
@@ -117,6 +125,7 @@ const App = () => {
             <Route path="/partner-dashboard" element={<DashboardPartner />} />
             <Route path="vehicle-data" element={<VehicleData />} />
             <Route path="detail-costumer" element={<DetailCostumer />} />
+            
           </Route>
         </Route>
       </Routes>
