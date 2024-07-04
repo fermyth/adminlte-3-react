@@ -30,9 +30,13 @@ import DashboardPartner from "./pages/partner/Dashboard/Dashboard_Partner";
 import DetailCostumer from "./pages/partner/Dashboard/components/Detail_Costumer";
 import Sidebar from "./pages/partner/Sidebar/Sidebar";
 import Header from "./modules/main/header/Header";
-import VehicleData from "./pages/partner/Vehicle_Data/Vehicle";
+import VehicleData from "./pages/partner/Customer/Customer";
 import Service from "./pages/servie_report/service";
 import Profil_Driver from "./pages/Driver/Profil_Driver";
+import Jadwal from "./pages/partner/Jadwal/Jadwal";
+import Customer from "./pages/partner/Customer/Customer";
+import CustomerDetail from "./pages/partner/Customer/Components/DetailCustomer";
+import DetailCustomerMobil from "./pages/partner/Customer/Components/DetailCustomerMobil";
 
 const { VITE_NODE_ENV } = import.meta.env;
 
@@ -123,8 +127,12 @@ const App = () => {
           </Route>
           <Route path="/partner-dashboard" element={<Sidebar />}>
             <Route path="/partner-dashboard" element={<DashboardPartner />} />
-            <Route path="vehicle-data" element={<VehicleData />} />
+            <Route path="customer" element={<Customer />} />
+            <Route path="jadwal" element={<Jadwal />} />
             <Route path="detail-costumer" element={<DetailCostumer />} />
+            <Route path="/partner-dashboard/customer/costumer-detail" element={<CustomerDetail />} />
+            <Route path="/partner-dashboard/customer/costumer-detail/detail-mobil" element={<DetailCustomerMobil />} />
+            <Route path="/partner-dashboard/profil_driver" element={<Profil_Driver />} />
             
           </Route>
         </Route>

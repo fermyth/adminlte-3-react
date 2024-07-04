@@ -38,10 +38,10 @@ const Driver: React.FC = () => {
       setIsLoading(true);
       try {
         const response = await axios.get(
-          `http://localhost:3000/api/v1/drivers/${idCompany}`
-        );
+          `https://backend.sigapdriver.com/api/getAllDriver?company_info=${idCompany}`
+        ); 
 
-        console.log("response.data.data:", response.data.data);
+        console.log("response.data.data:", response.data);
 
         if (response) {
           const drivers: DriverData[] = response.data.data.map(
