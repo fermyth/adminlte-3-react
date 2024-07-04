@@ -135,7 +135,7 @@ const Jadwal: React.FC = () => {
         <tbody>
             <tr> 
                 <td>
-                    16 Februari 2024
+                    <h2>10</h2> Februari
                 </td> 
               <td>
                 <p>
@@ -171,7 +171,7 @@ const Jadwal: React.FC = () => {
             </tr>
             <tr>  
             <td>
-                    20 Maret 2024
+                    <h2>20</h2> Maret
                 </td> 
                 <td>
                 <p>
@@ -208,7 +208,7 @@ const Jadwal: React.FC = () => {
             </tr>
             <tr>  
             <td>
-                    12 Juni 2024
+                    <h2>12</h2> Juni
                 </td> 
                 <td>
                 <p>
