@@ -47,8 +47,8 @@ const Login = () => {
           navigate("/"); // Redirect to home/dashboard for customer
         } else if (userData.role === "partner") {
           navigate("/partner-dashboard"); // Redirect to partner dashboard
-        } else {
-          navigate("/"); // Default redirect to home
+        } else if (userData.role === "luteral") {
+          navigate("/internal"); // Default redirect to home
         }
 
         toast.success("Login is successful!");

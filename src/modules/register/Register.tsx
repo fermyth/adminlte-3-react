@@ -277,7 +277,7 @@ const Register = () => {
                   <option value="">Select Role</option>
                   <option value="partner">Partner</option>
                   <option value="customer">Customer</option>
-                  <option value="luteral">Luteral</option>
+                  <option value="luteral">Internal</option>
                 </Form.Control>
                 {touched.role && errors.role ? (
                   <Form.Control.Feedback type="invalid">

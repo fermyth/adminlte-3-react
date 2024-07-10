@@ -9,6 +9,7 @@ import axios from "axios";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
+import ApiConfig from "@app/libs/Api";
 
 const icon = L.icon({
   iconUrl: "/img/mobil.png",
@@ -116,9 +117,9 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({ data }) => {
     name: string | null
   ) => {
     try {
-      const response = await axios.get(
-        `http://localhost:3000/api/v1/activity/${userId}/${date}`
-      );
+      const response = await ApiConfig.get(`activity/${userId}/${date}`);
+      console.log("vvv", response.data.data);
+
       setactifity(response.data.data);
       setloading(false);
       setSelectedUserId(userId);
@@ -138,10 +139,8 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({ data }) => {
     name: string | null
   ) => {
     try {
-      const response = await axios.get(
-        `http://localhost:3000/api/v1/pengeluaran/${userId}/${date}`
-      );
-      console.log("cekdancek", response.data);
+      const response = await ApiConfig.get(`pengeluaran/${userId}/${date}`);
+      console.log("cekdancek", response.data.data);
       setklaim(response.data.data);
       setloadingklaim(false);
       setSelectedUserIdklaim(userId);
@@ -322,8 +321,12 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({ data }) => {
                       <td className="text-center">{timesheet.km_in}</td>
                       <td className="text-center">{timesheet.km_out}</td>
                       <td className="text-center lk-pp-column">
-                        {timesheet.lk_pp || "-"}
+                        {timesheet.lk_pp &&
+                        timesheet.lk_pp.split(",").includes("null")
+                          ? "-"
+                          : timesheet.lk_pp}
                       </td>
+
                       <td className="text-center lk-pp-column">
                         {timesheet.lk_inap}
                       </td>

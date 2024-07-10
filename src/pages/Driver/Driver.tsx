@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Pagination } from "react-bootstrap";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import ApiConfig from "@app/libs/Api";
 
 interface DriverApiResponse {
   photo: string;
@@ -37,9 +38,7 @@ const Driver: React.FC = () => {
     const getDataDriver = async () => {
       setIsLoading(true);
       try {
-        const response = await axios.get(
-          `http://localhost:3000/api/v1/drivers/${idCompany}`
-        );
+        const response = await ApiConfig.get(`drivers/${idCompany}`);
 
         console.log("response.data.data:", response.data.data);
 
@@ -232,7 +231,7 @@ const Driver: React.FC = () => {
           </p>
         </div>
       </div>
-      <div className="container">
+      <div className="p-4">
         <div className="table-responsive">
           <table className="table table-bordered">
             <thead>

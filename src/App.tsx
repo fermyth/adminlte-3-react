@@ -32,6 +32,8 @@ import Sidebar from "./pages/partner/Sidebar/Sidebar";
 import Header from "./modules/main/header/Header";
 import VehicleData from "./pages/partner/Vehicle_Data/Vehicle";
 import Service from "./pages/servie_report/service";
+import SidebarInternal from "./pages/Internal/Sidebar/Sidebar";
+import Laporan_jam_kerja_internal from "./pages/Internal/Laporan_jam_kerja_Internal/Laporan_jam_kerja_internal";
 
 const { VITE_NODE_ENV } = import.meta.env;
 
@@ -117,6 +119,12 @@ const App = () => {
             <Route path="/partner-dashboard" element={<DashboardPartner />} />
             <Route path="vehicle-data" element={<VehicleData />} />
             <Route path="detail-costumer" element={<DetailCostumer />} />
+          </Route>
+          <Route path="/internal" element={<SidebarInternal />}>
+            <Route
+              path="internal_laporan_jam_kerja"
+              element={<Laporan_jam_kerja_internal />}
+            />
           </Route>
         </Route>
       </Routes>

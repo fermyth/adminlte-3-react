@@ -10,6 +10,7 @@ import {
 } from "react-bootstrap";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import ApiConfig from "@app/libs/Api";
 
 interface DataItem {
   pt: string;
@@ -84,9 +85,10 @@ const LaporanHarian: React.FC = () => {
   const handleFilter = async (selectedDate: string, idCompany: string) => {
     setLoading(true);
     try {
-      const response = await axios.get<{ data: any[] }>(
-        `https://backend.sigapdriver.com/api/get_data_timesheet_api/${selectedDate}/-/1/${idCompany}`
+      const response = await ApiConfig.get<{ data: any[] }>(
+        `laporan_harian/${idCompany}/${selectedDate}`
       );
+      console.log("asasas", response.data.data);
 
       const mappedData: DataItem[] = response.data.data.map((item) => ({
         pt: item.pt || "-",

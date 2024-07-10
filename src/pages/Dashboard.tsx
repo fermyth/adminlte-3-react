@@ -4,6 +4,7 @@ import MyChart from "./Cart";
 import { useAppSelector } from "@app/store/store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { EventEmitter } from "events";
+import ApiConfig from "@app/libs/Api";
 
 const eventEmitter = new EventEmitter();
 
@@ -80,9 +81,7 @@ const Dashboard = () => {
 
   const getPortal = async (id_company: string) => {
     try {
-      const response = await axios.get(
-        `http://localhost:3000/api/v1/mastercompanies/${id_company}`
-      );
+      const response = await ApiConfig.get(`mastercompanies/${id_company}`);
       setCompanyInfo(response.data);
       setIsLoading(false);
     } catch (error) {
@@ -93,9 +92,7 @@ const Dashboard = () => {
 
   const getLatestInvoices = async (id_company: string) => {
     try {
-      const response = await axios.get(
-        `http://localhost:3000/api/v1/invoices/${id_company}`
-      );
+      const response = await ApiConfig.get(`invoices/${id_company}`);
       console.log("response.data:", response.data);
 
       if (Array.isArray(response.data) && response.data.length > 0) {

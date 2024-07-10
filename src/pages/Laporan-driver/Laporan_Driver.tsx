@@ -6,8 +6,7 @@ import DriverReportTable from "./components/Driver_Report_Table";
 import * as XLSX from "xlsx";
 
 const eventEmitter = new EventEmitter();
-const apiUrl =
-  "https://backend.sigapdriver.com/api/greatday_sigaps_keyence_json";
+const apiUrl = "http://localhost:5180/api/v1/laporan_driver";
 
 interface Timesheet {
   jam_masuk: string;
@@ -76,8 +75,8 @@ function LaporanDriver() {
   };
 
   const fetchLaporanDriver = useCallback(
-    async (companyId: string) => {
-      let url = `${apiUrl}/${startDate}/${endDate}/0/${companyId}`;
+    async (companyId: any) => {
+      let url = `${apiUrl}/${startDate}/${endDate}/${companyId}`;
       if (type !== "") {
         url += `/${type}`;
       }
@@ -87,6 +86,8 @@ function LaporanDriver() {
 
       try {
         const response = await axios.get<ApiResponse>(url);
+        console.log("nanananan", response.data.data);
+
         setData(response.data.data);
         setIsFiltered(true);
         if (response.data.data.length === 0) {

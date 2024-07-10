@@ -3,6 +3,7 @@ import React, { useEffect, useState, useCallback } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { EventEmitter } from "events";
 import * as XLSX from "xlsx";
+import ApiConfig from "@app/libs/Api";
 
 const eventEmitter = new EventEmitter();
 
@@ -79,11 +80,13 @@ const ContentHeader: React.FC = () => {
 
   const fetchDatagreatday = async (start: string, idCompany: string) => {
     try {
-      const response = await axios.get(
-        `https://backend.sigapdriver.com/api/greatdayinout/${start}/${idCompany}`
+      const response = await ApiConfig.get(
+        `laporan_jam_kerja/${idCompany}/${start}`
       );
       const data = response.data.data;
-      const { drivers, jam_masuk, jam_keluar, awh, color_code } = data;
+      console.log("data", data);
+
+      const { drivers, jam_masuk, jam_keluar, awh } = data;
 
       const formattedData = drivers.map((driver: any) => ({
         name: driver,
@@ -123,7 +126,7 @@ const ContentHeader: React.FC = () => {
           awh[driver] && awh[driver].split(" || ")[1] !== "00:00"
             ? awh[driver].split(" || ")[1]
             : "-",
-        colorCode: color_code[driver],
+        colorCode: calculateColor(awh[driver]),
       }));
 
       setTableData(formattedData);
@@ -176,6 +179,22 @@ const ContentHeader: React.FC = () => {
     XLSX.writeFile(workbook, "Laporan_Jam_Kerja.xlsx");
   };
 
+  const calculateColor = (awh: string | undefined) => {
+    if (!awh) return "#ffffff";
+
+    const hours = parseInt(awh.split(":")[0]);
+
+    if (hours >= 55) {
+      return "#ff8566";
+    } else if (hours >= 50 && hours <= 54) {
+      return "#ffcc99";
+    } else if (hours >= 40 && hours <= 49) {
+      return "#ffffb3";
+    } else {
+      return "#ffffff";
+    }
+  };
+
   return (
     <section className="containers" style={{ padding: 20 }}>
       <div className="text-center mb-4">
@@ -198,9 +217,6 @@ const ContentHeader: React.FC = () => {
               onChange={(e) => setStartDate(e.target.value)}
               placeholder="Pilih Tanggal"
             />
-            {/* <button type="submit" className="btn btn-dark ml-3">
-              Pilih Tanggal
-            </button> */}
             <button
               type="button"
               className="btn btn-success custom-btn ml-3"
