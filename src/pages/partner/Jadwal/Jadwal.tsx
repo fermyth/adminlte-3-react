@@ -13,6 +13,7 @@ import {
   Dropdown,
 } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { Link } from "react-router-dom";
 
 interface Customer {
   id: string;
@@ -21,7 +22,7 @@ interface Customer {
   status: string;
 }
 
-const VehicleData: React.FC = () => {
+const Jadwal: React.FC = () => {
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [showAddModal, setShowAddModal] = useState(false);
@@ -88,67 +89,17 @@ const VehicleData: React.FC = () => {
     handleEditModalClose();
   };
 
-  const handleDeleteCustomer = (id: string) => {
-    const updatedCustomers = customers.filter((customer) => customer.id !== id);
-    setCustomers(updatedCustomers);
+  const kirim = () => {
+   alert('Pesan Berhasil Terkirim ke Driver')
   };
 
   return (
     <div className="container mt-5">
       <h1 className="text-center mb-4 text-dark font-weight-bold">
-        Vehicle Leasing
+        Jadwal
       </h1>
-      <Row className="mb-3 justify-content-between">
-        <Col md="4">
-          <Button variant="success" onClick={handleAddModalShow}>
-            <i className="fas fa-plus"></i> Add New
-          </Button>
-        </Col>
-        <Col md="4" className="text-right">
-          <Button variant="danger" className="mr-2">
-            <i className="fas fa-trash"></i> Bulk Delete
-          </Button>
-          <Button variant="info">
-            <i className="fas fa-sort"></i> Order
-          </Button>
-        </Col>
-      </Row>
-      <InputGroup className="mb-3">
-        <FormControl
-          placeholder="Search"
-          aria-label="Search"
-          aria-describedby="basic-addon2"
-          value={searchTerm}
-          onChange={handleSearch}
-        />
-        <DropdownButton
-          as={InputGroup.Append}
-          variant="outline-secondary"
-          title={dropdownValue1}
-          id="input-group-dropdown-1"
-          onSelect={(eventKey: any) => setDropdownValue1(eventKey)}
-        >
-          <Dropdown.Item eventKey="Option 1">Option 1</Dropdown.Item>
-          <Dropdown.Item eventKey="Option 2">Option 2</Dropdown.Item>
-          <Dropdown.Item eventKey="Option 3">Option 3</Dropdown.Item>
-        </DropdownButton>
-        <DropdownButton
-          as={InputGroup.Append}
-          variant="outline-secondary"
-          title={dropdownValue2}
-          id="input-group-dropdown-2"
-          onSelect={(eventKey: any) => setDropdownValue2(eventKey)}
-        >
-          <Dropdown.Item eventKey="Option A">Option A</Dropdown.Item>
-          <Dropdown.Item eventKey="Option B">Option B</Dropdown.Item>
-          <Dropdown.Item eventKey="Option C">Option C</Dropdown.Item>
-        </DropdownButton>
-        <InputGroup.Append>
-          <Button variant="outline-secondary">
-            <i className="fas fa-search"></i>
-          </Button>
-        </InputGroup.Append>
-      </InputGroup>
+      
+      
       <style>
         {`
           .table-bordered {
@@ -164,15 +115,14 @@ const VehicleData: React.FC = () => {
       <Table striped bordered hover className="text-center table-bordered">
         <thead className="">
           <tr>
-            <th style={{ backgroundColor: "#009879", color: "white" }}></th>
-            <th style={{ backgroundColor: "#009879", color: "white" }}>
-              Nama Customer
+          <th style={{ backgroundColor: "#009879", color: "white" }}>
+              Tanggal
             </th>
             <th style={{ backgroundColor: "#009879", color: "white" }}>
-              Customer Id
+              Nopol Customer
             </th>
             <th style={{ backgroundColor: "#009879", color: "white" }}>
-              Jumlah Kendaraan
+              Lokasi Service
             </th>
             <th style={{ backgroundColor: "#009879", color: "white" }}>
               Status
@@ -183,39 +133,116 @@ const VehicleData: React.FC = () => {
           </tr>
         </thead>
         <tbody>
-          {filteredCustomers.map((customer) => (
-            <tr key={customer.id}>
+            <tr> 
+                <td>
+                    <h2>10</h2> Februari
+                </td> 
               <td>
-                <Form.Check type="checkbox" />
-              </td>
-              <td>{customer.namaCustomer}</td>
-              <td>{customer.id}</td>
-              <td>{customer.jumlahKendaraan}</td>
-              <td>{customer.status}</td>
+                <p>
+                <Link to="/partner-dashboard/customer/costumer-detail/detail-mobil">
+                B 12345 AC
+                </Link>
+                </p>
+                <h5>
+                <Link to="/partner-dashboard/customer/costumer-detail"
+                className="text-dark hover font-weight-bold">
+                    PT Keyence Indonesia
+                </Link>
+                </h5>
+                
+                </td>
+              <td style={{textAlign:'left'}}>
+                <p><b>Service Rutin</b></p>
+                <hr style={{marginTop: -10}}></hr>
+                <p style={{marginTop: -10,color:'blue'}}><b>Lokasi : Jakarta</b></p>
+                <p style={{fontSize:13}}>Lorem Ipsum is simply dummy text </p>
+                
+                </td>
+                <td><span className="alert-primary">Sudah dilakuan</span></td>
               <td>
-                <Button
-                  variant="warning"
-                  className="mr-2"
-                  onClick={() => handleViewModalShow(customer)}
-                >
-                  <i className="fas fa-eye"></i> View
-                </Button>
-                <Button
+              <Button
                   variant="primary"
                   className="mr-2"
-                  onClick={() => handleEditModalShow(customer)}
+                  onClick={() => kirim()}
                 >
-                  <i className="fas fa-edit"></i> Edit
-                </Button>
-                <Button
-                  variant="danger"
-                  onClick={() => handleDeleteCustomer(customer.id)}
-                >
-                  <i className="fas fa-trash-alt"></i> Delete
+                  <i className="fas fa-paper-plane"></i> Kirim ke Driver
                 </Button>
               </td>
             </tr>
-          ))}
+            <tr>  
+            <td>
+                    <h2>20</h2> Maret
+                </td> 
+                <td>
+                <p>
+                <Link to="/partner-dashboard/customer/costumer-detail/detail-mobil">
+                B 894754 DD
+                </Link>
+                </p>
+                <h5>
+                <Link to="/partner-dashboard/customer/costumer-detail"
+                className="text-dark hover font-weight-bold">
+                    PT Keyence Indonesia
+                </Link>
+                </h5>
+                
+                </td>
+              <td style={{textAlign:'left'}}>
+                <p><b>Service Kecelakaan</b></p>
+                <hr style={{marginTop: -10}}></hr>
+                <p style={{marginTop: -10,color:'blue'}}><b>Lokasi : Tanggerang</b></p>
+                <p style={{fontSize:13}}>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been
+                     </p>
+                
+                </td>
+              <td><span className="alert-warning">Belum dilakukan</span></td>
+              <td>
+              <Button
+                  variant="primary"
+                  className="mr-2"
+                  onClick={() => kirim()}
+                >
+                  <i className="fas fa-paper-plane"></i> Kirim ke Driver
+                </Button>
+              </td>
+            </tr>
+            <tr>  
+            <td>
+                    <h2>12</h2> Juni
+                </td> 
+                <td>
+                <p>
+                <Link to="/partner-dashboard/customer/costumer-detail/detail-mobil">
+                F 894778 ZX
+                </Link>
+                </p>
+                <h5>
+                <Link to="/partner-dashboard/customer/costumer-detail"
+                className="text-dark hover font-weight-bold">
+                    PT Keyence Indonesia
+                </Link>
+                </h5>
+                
+                </td>
+              <td style={{textAlign:'left'}}>
+                <p><b>Uji Emisi</b></p>
+                <hr style={{marginTop: -10}}></hr>
+                <p style={{marginTop: -10, color:'blue'}}><b>Lokasi : Bengkel Toyota</b></p>
+                <p style={{fontSize:13}}>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been
+                     the industry's </p>
+                
+                </td>
+                <td><span className="alert-success">Sedang diproses</span></td>
+              <td>
+              <Button
+                  variant="primary"
+                  className="mr-2"
+                  onClick={() => kirim()}
+                >
+                  <i className="fas fa-paper-plane"></i> Kirim ke Driver
+                </Button>
+              </td>
+            </tr>
         </tbody>
       </Table>
       <p className="text-center mt-2">
@@ -410,4 +437,4 @@ const VehicleData: React.FC = () => {
   );
 };
 
-export default VehicleData;
+export default Jadwal;

@@ -175,12 +175,22 @@ const Sidebar = () => {
               </li>
               <li className="nav-item">
                 <Link
-                  to="/partner-dashboard/vehicle-data"
-                  className={`nav-link ${location.pathname === "/partner-dashboard/vehicle-data" ? "active" : ""}`}
+                  to="/partner-dashboard/customer"
+                  className={`nav-link ${location.pathname === "/partner-dashboard/customer" ? "active" : ""}`}
                   style={{ fontWeight: "bold" }}
                 >
                   <FaCar className="icon" />{" "}
-                  {!isCollapsed && <span>Vehicle Data</span>}
+                  {!isCollapsed && <span> Customer </span>}
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link
+                  to="/partner-dashboard/jadwal"
+                  className={`nav-link ${location.pathname === "/partner-dashboard/jadwal" ? "active" : ""}`}
+                  style={{ fontWeight: "bold" }}
+                >
+                  <FaCar className="icon" />{" "}
+                  {!isCollapsed && <span> Jadwal </span>}
                 </Link>
               </li>
             </ul>

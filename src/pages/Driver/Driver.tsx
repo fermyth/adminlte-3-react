@@ -40,7 +40,7 @@ const Driver: React.FC = () => {
       try {
         const response = await ApiConfig.get(`drivers/${idCompany}`);
 
-        console.log("response.data.data:", response.data.data);
+        console.log("response.data.data:", response.data);
 
         if (response) {
           const drivers: DriverData[] = response.data.data.map(
