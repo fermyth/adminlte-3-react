@@ -75,10 +75,13 @@ function LaporanDriver() {
   };
 
   const fetchLaporanDriver = useCallback(
+    
     async (companyId: any) => {
       let url = `${apiUrl}/${startDate}/${endDate}/${companyId}`;
       if (type !== "") {
         url += `/${type}`;
+      } else {
+        url += `/dummy`;
       }
       setIsLoading(true);
       setIsError(false);
