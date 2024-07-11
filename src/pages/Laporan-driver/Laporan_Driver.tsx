@@ -4,9 +4,11 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { EventEmitter } from "events";
 import DriverReportTable from "./components/Driver_Report_Table";
 import * as XLSX from "xlsx";
+import ApiConfig, { UrlServer } from "@app/libs/Api";
+
 
 const eventEmitter = new EventEmitter();
-const apiUrl = "http://localhost:5180/api/v1/laporan_driver";
+const apiUrl = UrlServer() + '/api/v1/laporan_driver';
 
 interface Timesheet {
   jam_masuk: string;
