@@ -135,26 +135,26 @@ const ProfilDriver: React.FC = () => {
             margin: 0;
             padding: 0;
           }
-
+  
           .container {
-            max-width: 900px;
+            max-width: 1300px;
             margin: 20px auto;
             background-color: #fff;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
           }
-
+  
           .profile-section {
             display: flex;
             align-items: center;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            background-color: #ffffff; /* Warna latar belakang untuk card profil */
+            background-color: #ffffff;
             margin-bottom: 20px;
           }
-
+  
           .profile-img {
             width: 150px;
             height: 150px;
@@ -162,101 +162,81 @@ const ProfilDriver: React.FC = () => {
             border: 4px solid #009879;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
           }
-
+  
           .profile-details {
             flex: 1;
             margin-left: 20px;
           }
-
+  
           .profile-details h2 {
             margin: 5px 0;
             font-size: 24px;
             color: #333;
             text-transform: uppercase;
           }
-
+  
           .profile-details p {
             margin: 5px 0;
             font-size: 16px;
             color: #666;
             line-height: 1.6;
           }
-
+  
           .profile-details p strong {
             color: #333;
           }
-          .experience-section {
-            margin-bottom: 30px;
-          }
-
-          .experience-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-          }
-
-          .experience-table th,
-          .experience-table td {
-            padding: 12px;
-            text-align: left;
-            border: 1px solid #ddd;
-          }
-
-          .experience-table th {
-            background-color: #009879;
-            color: #333;
-            font-weight: bold;
-            text-align: center;
-           }
-            .experience-section .experience-table th {
-            color: white; 
-           }
-
-          .experience-table tbody tr:nth-child(even) {
-            background-color: #f9f9f9;
-            color
-          }
-
-          .experience-table tbody tr:hover {
-            background-color: #e0e0e0;
-            cursor: pointer;
-          }
-
+  
+          .experience-section,
           .skills-section {
             margin-bottom: 30px;
           }
-
+  
+          .experience-table,
           .skills-table {
             width: 100%;
-            border-collapse: collapse;
+            border-collapse: separate;
+            border-spacing: 0;
             margin-top: 20px;
+            border-radius: 8px; /* Border radius untuk tabel */
+            overflow: hidden; /* Untuk menghindari radius mempengaruhi garis tabel */
           }
-
+  
+          .experience-table th,
+          .experience-table td,
           .skills-table th,
           .skills-table td {
             padding: 12px;
             text-align: left;
             border: 1px solid #ddd;
           }
-
+  
+          .experience-table th {
+            background-color: #009879;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+          }
+  
           .skills-table th {
             background-color: #f2f2f2;
             color: #333;
             font-weight: bold;
             text-align: center;
           }
-
+  
+          .experience-table tbody tr:nth-child(even),
           .skills-table tbody tr:nth-child(even) {
             background-color: #f9f9f9;
           }
-
+  
+          .experience-table tbody tr:hover,
           .skills-table tbody tr:hover {
             background-color: #e0e0e0;
             cursor: pointer;
           }
         `}
       </style>
-
+  
       <div className="profile-section">
         <img
           src="https://via.placeholder.com/150"
@@ -266,14 +246,14 @@ const ProfilDriver: React.FC = () => {
         <div className="profile-details">
           <h2>Profil Driver</h2>
           <div className="profile-info">
-            <p><strong>ID Pegawai: </strong> 2312875</p>
+            <p><strong>ID Pegawai:</strong> 2312875</p>
             <p><strong>Nama:</strong> Bar</p>
             <p><strong>Alamat:</strong> Kota Sukabumi</p>
             <p><strong>Nomor Telepon:</strong> 0834728292929</p>
           </div>
         </div>
       </div>
-
+  
       <div className="experience-section">
         <h2>Pengalaman</h2>
         <table className="experience-table">
@@ -299,7 +279,7 @@ const ProfilDriver: React.FC = () => {
           </tbody>
         </table>
       </div>
-
+  
       <div className="skills-section">
         <h2>Keahlian</h2>
         <table className="skills-table">
@@ -313,6 +293,5 @@ const ProfilDriver: React.FC = () => {
       </div>
     </div>
   );
-};
-
+        };  
 export default ProfilDriver;

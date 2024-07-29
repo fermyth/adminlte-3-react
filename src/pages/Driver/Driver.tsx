@@ -3,6 +3,7 @@ import axios from "axios";
 import { Pagination } from "react-bootstrap";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import ApiConfig from "@app/libs/Api";
+import { Link } from "react-router-dom";
 
 interface DriverApiResponse {
   photo: string;
@@ -308,7 +309,9 @@ const Driver: React.FC = () => {
                       />
                     </td>
                     <td className="text-center align-middle nowrap">
+                      <Link to="/admin/profil_driver">
                       {item.namaLengkap}
+                      </Link>
                     </td>
                     <td
                       className="text-center align-middle nowrap"
