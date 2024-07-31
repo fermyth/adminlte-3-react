@@ -1,181 +1,182 @@
-import React from "react";
-import { InfoBox } from "@app/components/info-box/InfoBox";
-import { ContentHeader } from "@components";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  ArcElement,
-  Title,
-  Tooltip,
-  Legend,
-} from "chart.js";
-import { Bar, Pie } from "react-chartjs-2";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import MyChart from "./Cart";
+import { useAppSelector } from "@app/store/store";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { EventEmitter } from "events";
+import ApiConfig from "@app/libs/Api";
 
-// Registrasi komponen yang diperlukan
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  ArcElement,
-  Title,
-  Tooltip,
-  Legend
-);
+const eventEmitter = new EventEmitter();
 
+interface InvoiceData {
+  id: number;
+  periode: string;
+  grand_total_value_inv_A: string;
+  grand_total_value_inv_B: string;
+}
+
+interface CompanyInfo {
+  id: number;
+  company_name: string;
+  company_address: string;
+  company_ga_id: number;
+  company_creator_id: number;
+  address_area_id: string;
+  created_at: string;
+  updated_at: string;
+  type_invoice: number;
+  company_phone: string;
+  internal_company_id: string;
+  status: string;
+  type_ppn: number;
+  type_pph23: number;
+}
 
 const Dashboard = () => {
-  const data = {
-    labels: ["January", "February", "March", "April", "May", "June", "July"],
-    datasets: [
-      {
-        label: "My First dataset",
-        backgroundColor: "rgba(75,192,192,0.2)",
-        borderColor: "rgba(75,192,192,1)",
-        borderWidth: 1,
-        hoverBackgroundColor: "rgba(75,192,192,0.4)",
-        hoverBorderColor: "rgba(75,192,192,1)",
-        data: [65, 59, 80, 81, 56, 55, 40],
-      },
-    ],
+  const [companyInfo, setCompanyInfo] = useState<CompanyInfo | null>(null);
+  const [invoiceData, setInvoiceData] = useState<InvoiceData[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const currentUser = useAppSelector((state) => state.auth);
+  const [idCompany, setIdCompany] = useState<string | null>(null);
+  const [isDataChanged, setIsDataChanged] = useState(false);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const userData = await AsyncStorage.getItem("userData");
+        if (userData) {
+          let getstorage = JSON.parse(userData);
+          console.log("userData:", getstorage);
+          setIdCompany(getstorage.id_company);
+        } else {
+          console.log("id_company is not available");
+          setIdCompany(null);
+        }
+      } catch (error) {
+        console.error("Error fetching id_company from AsyncStorage:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+
+    const handleStorageChange = () => {
+      fetchData();
+    };
+
+    eventEmitter.on("storageChange", handleStorageChange);
+
+    return () => {
+      eventEmitter.off("storageChange", handleStorageChange);
+    };
+  }, [currentUser]);
+
+  useEffect(() => {
+    if (idCompany) {
+      getPortal(idCompany);
+      getLatestInvoices(idCompany);
+    }
+  }, [idCompany]);
+
+  const getPortal = async (id_company: string) => {
+    try {
+      const response = await ApiConfig.get(`mastercompanies/${id_company}`);
+      setCompanyInfo(response.data);
+      setIsLoading(false);
+    } catch (error) {
+      console.error("Error fetching company info:", error);
+      setIsLoading(false);
+    }
   };
 
-  const datapie = {
-    labels: ["January", "February", "March", "April", "May", "June", "July"],
-    datasets: [
-      {
-        label: "Monthly Sales",
-        data: [65, 59, 80, 81, 56, 55, 40],
-        backgroundColor: [
-          "rgba(255, 99, 132, 0.2)",
-          "rgba(54, 162, 235, 0.2)",
-          "rgba(255, 206, 86, 0.2)",
-          "rgba(75, 192, 192, 0.2)",
-          "rgba(153, 102, 255, 0.2)",
-          "rgba(255, 159, 64, 0.2)",
-          "rgba(255, 99, 132, 0.2)",
-        ],
-        borderColor: [
-          "rgba(255, 99, 132, 1)",
-          "rgba(54, 162, 235, 1)",
-          "rgba(255, 206, 86, 1)",
-          "rgba(75, 192, 192, 1)",
-          "rgba(153, 102, 255, 1)",
-          "rgba(255, 159, 64, 1)",
-          "rgba(255, 99, 132, 1)",
-        ],
-        borderWidth: 1,
-      },
-    ],
+  const getLatestInvoices = async (id_company: string) => {
+    try {
+      const response = await ApiConfig.get(`invoices/${id_company}`);
+      console.log("response.data:", response.data);
+
+      if (Array.isArray(response.data) && response.data.length > 0) {
+        const latestInvoices = response.data.slice(0, 6);
+        setInvoiceData(latestInvoices);
+      } else {
+        console.log("Data invoices tidak ditemukan atau format tidak sesuai.");
+      }
+    } catch (error) {
+      console.error("Error fetching latest invoices:", error);
+    }
   };
+
+  if (isLoading || !idCompany || !companyInfo) {
+    return <div>Loading...</div>;
+  }
+
+  const addressLines = companyInfo.company_address
+    .split("<p>")
+    .filter((line) => line)
+    .map((line) => line.replace("</p>", "").replace("\r\n", ""));
+
+  const labels = invoiceData.map((invoice) => invoice.periode);
+  const data = invoiceData.map(
+    (invoice) =>
+      parseFloat(invoice.grand_total_value_inv_A) +
+      parseFloat(invoice.grand_total_value_inv_B)
+  );
+
+  const latestInvoice = invoiceData.length > 0 ? invoiceData[0] : null;
+  const latestTotalInvoiceValue = latestInvoice
+    ? parseFloat(latestInvoice.grand_total_value_inv_A) +
+      parseFloat(latestInvoice.grand_total_value_inv_B)
+    : 0;
 
   return (
     <div>
-      <ContentHeader title="Dashboard" />
-
-      <section className="content">
-        <div className="container-fluid">
-          <div className="row">
-            <div className="col-lg-3 col-6">
-              <div className="small-box bg-info">
-                <div className="inner">
-                  <h3>150</h3>
-                  <p>New Orders</p>
-                </div>
-                <div className="icon">
-                  <i className="ion ion-bag" />
-                </div>
-                <a href="/" className="small-box-footer">
-                  More info <i className="fas fa-arrow-circle-right" />
-                </a>
-              </div>
-            </div>
-            <div className="col-lg-3 col-6">
-              <div className="small-box bg-success">
-                <div className="inner">
-                  <h3>
-                    53<sup style={{ fontSize: "20px" }}>%</sup>
-                  </h3>
-                  <p>Bounce Rate</p>
-                </div>
-                <div className="icon">
-                  <i className="ion ion-stats-bars" />
-                </div>
-                <a href="/" className="small-box-footer">
-                  More info <i className="fas fa-arrow-circle-right" />
-                </a>
-              </div>
-            </div>
-            <div className="col-lg-3 col-6">
-              <div className="small-box bg-warning">
-                <div className="inner">
-                  <h3>44</h3>
-                  <p>User Registrations</p>
-                </div>
-                <div className="icon">
-                  <i className="ion ion-person-add" />
-                </div>
-                <a href="/" className="small-box-footer">
-                  More info <i className="fas fa-arrow-circle-right" />
-                </a>
-              </div>
-            </div>
-            <div className="col-lg-3 col-6">
-              <div className="small-box bg-danger">
-                <div className="inner">
-                  <h3>65</h3>
-                  <p>Unique Visitors</p>
-                </div>
-                <div className="icon">
-                  <i className="ion ion-pie-graph" />
-                </div>
-                <a href="/" className="small-box-footer">
-                  More info <i className="fas fa-arrow-circle-right" />
-                </a>
-              </div>
-            </div>
+      <div className="d-flex mt-3">
+        <div className="info-box w-50 d-flex flex-column mr-4 ">
+          <div className="d-flex ml-3">
+            <p className="font-weight-bold text-black text-uppercase">
+              Nama PT
+            </p>
+            <p className="ml-4 font-weight-bold text-black text-uppercase">
+              {companyInfo.company_name}
+            </p>
           </div>
-          <div className="row">
-            <div className="col-lg-3 col-6">
-              <InfoBox variant="warning" title="Messages" text="1,410" />
-            </div>
-            <div className="col-lg-9 col-12">
-              <div className="card">
-                <div className="card-header">
-                  <h3 className="card-title">Sales Data - Bar Chart</h3>
-                </div>
-                <div className="card-body">
-                  <Bar
-                    data={data}
-                    options={{
-                      maintainAspectRatio: false,
-                    }}
-                  />
-                </div>
-              </div>
-            </div>
-            <div className="col-12">
-              <div className="card">
-                <div className="card-header">
-                  <h3 className="card-title">Sales Data - Pie Chart</h3>
-                </div>
-                <div className="card-body">
-                  <Pie
-                    data={datapie}
-                    options={{
-                      maintainAspectRatio: false,
-                    }}
-                  />
-                </div>
-              </div>
+          <div className="d-flex ml-3">
+            <p className="font-weight-bold text-black text-uppercase">Alamat</p>
+            <div>
+              {addressLines.map((line, index) => (
+                <p
+                  key={index}
+                  className="ml-4 font-weight-bold text-black text-uppercase"
+                >
+                  {line}
+                </p>
+              ))}
             </div>
           </div>
         </div>
-      </section>
+        <div className="info-box w-50 mr-2 bg-black d-flex flex-column align-items-center justify-content-center">
+          <p className="font-weight-bold text-light text-uppercase">
+            {latestInvoice ? latestInvoice.periode : "Loading..."}
+          </p>
+          <h1 className="font-weight-bold text-light text-uppercase">
+            {latestTotalInvoiceValue.toLocaleString()}
+          </h1>
+          <h1
+            className="text-light"
+            style={{ fontSize: "25px", fontWeight: "bold" }}
+          >
+            Jumlah Invoice Terakhir
+          </h1>
+        </div>
+      </div>
+      <div className="pt-4 pb-3">
+        <h2 className="font-weight-bold text-black text-uppercase ml-3">
+          Nilai Invoice 6 Terakhir
+        </h2>
+      </div>
+      <MyChart data={data} labels={labels} />
     </div>
   );
 };
 
 export default Dashboard;
-
