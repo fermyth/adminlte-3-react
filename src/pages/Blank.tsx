@@ -1,9 +1,9 @@
 import { ContentHeader } from '@components';
 
-const SubMenu = () => {
+const Blank = () => {
   return (
     <div>
-      <ContentHeader title="SubMenu Page" />
+      <ContentHeader title="Blank Page" />
       <section className="content">
         <div className="container-fluid">
           <div className="card">
@@ -41,4 +41,4 @@ const SubMenu = () => {
   );
 };
 
-export default SubMenu;
+export default Blank;

@@ -1,44 +1,28 @@
-import React, { useEffect, useState } from "react";
-import { Routes, Route, useLocation } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
-import Main from "@modules/main/Main";
-import Login from "@modules/login/Login";
-import Register from "@modules/register/Register";
-import ForgetPassword from "@modules/forgot-password/ForgotPassword";
-import RecoverPassword from "@modules/recover-password/RecoverPassword";
-import { useWindowSize } from "@app/hooks/useWindowSize";
-import { calculateWindowSize } from "@app/utils/helpers";
-import { setWindowSize } from "@app/store/reducers/ui";
-import ReactGA from "react-ga4";
+import { useEffect, useState } from 'react';
+import { Routes, Route, useLocation } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import Main from '@modules/main/Main';
+import Login from '@modules/login/Login';
+import Register from '@modules/register/Register';
+import ForgetPassword from '@modules/forgot-password/ForgotPassword';
+import RecoverPassword from '@modules/recover-password/RecoverPassword';
+import { useWindowSize } from '@app/hooks/useWindowSize';
+import { calculateWindowSize } from '@app/utils/helpers';
+import { setWindowSize } from '@app/store/reducers/ui';
+import ReactGA from 'react-ga4';
 
-import Dashboard from "@pages/Dashboard";
-import SubMenu from "@pages/SubMenu";
-import Profile from "@pages/profile/Profile";
+import Dashboard from '@pages/Dashboard';
+import Blank from '@pages/Blank';
+import SubMenu from '@pages/SubMenu';
+import Profile from '@pages/profile/Profile';
 
-import PublicRoute from "./routes/PublicRoute";
-import PrivateRoute from "./routes/PrivateRoute";
-import { setCurrentUser } from "./store/reducers/auth";
+import PublicRoute from './routes/PublicRoute';
+import PrivateRoute from './routes/PrivateRoute';
+import { setCurrentUser } from './store/reducers/auth';
 
-import { firebaseAuth } from "./firebase";
-import { onAuthStateChanged } from "firebase/auth";
-import { useAppDispatch, useAppSelector } from "./store/store";
-import Driver from "./pages/Driver/Driver";
-import LaporanJamKerja from "@app/pages/Laporan-Jam-Kerja/Laporan_Jam_Kerja";
-import LaporanDriver from "./pages/Laporan-driver/Laporan_Driver";
-import LaporanHarian from "./pages/Laporan-Harian/Laporan_Harian";
-import DashboardPartner from "./pages/partner/Dashboard/Dashboard_Partner";
-import DetailCostumer from "./pages/partner/Dashboard/components/Detail_Costumer";
-import Sidebar from "./pages/partner/Sidebar/Sidebar";
-import Header from "./modules/main/header/Header";
-import VehicleData from "./pages/partner/Customer/Customer";
-import Service from "./pages/servie_report/service";
-import SidebarInternal from "./pages/Internal/Sidebar/Sidebar";
-import Laporan_jam_kerja_internal from "./pages/Internal/Laporan_jam_kerja_Internal/Laporan_jam_kerja_internal";
-import Profil_Driver from "./pages/Driver/Profil_Driver";
-import Jadwal from "./pages/partner/Jadwal/Jadwal";
-import Customer from "./pages/partner/Customer/Customer";
-import CustomerDetail from "./pages/partner/Customer/Components/DetailCustomer";
-import DetailCustomerMobil from "./pages/partner/Customer/Components/DetailCustomerMobil";
+import { firebaseAuth } from './firebase';
+import { onAuthStateChanged } from 'firebase/auth';
+import { useAppDispatch, useAppSelector } from './store/store';
 
 const { VITE_NODE_ENV } = import.meta.env;
 
@@ -77,20 +61,16 @@ const App = () => {
   }, [windowSize]);
 
   useEffect(() => {
-    if (location && location.pathname && VITE_NODE_ENV === "production") {
+    if (location && location.pathname && VITE_NODE_ENV === 'production') {
       ReactGA.send({
-        hitType: "pageview",
+        hitType: 'pageview',
         page: location.pathname,
       });
     }
   }, [location]);
 
   if (isAppLoading) {
-    return (
-      <div style={styles.spinnerContainer}>
-        <div style={styles.spinner}></div>
-      </div>
-    );
+    return <p>Loading</p>;
   }
 
   return (
@@ -108,47 +88,13 @@ const App = () => {
         <Route path="/recover-password" element={<PublicRoute />}>
           <Route path="/recover-password" element={<RecoverPassword />} />
         </Route>
-
-        {/* <Route path="/profil_driver" element={<PublicRoute />}>
-          <Route path="/profil_driver" element={<Profil_Driver />} />
-        </Route> */}
-
         <Route path="/" element={<PrivateRoute />}>
           <Route path="/" element={<Main />}>
-            <Route path="/sub-menu-2" element={<LaporanJamKerja />} />
+            <Route path="/sub-menu-2" element={<Blank />} />
             <Route path="/sub-menu-1" element={<SubMenu />} />
-            <Route path="/admin/report_awh" element={<LaporanJamKerja />} />
-            <Route path="/admin/driver" element={<Driver />} />
-            <Route path="/admin/profil_driver" element={<Profil_Driver />} />
-            <Route path="/admin/sigaps_company" element={<LaporanDriver />} />
-            <Route path="/admin/sigaps_driver" element={<LaporanHarian />} />
-            <Route path="/admin/service_report" element={<Service />} />
+            <Route path="/blank" element={<Blank />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/" element={<Dashboard />} />
-          </Route>
-          <Route path="/partner-dashboard" element={<Sidebar />}>
-            <Route path="/partner-dashboard" element={<DashboardPartner />} />
-            <Route path="customer" element={<Customer />} />
-            <Route path="jadwal" element={<Jadwal />} />
-            <Route path="detail-costumer" element={<DetailCostumer />} />
-            <Route
-              path="/partner-dashboard/customer/costumer-detail"
-              element={<CustomerDetail />}
-            />
-            <Route
-              path="/partner-dashboard/customer/costumer-detail/detail-mobil"
-              element={<DetailCustomerMobil />}
-            />
-            <Route
-              path="/partner-dashboard/profil_driver"
-              element={<Profil_Driver />}
-            />
-          </Route>
-          <Route path="/internal" element={<SidebarInternal />}>
-            <Route
-              path="internal_laporan_jam_kerja"
-              element={<Laporan_jam_kerja_internal />}
-            />
           </Route>
         </Route>
       </Routes>
@@ -164,27 +110,6 @@ const App = () => {
       />
     </>
   );
-};
-
-const styles = {
-  spinnerContainer: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    height: "100vh",
-  },
-  spinner: {
-    border: "8px solid rgba(0, 0, 0, 0.1)",
-    borderTop: "8px solid #009879",
-    borderRadius: "50%",
-    width: "40px",
-    height: "40px",
-    animation: "spin 1s linear infinite",
-  },
-  "@keyframes spin": {
-    "0%": { transform: "rotate(0deg)" },
-    "100%": { transform: "rotate(360deg)" },
-  },
 };
 
 export default App;
