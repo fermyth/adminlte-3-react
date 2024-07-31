@@ -315,12 +315,12 @@ const DetailProfilePartner: React.FC = () => {
           </thead>
           <tbody>
             <tr>
-              <td>2014 - 2015</td>
+              <td>2014 - 2016</td>
               <td>PT Keyence</td>
               <td>Driver User</td>
             </tr>
             <tr>
-              <td>2016 - 2017</td>
+              <td>2016 - 2023</td>
               <td>PT Epson</td>
               <td>Driver User</td>
             </tr>
