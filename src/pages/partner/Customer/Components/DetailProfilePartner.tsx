@@ -19,7 +19,6 @@ interface DriverData {
   handphone: string;
   alamatLengkap: string;
 }
-
 const DetailProfilePartner: React.FC = () => {
   const navigate = useNavigate();
   const [data, setData] = useState<DriverData[]>([]);
