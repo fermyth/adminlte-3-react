@@ -190,13 +190,13 @@ const Customer: React.FC = () => {
       <tr key={customer.id}>
         <td><Form.Check type="checkbox" /></td>
         <td>
-          <Link 
-            to="/partner-dashboard/customer/costumer-detail" 
-            className="text-dark hover font-weight-bold"
-            onClick={() => handleCompanyClick(customer.id, customer.namaCustomer)}
-          >
-            {customer.namaCustomer}
-          </Link>
+        <Link 
+          to="/partner-dashboard/customer/costumer-detail" 
+          style={{ color: '#007bff', fontWeight: 'bold' }} // Warna biru dan font-weight bold
+          onClick={() => handleCompanyClick(customer.id, customer.namaCustomer)}
+         >
+         {customer.namaCustomer}
+       </Link>
         </td>
         <td>{customer.id}</td>
         <td>{customer.jumlahKendaraan}</td>

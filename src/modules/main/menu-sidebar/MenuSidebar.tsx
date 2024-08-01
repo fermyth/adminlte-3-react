@@ -104,7 +104,10 @@ const MenuSidebar = () => {
     };
   }, [currentUser]);
 
+  
   return (
+    <>
+  
     <aside
       className={`main-sidebar elevation-4 `}
       style={{ backgroundColor: "#FFFFFF  " }}
@@ -168,6 +171,7 @@ const MenuSidebar = () => {
         </nav>
       </div>
     </aside>
+    </>
   );
 };
 

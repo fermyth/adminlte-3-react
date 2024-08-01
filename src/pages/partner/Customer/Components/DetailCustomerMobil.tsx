@@ -3,6 +3,7 @@ import axios from "axios";
 import { Pagination } from "react-bootstrap";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+
 interface DriverApiResponse {
   photo: string;
   full_name: string;
@@ -196,6 +197,8 @@ const DetailCustomerMobil: React.FC = () => {
     width: 100%;
     border-collapse: collapse;
     margin-top: 10px;
+    background-color: #009879;
+    color: white;
   }
 
   table th,
@@ -217,11 +220,7 @@ const DetailCustomerMobil: React.FC = () => {
     color 
   }
 
-  table tbody tr:hover {
-    background-color: #009879;
-    color: #ffff;
-    cursor: pointer;
-  }
+  z
 
   @media (max-width: 768px) {
     .container {
@@ -357,6 +356,7 @@ const DetailCustomerMobil: React.FC = () => {
           </table>
       </div>
       </div>
+     
     </>
   );
 };

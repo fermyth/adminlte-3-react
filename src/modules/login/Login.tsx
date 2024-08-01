@@ -16,6 +16,7 @@ import { db } from "../../firebase/index";
 import { doc, getDoc } from "firebase/firestore"; // Import Firestore functions
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+
 const Login = () => {
   const [isAuthLoading, setAuthLoading] = useState(false);
   const [isGoogleAuthLoading, setGoogleAuthLoading] = useState(false);
@@ -96,7 +97,16 @@ const Login = () => {
       toast.error(err.message || "Failed to login with Google");
     }
   };
+  const styles = {
+    versionInfo: {
+      fontSize: '0.875rem',
+      color: '#6c757d',
+      marginTop: '1rem',
+      textAlign: 'center',
 
+    },
+  };
+  
   return (
     <div className="login-box">
       <div className="card card-outline card-primary">
@@ -213,6 +223,9 @@ const Login = () => {
           </p> */}
         </div>
       </div>
+      <div>
+      <p style={styles.versionInfo}>Version 1.2</p>
+    </div>
     </div>
   );
 };

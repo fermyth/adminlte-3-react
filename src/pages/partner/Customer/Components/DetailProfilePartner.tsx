@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate } from 'react-router-dom';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+
 interface DriverApiResponse {
   photo: string;
   full_name: string;
@@ -19,6 +20,7 @@ interface DriverData {
   handphone: string;
   alamatLengkap: string;
 }
+
 const DetailProfilePartner: React.FC = () => {
   const navigate = useNavigate();
   const [data, setData] = useState<DriverData[]>([]);
@@ -174,19 +176,24 @@ const DetailProfilePartner: React.FC = () => {
           }
   
           .back-button {
+
             color: #009879;
             border: none;
             border-radius: 50%;
             padding: 10px;
             cursor: pointer;
             font-size: 20px;
+            
             display: flex;
             align-items: center;
             justify-content: center;
             width: 40px;
             height: 40px;
           }
-        
+  
+          .back-button:hover {
+            background-color: white;
+          }
   
           .profile-section {
             display: flex;
@@ -287,11 +294,11 @@ const DetailProfilePartner: React.FC = () => {
       </div>
   
       <div className="profile-section">
-      <img
-         src={`http://operation.sigapps.com/${photo}`}
-         className="profile-img"
-         alt="Profile"
-       />
+       <img
+  src={`http://operation.sigapps.com/${photo}`}
+  className="profile-img"
+  alt="Profile"
+/>
         <div className="profile-details">
           <h2>Profil Driver</h2>
           <div className="profile-info">
@@ -315,12 +322,12 @@ const DetailProfilePartner: React.FC = () => {
           </thead>
           <tbody>
             <tr>
-              <td>2014 - 2016</td>
+              <td>2014 - 2015</td>
               <td>PT Keyence</td>
               <td>Driver User</td>
             </tr>
             <tr>
-              <td>2016 - 2023</td>
+              <td>2016 - 2017</td>
               <td>PT Epson</td>
               <td>Driver User</td>
             </tr>
@@ -340,6 +347,7 @@ const DetailProfilePartner: React.FC = () => {
           </tbody>
         </table>
       </div>
+      
     </div>
   );
 };

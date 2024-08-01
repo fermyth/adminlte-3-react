@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
-import { FaHome, FaCar } from "react-icons/fa";
+import { FaHome, FaCar, FaClock } from "react-icons/fa"; // Import ikon baru
 import "bootstrap/dist/css/bootstrap.min.css";
 import styled from "styled-components";
 import { Image } from "@profabric/react-components";
@@ -35,6 +35,7 @@ const Sidebar = () => {
   };
 
   const sidebarWidth = isCollapsed ? "80px" : "250px";
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -106,7 +107,13 @@ const Sidebar = () => {
 
         .shadow {
           box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }     
+        }  
+        .version-info {
+          font-size: 0.875rem;
+          color: #6c757d;
+          margin-top: 1rem;
+          text-align: center;
+        }
       `}
       </style>
       <div style={{ marginLeft: sidebarWidth }}>
@@ -134,7 +141,6 @@ const Sidebar = () => {
               height={33}
               rounded
             />
-
             <span className="brand-text ml-2 font-weight-bold text-light">
               SIGAP PORTAL
             </span>
@@ -189,8 +195,8 @@ const Sidebar = () => {
                   className={`nav-link ${location.pathname === "/partner-dashboard/jadwal" ? "active" : ""}`}
                   style={{ fontWeight: "bold" }}
                 >
-                  <FaCar className="icon" />{" "}
-                  {!isCollapsed && <span> Jadwal </span>}
+                  <FaClock className="icon" />{" "}
+                  {!isCollapsed && <span>Jadwal</span>}
                 </Link>
               </li>
             </ul>
@@ -209,6 +215,7 @@ const Sidebar = () => {
           <Outlet />
         </div>
       </div>
+      <p className="version-info">Version 1.2</p>
     </>
   );
 };
