@@ -11,6 +11,7 @@ import { calculateWindowSize } from "@app/utils/helpers";
 import { setWindowSize } from "@app/store/reducers/ui";
 import ReactGA from "react-ga4";
 
+
 import Dashboard from "@pages/Dashboard";
 import SubMenu from "@pages/SubMenu";
 import Profile from "@pages/profile/Profile";
@@ -40,6 +41,9 @@ import Customer from "./pages/partner/Customer/Customer";
 import CustomerDetail from "./pages/partner/Customer/Components/DetailCustomer";
 import DetailCustomerMobil from "./pages/partner/Customer/Components/DetailCustomerMobil";
 import DetailProfilePartner from "./pages/partner/Customer/Components/DetailProfilePartner";
+import Laporan_partner_internal from "./pages/Internal/Laporan_partner_internal/Laporan_partner_Internal";
+import Form_partner_internal from "./pages/Internal/Laporan_partner_internal/Form_partner_internal";
+
 
 const { VITE_NODE_ENV } = import.meta.env;
 
@@ -146,12 +150,24 @@ const App = () => {
             />
           </Route>
           <Route path="/internal" element={<SidebarInternal />}>
-            <Route
-              path="internal_laporan_jam_kerja"
-              element={<Laporan_jam_kerja_internal />}
+              <Route
+               path="internal_laporan_jam_kerja"
+               element={<Laporan_jam_kerja_internal />}
+              />
+              
+          <Route
+              path="partner_internal"
+              element={<Laporan_partner_internal />}
+              />
+
+<Route
+              path="form-partner-internal"
+              element={<Form_partner_internal />} 
             />
           </Route>
-        </Route>
+
+          
+          </Route>
       </Routes>
       <ToastContainer
         autoClose={3000}
