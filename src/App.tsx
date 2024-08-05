@@ -11,7 +11,6 @@ import { calculateWindowSize } from "@app/utils/helpers";
 import { setWindowSize } from "@app/store/reducers/ui";
 import ReactGA from "react-ga4";
 
-
 import Dashboard from "@pages/Dashboard";
 import SubMenu from "@pages/SubMenu";
 import Profile from "@pages/profile/Profile";
@@ -43,7 +42,11 @@ import DetailCustomerMobil from "./pages/partner/Customer/Components/DetailCusto
 import DetailProfilePartner from "./pages/partner/Customer/Components/DetailProfilePartner";
 import Laporan_partner_internal from "./pages/Internal/Laporan_partner_internal/Laporan_partner_Internal";
 import Form_partner_internal from "./pages/Internal/Laporan_partner_internal/Form_partner_internal";
-
+import UpdateFormPerusahaanInternal from "./pages/partner/Customer/Components/FormEditPerusahaan";
+import MobilInternal from "./pages/partner/Customer/Components/MobilPartner";
+import MobilPartner from "./pages/partner/Customer/Components/MobilPartner";
+import FormMobilPartner from "./pages/partner/Customer/Components/FormMObilPartner";
+import FormPerusahaanPartner from "./pages/partner/Customer/Components/FormPerusahaan";
 
 const { VITE_NODE_ENV } = import.meta.env;
 
@@ -136,6 +139,13 @@ const App = () => {
             <Route path="customer" element={<Customer />} />
             <Route path="jadwal" element={<Jadwal />} />
             <Route path="detail-costumer" element={<DetailCostumer />} />
+            <Route path="form-perusahaan" element={<FormPerusahaanPartner />} />
+            <Route
+              path="update-form-perusahaan"
+              element={<UpdateFormPerusahaanInternal />}
+            />
+            <Route path="add-mobil-partner" element={<FormMobilPartner />} />
+            <Route path="add-mobil/:id" element={<MobilPartner />} />
             <Route
               path="/partner-dashboard/customer/costumer-detail"
               element={<CustomerDetail />}
@@ -149,25 +159,23 @@ const App = () => {
               element={<DetailProfilePartner />}
             />
           </Route>
-          <Route path="/internal" element={<SidebarInternal />}>
-              <Route
-               path="internal_laporan_jam_kerja"
-               element={<Laporan_jam_kerja_internal />}
-              />
-              
-          <Route
+          {/* <Route path="/internal" element={<SidebarInternal />}>
+            <Route
+              path="internal_laporan_jam_kerja"
+              element={<Laporan_jam_kerja_internal />}
+            />
+
+            <Route
               path="partner_internal"
               element={<Laporan_partner_internal />}
-              />
-
-<Route
-              path="form-partner-internal"
-              element={<Form_partner_internal />} 
             />
-          </Route>
 
-          
-          </Route>
+            <Route
+              path="form-partner-internal"
+              element={<Form_partner_internal />}
+            />
+          </Route> */}
+        </Route>
       </Routes>
       <ToastContainer
         autoClose={3000}
