@@ -137,7 +137,7 @@ const App = () => {
               element={<CustomerDetail />}
             />
             <Route
-              path="/partner-dashboard/customer/costumer-detail/detail-mobil"
+              path="/partner-dashboard/customer/costumer-detail/detail-mobil/:nopol"
               element={<DetailCustomerMobil />}
             />
             <Route

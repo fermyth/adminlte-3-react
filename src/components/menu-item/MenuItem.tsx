@@ -1,9 +1,9 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { useEffect, useState } from 'react';
-import { NavLink, useNavigate, useLocation, Location } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
-import { IMenuItem } from '@app/modules/main/menu-sidebar/MenuSidebar';
-import { useAppSelector } from '@app/store/store'; // Assuming this hook is for accessing Redux store
+import { useEffect, useState } from "react";
+import { NavLink, useNavigate, useLocation, Location } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { IMenuItem } from "@app/modules/main/menu-sidebar/MenuSidebar";
+import { useAppSelector } from "@app/store/store"; // Assuming this hook is for accessing Redux store
 
 const MenuItem = ({ menuItem }: { menuItem: IMenuItem }) => {
   const [t] = useTranslation();
@@ -13,7 +13,9 @@ const MenuItem = ({ menuItem }: { menuItem: IMenuItem }) => {
   const [isOneOfChildrenActive, setIsOneOfChildrenActive] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-  const menuSidebarCollapsed = useAppSelector((state) => state.ui.menuSidebarCollapsed); // Accessing the sidebar collapsed state
+  const menuSidebarCollapsed = useAppSelector(
+    (state) => state.ui.menuSidebarCollapsed
+  ); // Accessing the sidebar collapsed state
 
   const toggleMenu = () => {
     setIsMenuExtended(!isMenuExtended);
@@ -23,7 +25,7 @@ const MenuItem = ({ menuItem }: { menuItem: IMenuItem }) => {
     if (isExpandable) {
       toggleMenu();
     } else {
-      navigate(menuItem.path ? menuItem.path : '/');
+      navigate(menuItem.path ? menuItem.path : "/");
     }
   };
 
@@ -54,40 +56,47 @@ const MenuItem = ({ menuItem }: { menuItem: IMenuItem }) => {
   }, [location, menuItem]);
 
   useEffect(() => {
-    setIsExpandable(Boolean(menuItem && menuItem.children && menuItem.children.length > 0));
+    setIsExpandable(
+      Boolean(menuItem && menuItem.children && menuItem.children.length > 0)
+    );
   }, [menuItem]);
 
   return (
-    <li className={`nav-item${isMenuExtended ? ' menu-open' : ''}`}>
+    <li className={`nav-item${isMenuExtended ? " menu-open" : ""}`}>
       <style>
         {`
           .nav-item .active {
-            background-color: ${!menuSidebarCollapsed ? '#009879' : 'transparent'};
-            color: ${!menuSidebarCollapsed ? 'white' : '#333333'};
+            background-color: ${!menuSidebarCollapsed ? "#009879" : "transparent"};
+            color: ${!menuSidebarCollapsed ? "white" : "#333333"};
             border-radius: 9px;
           }
 
           .nav-item .active p {
-            color: ${!menuSidebarCollapsed ? 'white' : '#333333'};
+            color: ${!menuSidebarCollapsed ? "white" : "#333333"};
           }
 
           .nav-item .active i {
-            color: ${!menuSidebarCollapsed ? 'white' : '#333333'};
+            color: ${!menuSidebarCollapsed ? "white" : "#333333"};
           }
 
           .nav-item i {
-            color: ${!menuSidebarCollapsed ? '#009879' : '#009879'};
+            color: ${!menuSidebarCollapsed ? "#009879" : "#009879"};
           }
         `}
       </style>
       <a
-        className={`d-flex text-black ml-3${(isMainActive || isOneOfChildrenActive) && !menuSidebarCollapsed ? ' active' : ''}`}
+        className={`d-flex text-black ml-3${(isMainActive || isOneOfChildrenActive) && !menuSidebarCollapsed ? " active" : ""}`}
         role="link"
         onClick={handleMainMenuAction}
-        style={{ cursor: 'pointer' }}
+        style={{ cursor: "pointer" }}
       >
-        <i className={`${menuItem.icon}`} style={{ marginRight: '20px', marginTop: '15px' }} />
-        <p className="font-weight-bold" style={{ marginTop: '14px' }}>{t(menuItem.name)}</p>
+        <i
+          className={`${menuItem.icon}`}
+          style={{ marginRight: "20px", marginTop: "15px" }}
+        />
+        <p className="font-weight-bold" style={{ marginTop: "14px" }}>
+          {t(menuItem.name)}
+        </p>
         {isExpandable ? <i className="right fas fa-angle-left" /> : null}
       </a>
 
@@ -96,7 +105,7 @@ const MenuItem = ({ menuItem }: { menuItem: IMenuItem }) => {
           {menuItem.children.map((item) => (
             <li key={item.name} className="nav-item">
               {/* Ensure item.path is not undefined */}
-              <NavLink className="nav-link" to={item.path || '/'}>
+              <NavLink className="nav-link" to={item.path || "/"}>
                 <i className={`${item.icon}`} />
                 <p>{t(item.name)}</p>
               </NavLink>
