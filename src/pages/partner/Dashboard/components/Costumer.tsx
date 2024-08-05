@@ -56,7 +56,7 @@ const CustomerList = () => {
                   <td>{customer.name}</td>
                   <td>
                     <Link
-                      to="detail-costumer"
+                      to="/partner-dashboard/customer"
                       className="text-dark hover font-weight-bold"
                     >
                       {customer.vehicles} {""}Vehicle

@@ -200,7 +200,7 @@ const CustomerDetail: React.FC = () => {
                 <tr key={index}>
                   <td>{index + 1}</td>
                   <td>
-                    <Link to={`/partner-dashboard/customer/costumer-detail/detail-mobil/847854`}>
+                    <Link to={`/partner-dashboard/customer/costumer-detail/detail-mobil`}>
                      B 12345 DC
                     </Link>
                   </td>

@@ -9,6 +9,7 @@ import HeaderNavbar from "./Navbar";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useAppSelector } from "@app/store/store";
 import { EventEmitter } from "events";
+import { MdGroup } from "react-icons/md"; 
 
 const eventEmitter = new EventEmitter();
 
@@ -184,6 +185,18 @@ const SidebarInternal = () => {
                   {!isCollapsed && <span>Laporan Jam Kerja</span>}
                 </Link>
               </li>
+              <li className="nav-item">
+            <Link
+              to="/internal/partner_internal"
+              className={`nav-link ${location.pathname === "/internal/partner_internal" ? "active" : ""}`}
+              style={{ fontWeight: "bold" }}
+            >
+              <MdGroup className="icon" />{" "}
+                {!isCollapsed && <span>Partner</span>}
+            </Link>
+             </li>
+
+
             </ul>
           </div>
         </div>

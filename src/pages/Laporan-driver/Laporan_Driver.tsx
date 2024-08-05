@@ -5,6 +5,7 @@ import { EventEmitter } from "events";
 import DriverReportTable from "./components/Driver_Report_Table";
 import * as XLSX from "xlsx";
 import ApiConfig, { UrlServer } from "@app/libs/Api";
+import Footer from "../Footer";
 
 
 const eventEmitter = new EventEmitter();
@@ -257,6 +258,9 @@ function LaporanDriver() {
       </center>
       <div className="info-box">
         {isFiltered && <DriverReportTable data={data} />}
+      </div>
+      <div>
+        <Footer/>
       </div>
     </>
   );

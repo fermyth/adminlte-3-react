@@ -4,6 +4,7 @@ import { Pagination } from "react-bootstrap";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import ApiConfig from "@app/libs/Api";
 import { Link,useNavigate } from "react-router-dom";
+import Footer from "../Footer";
 
 
 
@@ -330,7 +331,7 @@ const Driver: React.FC = () => {
                       item.alamatLengkap,
                       item.handphone
                       
-                      )} style={{ cursor: 'pointer', color: 'black' }}>
+                      )} style={{ cursor: 'pointer', color: 'blue' }}>
                       {item.namaLengkap}
                     </span>
                     </td>
@@ -377,6 +378,7 @@ const Driver: React.FC = () => {
             </Pagination>
           </div>
         </div>
+        <Footer/>
       </div>
     </>
   );

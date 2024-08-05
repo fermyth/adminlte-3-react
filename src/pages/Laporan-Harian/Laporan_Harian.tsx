@@ -11,6 +11,7 @@ import {
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import ApiConfig from "@app/libs/Api";
+import Footer from "../Footer";
 
 interface DataItem {
   pt: string;
@@ -434,6 +435,9 @@ const LaporanHarian: React.FC = () => {
           </Button>
         </Modal.Footer>
       </Modal>
+      <div>
+        <Footer/>
+      </div>
     </Container>
   );
 };

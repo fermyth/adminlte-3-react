@@ -5,6 +5,7 @@ import { useAppSelector } from "@app/store/store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { EventEmitter } from "events";
 import ApiConfig from "@app/libs/Api";
+import Footer from "./Footer";
 
 const eventEmitter = new EventEmitter();
 
@@ -129,6 +130,8 @@ const Dashboard = () => {
     : 0;
 
   return (
+    <>
+
     <div>
       <div className="d-flex mt-3">
         <div className="info-box w-50 d-flex flex-column mr-4 ">
@@ -175,7 +178,9 @@ const Dashboard = () => {
         </h2>
       </div>
       <MyChart data={data} labels={labels} />
+      <Footer/>
     </div>
+    </>
   );
 };
 

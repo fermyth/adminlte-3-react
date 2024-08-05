@@ -124,6 +124,15 @@ const Register = () => {
 
   setWindowClass("hold-transition register-page");
 
+  const styles = {
+    versionInfo: {
+      fontSize: '0.875rem',
+      color: '#6c757d',
+      marginTop: '1rem',
+      textAlign: 'center',
+    },
+  };
+  
   return (
     <div className="register-box">
       <div className="card card-outline card-primary">
@@ -318,6 +327,9 @@ const Register = () => {
             {t("register.alreadyHave")}
           </Link>
         </div>
+      </div>
+      <div>
+        <p style={styles.versionInfo}>Version 1.278978</p>
       </div>
     </div>
   );

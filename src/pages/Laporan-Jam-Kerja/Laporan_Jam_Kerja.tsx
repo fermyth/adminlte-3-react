@@ -4,6 +4,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { EventEmitter } from "events";
 import * as XLSX from "xlsx";
 import ApiConfig from "@app/libs/Api";
+import Footer from "../Footer";
 
 const eventEmitter = new EventEmitter();
 
@@ -370,6 +371,7 @@ const ContentHeader: React.FC = () => {
           )}
         </div>
       </div>
+      <Footer/>
     </section>
   );
 };
