@@ -4,68 +4,67 @@ import { Table, Button, Row, Col } from "react-bootstrap";
 import { ToastContainer, toast } from "react-toastify";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
 import { FaEdit, FaTrashAlt, FaPlus } from "react-icons/fa";
 
 interface Car {
   id: string;
-  namaMobil: string;
-  jenisMobil: string;
+  tipe_kendaraan: string;
+  pembuat: string;
   tahun: string;
-  warnaKendaraan: string;
+  warna_kendaraan: string;
   nopol: string;
-  nomorRangka: string;
-  nomorMesin: string;
-  pilihanAksesoris: string;
-  biayaSewa: string;
-  perusahaan: string;
-  photo1: string;
-  photo2: string;
-  photo3: string;
-  photo4: string;
+  biaya_sewa: string;
+  jangka_waktu_sewa: string;
+  tb_perusahaan: {
+    nama_perusahaan: string;
+  };
 }
 
 const MobilPartner: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
   const [cars, setCars] = useState<Car[]>([]);
   const navigate = useNavigate();
+  const { perusahaanID } = useParams();
 
   useEffect(() => {
-    const fetchCars = async () => {
-      // Gantilah dengan pengambilan data mobil berdasarkan ID perusahaan
-      const updatedCars: Car[] = [
-        {
-          id: "1",
-          namaMobil: "Toyota Avanza",
-          jenisMobil: "MPV",
-          tahun: "2022",
-          warnaKendaraan: "Hitam",
-          nopol: "B 1234 CD",
-          nomorRangka: "1234567890",
-          nomorMesin: "0987654321",
-          pilihanAksesoris: "GPS, AC",
-          biayaSewa: "500000",
-          perusahaan: "PT Toyota",
-          photo1: "photo1_url",
-          photo2: "photo2_url",
-          photo3: "photo3_url",
-          photo4: "photo4_url",
-        },
-      ];
-      setCars(updatedCars);
-    };
+    if (perusahaanID) {
+      const fetchCars = async () => {
+        try {
+          const response = await axios.get(
+            `http://localhost:5182/api/v1/mobil/${perusahaanID}`
+          );
+          if (Array.isArray(response.data)) {
+            setCars(response.data);
+          } else {
+            toast.error("Invalid data format received");
+          }
+        } catch (error) {
+          console.error("Error fetching car data:", error);
+          toast.error("Error fetching car data");
+        }
+      };
 
-    fetchCars();
-  }, [id]);
+      fetchCars();
+    } else {
+      toast.error("Perusahaan ID tidak ditemukan di URL");
+    }
+  }, [perusahaanID]);
 
-  const handleDeleteCar = (carId: string) => {
+  const handleDeleteCar = async (carId: string) => {
     if (window.confirm("Apakah Anda yakin ingin menghapus data ini?")) {
-      setCars(cars.filter((car) => car.id !== carId));
-      toast.success("Data berhasil dihapus!");
+      try {
+        await axios.delete(`http://localhost:5182/api/v1/mobil/${carId}`);
+        setCars(cars.filter((car) => car.id !== carId));
+        toast.success("Data berhasil dihapus!");
+      } catch (error) {
+        console.error("Error deleting car data:", error);
+        toast.error("Error deleting car data");
+      }
     }
   };
 
   return (
-    <div className="container mt-5">
+    <div className="p-4 mt-5">
       <Row className="mb-4">
         <Col>
           <h1 className="text-dark font-weight-bold">Mobil Perusahaan</h1>
@@ -74,7 +73,6 @@ const MobilPartner: React.FC = () => {
           <Link
             to="/partner-dashboard/add-mobil-partner"
             className="btn btn-success d-inline-flex align-items-center font-weight-bold"
-            style={{ textDecoration: "none" }}
           >
             <FaPlus className="mr-1" /> Create
           </Link>
@@ -95,15 +93,9 @@ const MobilPartner: React.FC = () => {
               "Tahun",
               "Warna Kendaraan",
               "Nopol",
-              "Nomor Rangka",
-              "Nomor Mesin",
-              "Pilihan Aksesoris",
               "Biaya Sewa",
+              "jangkwa_waktu_sewa",
               "Perusahaan",
-              "Photo 1",
-              "Photo 2",
-              "Photo 3",
-              "Photo 4",
               "Actions",
             ].map((header) => (
               <th
@@ -118,31 +110,32 @@ const MobilPartner: React.FC = () => {
         <tbody>
           {cars.map((car) => (
             <tr key={car.id}>
-              <td>{car.namaMobil}</td>
-              <td>{car.jenisMobil}</td>
+              <td>{car.tipe_kendaraan}</td>
+              <td>{car.pembuat}</td>
               <td>{car.tahun}</td>
-              <td>{car.warnaKendaraan}</td>
+              <td>{car.warna_kendaraan}</td>
               <td>{car.nopol}</td>
-              <td>{car.nomorRangka}</td>
-              <td>{car.nomorMesin}</td>
-              <td>{car.pilihanAksesoris}</td>
-              <td>{car.biayaSewa}</td>
-              <td>{car.perusahaan}</td>
-              {["photo1", "photo2", "photo3", "photo4"].map((photo, index) => (
+              <td>{car.biaya_sewa}</td>
+              <td>{car.jangka_waktu_sewa}</td>
+              <td>{car.tb_perusahaan.nama_perusahaan}</td>
+              {/* {["photo1", "photo2", "photo3", "photo4"].map((photo, index) => (
                 <td key={index}>
-                  <img
-                    src={car[photo as keyof Car]}
-                    alt={`Photo ${index + 1}`}
-                    style={{ width: "50px" }}
-                  />
+                  {car[photo as keyof Car] ? (
+                    <img
+                      src={car[photo as keyof Car]}
+                      alt={`Photo ${index + 1}`}
+                      style={{ width: "50px" }}
+                    />
+                  ) : (
+                    <span>No Image</span>
+                  )}
                 </td>
-              ))}
+              ))} */}
               <td>
                 <Link
                   to={`/internal/update-form-mobil-internal`}
                   state={{ car }}
                   className="btn btn-primary d-inline-flex align-items-center font-weight-bold mr-2"
-                  style={{ textDecoration: "none" }}
                 >
                   <FaEdit className="mr-1" /> Edit
                 </Link>

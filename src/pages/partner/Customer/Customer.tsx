@@ -6,6 +6,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FaEdit, FaTrashAlt, FaCar } from "react-icons/fa";
+import { log } from "console";
 
 interface Company {
   id: number;
@@ -18,7 +19,7 @@ interface Company {
   createdAt?: string;
   updatedAt?: string;
 }
- 
+
 const Customer: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [companies, setCompanies] = useState<Company[]>([]);
@@ -30,10 +31,13 @@ const Customer: React.FC = () => {
     const fetchCompanies = async () => {
       try {
         const response = await fetch("http://localhost:5182/api/v1/perusahaan");
+
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
         const data: Company[] = await response.json();
+        console.log("asasa", data);
+
         setCompanies(data);
       } catch (error) {
         console.error("Failed to fetch companies:", error);
@@ -58,6 +62,14 @@ const Customer: React.FC = () => {
       setCompanies(companies.filter((company) => company.id !== id));
       toast.success("Data berhasil dihapus!");
     }
+  };
+  const handleCompanyClick = (idcomp: string, nama_customer: string) => {
+    // alert(idcomp)
+    const selectedCompany = { idcomp, nama_customer };
+    localStorage.setItem(
+      "selecteddataCompany",
+      JSON.stringify(selectedCompany)
+    );
   };
 
   const handleCarButtonClick = () => {
@@ -123,8 +135,17 @@ const Customer: React.FC = () => {
               <td>{index + 1}</td>
               <td>
                 <Link
-                  to={`/internal/perusahaan_internal/${company.id}`}
+                  to={`/partner-dashboard/customer/costumer-detail`}
                   style={{ color: "#007bff", fontWeight: "bold" }}
+                >
+                  {company.nama_perusahaan}
+                </Link>
+                <Link
+                  to="/partner-dashboard/customer/costumer-detail"
+                  style={{ color: "#007bff", fontWeight: "bold" }}
+                  onClick={() =>
+                    handleCompanyClick(customer.id, customer.namaCustomer)
+                  }
                 >
                   {company.nama_perusahaan}
                 </Link>
