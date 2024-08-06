@@ -88,7 +88,9 @@ const Customer: React.FC = () => {
 
   const handleCompanyClick = (idcomp: string, nama_customer: string) => {
     const selectedCompany = { idcomp, nama_customer };
+   // alert(idcomp)
     localStorage.setItem("selecteddataCompany", JSON.stringify(selectedCompany));
+    navigate('/partner-dashboard/customer/costumer-detail');
   };
 
   const handleCarButtonClick = () => {
@@ -137,13 +139,13 @@ const Customer: React.FC = () => {
             <tr key={company.id}>
               <td>{index + 1}</td>
               <td>
-                <Link
-                  to="/partner-dashboard/customer/costumer-detail"
+                <span
+                 // to="/partner-dashboard/customer/costumer-detail"
                   style={{ color: "#007bff", fontWeight: "bold" }}
-                  onClick={() => handleCompanyClick(company.id.toString(), company.nama_perusahaan)}
+                  onClick={() => handleCompanyClick(company.id_company.toString(), company.nama_perusahaan)}
                 >
                   {company.nama_perusahaan}
-                </Link>
+                </span>
               </td>
               <td>{company.alamat}</td>
               <td>{company.kontak}</td>
