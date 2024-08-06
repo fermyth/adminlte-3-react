@@ -18,7 +18,7 @@ interface Company {
   createdAt?: string;
   updatedAt?: string;
 }
-
+ 
 const Customer: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [companies, setCompanies] = useState<Company[]>([]);
