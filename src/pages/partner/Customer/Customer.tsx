@@ -97,7 +97,9 @@ const Customer: React.FC = () => {
       >
         <thead>
           <tr>
-            <th style={{ backgroundColor: "#009879", color: "white" }}></th>
+            <th style={{ backgroundColor: "#009879", color: "white" }}>
+              Nomor
+            </th>
             <th style={{ backgroundColor: "#009879", color: "white" }}>
               Nama Perusahaan
             </th>
@@ -116,11 +118,9 @@ const Customer: React.FC = () => {
           </tr>
         </thead>
         <tbody>
-          {companies.map((company) => (
+          {companies.map((company, index) => (
             <tr key={company.id}>
-              <td>
-                <Form.Check type="checkbox" />
-              </td>
+              <td>{index + 1}</td>
               <td>
                 <Link
                   to={`/internal/perusahaan_internal/${company.id}`}
