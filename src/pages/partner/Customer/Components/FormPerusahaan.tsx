@@ -10,9 +10,9 @@ import Select from "react-select";
 // Fungsi untuk menghapus tag HTML dari string
 const removeHTMLTags = (str: string | null | undefined): string => {
   if (!str) {
-    return '';
+    return "";
   }
-  return str.replace(/<[^>]*>?/gm, '');
+  return str.replace(/<[^>]*>?/gm, "");
 };
 
 const FormPerusahaanPartner: React.FC = () => {
@@ -29,16 +29,16 @@ const FormPerusahaanPartner: React.FC = () => {
           "http://localhost:5181/api/v1/customer_sigap"
         );
         const data = response.data.data;
-        console.log('cekdata', response.data.data);
+        console.log("cekdata", response.data.data);
         const formattedOptions = data.map((item) => ({
           value: item.company_name,
           label: item.company_name,
           id_company: item.master_companies_id,
           alamat: removeHTMLTags(item.company_address),
           kontak: item.phone_number,
-          email: item.email
+          email: item.email,
         }));
-        console.log('cekdataitem', formattedOptions)
+        console.log("cekdataitem", formattedOptions);
         setOptions(formattedOptions);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -61,7 +61,9 @@ const FormPerusahaanPartner: React.FC = () => {
 
   const navigate = useNavigate();
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
@@ -81,14 +83,26 @@ const FormPerusahaanPartner: React.FC = () => {
       });
       setIsExistingCompany(true);
     } else {
-      handleCreateNewCompany();
+      handleCreateNewCompanySearch();
     }
+  };
+
+  const handleCreateNewCompanySearch = () => {
+    setFormData({
+      id_company: "",
+      nama_perusahaan: "",
+      alamat: "",
+      kontak: "",
+      email: "",
+      image: "static_image.jpg",
+      partnerId: 1,
+    });
   };
 
   const handleCreateNewCompany = () => {
     setIsExistingCompany(false);
     setFormData({
-      id_company:"",
+      id_company: "",
       nama_perusahaan: "",
       alamat: "",
       kontak: "",
@@ -101,7 +115,7 @@ const FormPerusahaanPartner: React.FC = () => {
   const handleCreateNewCompanySelect = () => {
     setIsExistingCompany(true);
     setFormData({
-      id_company:"",
+      id_company: "",
       nama_perusahaan: "",
       alamat: "",
       kontak: "",
@@ -119,10 +133,10 @@ const FormPerusahaanPartner: React.FC = () => {
       alamat: formData.alamat,
       kontak: formData.kontak,
       email: formData.email,
-      image: '',
+      image: "",
       partnerId: formData.partnerId,
     };
-    console.log('inputperusahaan',data)
+    console.log("inputperusahaan", data);
 
     try {
       const response = await axios.post(
@@ -151,12 +165,12 @@ const FormPerusahaanPartner: React.FC = () => {
         <Row>
           <Col md={6} className="mb-3">
             <Card className="shadow-sm">
-              <Card.Header style={{ backgroundColor: "#009879", color: "white", display: "flex", alignItems: "center", padding: "10px", borderBottom: "2px solid white" }}>
-                <FaBuilding size={24} style={{ marginRight: "10px" }} />
-                <h4 style={{ fontSize: "18px", marginBottom: 0 }}>Form Perusahaan</h4>
+              <Card.Header className="bg-primary text-white d-flex align-items-center px-3 py-2">
+                <FaBuilding size={24} className="mr-2" />
+                <h4 className="mb-0">Form Perusahaan</h4>
               </Card.Header>
               <Card.Body>
-              <Form.Group controlId="formKontak">
+                <Form.Group controlId="formKontak">
                   <Form.Control
                     type="hidden"
                     name="id_company"
@@ -169,42 +183,68 @@ const FormPerusahaanPartner: React.FC = () => {
                 <Form.Group controlId="formNamaPerusahaan">
                   <Form.Label>Nama Perusahaan</Form.Label>
                   {loading ? (
-                    <FaSpinner size={24} className="text-primary" style={{ animation: "spin 1s linear infinite" }} />
+                    <FaSpinner
+                      size={24}
+                      className="text-primary"
+                      style={{ animation: "spin 1s linear infinite" }}
+                    />
                   ) : isExistingCompany ? (
-                    <Select
-                      placeholder="Masukkan Nama Perusahaan"
-                      options={options}
-                      value={options.find(
-                        (option) => option.value === formData.nama_perusahaan
-                      )}
-                      onChange={handleSelectChange}
-                      isClearable
-                    />
+                    <Row>
+                      <Col md={8} className="mb-8">
+                        <Select
+                          placeholder="Masukkan Nama Perusahaan"
+                          options={options}
+                          value={
+                            options.find(
+                              (option) =>
+                                option.value === formData.nama_perusahaan
+                            ) || null
+                          }
+                          onChange={handleSelectChange}
+                          isClearable
+                        />
+                      </Col>
+                      <Col md={4} className="mb-4">
+                        <Button
+                          style={{
+                            backgroundColor: "#049879",
+                            borderColor: "#009879", fontSize:14
+                          }}
+                          onClick={handleCreateNewCompany}
+                        >
+                          Buat Perusahaan Baru
+                        </Button>
+                      </Col>
+                    </Row>
                   ) : (
-                    <Form.Control
-                      type="text"
-                      placeholder="Masukkan Nama Perusahaan"
-                      name="nama_perusahaan"
-                      value={formData.nama_perusahaan}
-                      onChange={handleInputChange}
-                      required
-                    />
-                  )}
-                  {!isExistingCompany && (
-                    <div>
-                      <Button
-                        variant="link"
-                        onClick={handleCreateNewCompany}
-                      >
-                        Tambah Perusahaan Baru
-                      </Button>
-                      <Button
-                        variant="link"
-                        onClick={handleCreateNewCompanySelect}
-                      >
-                        Cari Perusahaan
-                      </Button>
-                    </div>
+                    <Row>
+                      <Col md={8}>
+                        <Form.Control
+                          type="text"
+                          placeholder="Masukkan Nama Perusahaan"
+                          name="nama_perusahaan"
+                          value={formData.nama_perusahaan}
+                          onChange={handleInputChange}
+                          required
+                        />
+                      </Col>
+                      <Col md={4}>
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          onClick={handleCreateNewCompanySelect}
+                          style={{
+                            width: "100%",
+                            maxWidth: "300px",
+                            backgroundColor: "#027BFF",
+                            borderColor: "#009879",
+                            color: "white",
+                          }}
+                        >
+                          Cari Perusahaan
+                        </Button>
+                      </Col>
+                    </Row>
                   )}
                 </Form.Group>
                 <Form.Group controlId="formAlamat">
@@ -248,9 +288,9 @@ const FormPerusahaanPartner: React.FC = () => {
           </Col>
           <Col md={6} className="mb-3">
             <Card className="shadow-sm">
-              <Card.Header style={{ backgroundColor: "#009879", color: "white", display: "flex", alignItems: "center", padding: "10px", borderBottom: "2px solid white" }}>
-                <FaUpload size={24} style={{ marginRight: "10px" }} />
-                <h4 style={{ fontSize: "18px", marginBottom: 0 }}>Upload Logo Perusahaan</h4>
+              <Card.Header className="bg-primary text-white d-flex align-items-center px-3 py-2">
+                <FaUpload size={24} className="mr-2" />
+                <h4 className="mb-0">Upload Logo Perusahaan</h4>
               </Card.Header>
               <Card.Body>
                 <Form.Group controlId="formLogoPerusahaan">
@@ -263,7 +303,11 @@ const FormPerusahaanPartner: React.FC = () => {
         </Row>
 
         <div className="text-right">
-          <Button type="submit" className="mt-3 px-4" style={{ backgroundColor: "#009879", borderColor: "#009879" }}>
+          <Button
+            type="submit"
+            className="mt-3 px-4"
+            style={{ backgroundColor: "#009879", borderColor: "#009879" }}
+          >
             Simpan
           </Button>
         </div>
