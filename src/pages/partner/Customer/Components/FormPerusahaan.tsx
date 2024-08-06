@@ -4,7 +4,7 @@ import { FaArrowLeft, FaBuilding, FaUpload, FaSpinner } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,useParams } from "react-router-dom";
 import Select from "react-select";
 
 // Fungsi untuk menghapus tag HTML dari string
@@ -16,15 +16,17 @@ const removeHTMLTags = (str: string | null | undefined): string => {
 };
 
 const FormPerusahaanPartner: React.FC = () => {
+  const { idpartner } = useParams();
   const [options, setOptions] = useState([]);
   const [isExistingCompany, setIsExistingCompany] = useState(true);
   const [loading, setLoading] = useState(true); // Tambah state loading
 
   useEffect(() => {
-    // Fungsi untuk mengambil data dari API
+   
     const fetchData = async () => {
       setLoading(true); // Set loading ke true saat memulai fetch
       try {
+      //  alert(idpartner);
         const response = await axios.get(
           "http://localhost:5181/api/v1/customer_sigap"
         );
@@ -56,7 +58,7 @@ const FormPerusahaanPartner: React.FC = () => {
     kontak: "",
     email: "",
     image: "static_image.jpg",
-    partnerId: 1,
+    partnerId: idpartner,
   });
 
   const navigate = useNavigate();
@@ -79,7 +81,7 @@ const FormPerusahaanPartner: React.FC = () => {
         alamat: selectedOption.alamat,
         kontak: selectedOption.kontak,
         email: selectedOption.email,
-        partnerId: 1,
+        partnerId: idpartner,
       });
       setIsExistingCompany(true);
     } else {
@@ -95,7 +97,7 @@ const FormPerusahaanPartner: React.FC = () => {
       kontak: "",
       email: "",
       image: "static_image.jpg",
-      partnerId: 1,
+      partnerId: idpartner,
     });
   };
 
@@ -108,7 +110,7 @@ const FormPerusahaanPartner: React.FC = () => {
       kontak: "",
       email: "",
       image: "static_image.jpg",
-      partnerId: 1,
+      partnerId: idpartner,
     });
   };
 
@@ -121,7 +123,7 @@ const FormPerusahaanPartner: React.FC = () => {
       kontak: "",
       email: "",
       image: "static_image.jpg",
-      partnerId: 1,
+      partnerId: idpartner,
     });
   };
 
@@ -134,7 +136,7 @@ const FormPerusahaanPartner: React.FC = () => {
       kontak: formData.kontak,
       email: formData.email,
       image: "",
-      partnerId: formData.partnerId,
+      partnerId: Number(formData.partnerId),
     };
     console.log("inputperusahaan", data);
 

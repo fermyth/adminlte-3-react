@@ -139,7 +139,7 @@ const App = () => {
             <Route path="customer" element={<Customer />} />
             <Route path="jadwal" element={<Jadwal />} />
             <Route path="detail-costumer" element={<DetailCostumer />} />
-            <Route path="form-perusahaan" element={<FormPerusahaanPartner />} />
+            <Route path="form-perusahaan/:idpartner" element={<FormPerusahaanPartner />} />
             <Route
               path="update-form-perusahaan"
               element={<UpdateFormPerusahaanInternal />}
