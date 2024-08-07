@@ -2,7 +2,10 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Table, Button, Row, Col } from "react-bootstrap";
+
 import ApiConfig from "@app/libs/Api";
+import { FaEdit, FaTrashAlt, FaPlus } from "react-icons/fa";
 
 interface DriverApiResponse {
   id: number;
@@ -18,34 +21,39 @@ interface DriverData {
 
 const CustomerDetail: React.FC = () => {
   const navigate = useNavigate();
-  const [ idcustomer, setidcustomer] = useState(null); 
-  const [ nama_customer, setnamacustomer] = useState(null);
-  const [ no_hp, setno_hp] = useState(null); 
-  
+  const [idcustomer, setidcustomer] = useState(null);
+  const [nama_customer, setnamacustomer] = useState(null);
+  const [no_hp, setno_hp] = useState(null);
+
   const [drivers, setDrivers] = useState<DriverData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [idCompany, setIdCompany] = useState<string | null>(null);
+  const [idperusahaan, setidperusahaan] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  
+  const [alamat, setalamat] = useState(null);
+  const [kontak, setkontak] = useState(null);
+
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
-      
-       try {
-          const datausers = localStorage.getItem('selecteddataCompany');      
-         // console.log('ceklagi',datausers);   
-          if(datausers){
+
+      try {
+        const datausers = localStorage.getItem("selecteddataCompany");
+        // console.log('ceklagi',datausers);
+        if (datausers) {
           const parsejson = JSON.parse(datausers);
-          console.log('cekcekcek',parsejson)
-          setidcustomer(parsejson.idcomp)
+          console.log("cekcekcek", parsejson);
+          setidcustomer(parsejson.idcomp);
           setnamacustomer(parsejson.nama_customer);
-          setno_hp(parsejson.no_hp)
-          }
-          
-        } catch (error) {
-          console.error('Error parsing JSON from localStorage:', error);
+          setno_hp(parsejson.no_hp);
+          setidperusahaan(parsejson.idperusahaan);
+          setalamat(parsejson.alamat);
+          setkontak(parsejson.kontak);
         }
+      } catch (error) {
+        console.error("Error parsing JSON from localStorage:", error);
+      }
       try {
         // Get id company from AsyncStorage
         const userData = await AsyncStorage.getItem("userData");
@@ -63,30 +71,49 @@ const CustomerDetail: React.FC = () => {
     };
 
     fetchData();
-    
   }, []);
+
+  // useEffect(() => {
+  //   if (idcustomer) {
+  //     const getDataDriver = async () => {
+  //       setIsLoading(true);
+
+  //       try {
+  //         // alert(idcustomer)
+  //         const response = await ApiConfig.get(`drivers/${idcustomer}`);
+  //         console.log("cekresdriver", response);
+  //         const drivers: DriverData[] = response.data.data.map(
+  //           (driver: DriverApiResponse): DriverData => ({
+  //             id: driver.id,
+  //             full_name: driver.full_name,
+  //             no_hp: driver.no_hp,
+  //             photo: driver.photo,
+  //             home_address: driver.home_address,
+  //             phone_number: driver.phone_number,
+  //           })
+  //         );
+  //         setDrivers(drivers);
+  //         setIsLoading(false);
+  //       } catch (err) {
+  //         setError("Failed to fetch driver data");
+  //         setIsLoading(false);
+  //       }
+  //     };
+
+  //     getDataDriver();
+  //   }
+  // }, [idcustomer]);
 
   useEffect(() => {
     if (idcustomer) {
       const getDataDriver = async () => {
         setIsLoading(true);
-       
+
         try {
-         // alert(idcustomer)
-          const response = await ApiConfig.get(`drivers/${idcustomer}`);
-          console.log('cekresdriver',response)
-          const drivers: DriverData[] = response.data.data.map(
-            (driver: DriverApiResponse): DriverData => ({
-              id: driver.id,
-              full_name: driver.full_name,
-              no_hp: driver.no_hp,
-              photo: driver.photo,
-              home_address: driver.home_address,
-              phone_number: driver.phone_number
-             
-            })
-          );
-          setDrivers(drivers);
+          // alert(idcustomer)
+          const response = await ApiConfig.get(`http://localhost:5182/api/v1/mobil/${idperusahaan}`);
+          console.log("cekresdriver", response.data);
+          setDrivers(response.data);
           setIsLoading(false);
         } catch (err) {
           setError("Failed to fetch driver data");
@@ -131,11 +158,22 @@ const CustomerDetail: React.FC = () => {
     // Tambahkan data kendaraan lainnya sesuai kebutuhan
   ];
 
-  const detaildriver =(id : any ,nama_lengkap : any ,photo : any,alamat : any ,no_hp : any) =>{
+  const detaildriver = (
+    id: any,
+    nama_lengkap: any,
+    photo: any,
+    alamat: any,
+    no_hp: any
+  ) => {
     // alert(photo)
-     localStorage.setItem('getdatadriverpartner', JSON.stringify({id,nama_lengkap,photo,alamat,no_hp}));
-     navigate('/partner-dashboard/customer/costumer-detail/detail-profile-partner');
-   }
+    localStorage.setItem(
+      "getdatadriverpartner",
+      JSON.stringify({ id, nama_lengkap, photo, alamat, no_hp })
+    );
+    navigate(
+      "/partner-dashboard/customer/costumer-detail/detail-profile-partner"
+    );
+  };
 
   return (
     <>
@@ -159,40 +197,85 @@ const CustomerDetail: React.FC = () => {
           <div className="col-md-4 mb-4">
             <div className="card shadow-sm bg-light">
               <div className="card-body">
-                <h5 className="card-title text-primary">{nama_customer} {idcustomer}</h5>
-                <p className="card-text mb-1">081324567</p>
-                <p className="card-text mb-1">Address: Jalan Slipi Raya no. 3 Jakarta Barat</p>
-                <p className="card-text mb-0">DKI Jakarta</p>
+                <h5 className="card-title text-primary">
+                  {nama_customer} {idcustomer}
+                </h5>
+                <p className="card-text mb-1">{kontak}</p>
+                <p className="card-text mb-1">
+                {alamat}
+                </p>
+                {/* <p className="card-text mb-0">DKI Jakarta</p> */}
               </div>
             </div>
           </div>
           <div className="col-md-4"></div>
         </div>
-        <h2 className="mt-5 text-dark font-weight-bold">List Kendaraan</h2>
+        {/* <h2 className="mt-5 text-dark font-weight-bold">List Kendaraan</h2> */}
         <div className="table-responsive">
-          <style>
-            {`
-              .table-bordered {
-                border-radius: 15px 15px 0 0;
-                border-top: 1px solid #009879;
-                overflow: hidden;
-              }
-              .table tbody tr:last-of-type {
-                border-bottom: 2px solid #009879;
-              }
-            `}
-          </style>
+          <Row className="mb-4">
+            <Col>
+              <h1 className="text-dark font-weight-bold">Mobil Perusahaan</h1>
+            </Col>
+            <Col className="text-right">
+              <Link
+                to={`/partner-dashboard/add-mobil-partner/${idperusahaan}`}
+                className="btn btn-success d-inline-flex align-items-center font-weight-bold"
+              >
+                <FaPlus className="mr-1" /> Create
+              </Link>
+            </Col>
+          </Row>
           <table className="table table-bordered mt-3">
             <thead>
               <tr>
-                <th scope="col" style={{ backgroundColor: "#009879", color: "white" }}>No</th>
-                <th scope="col" style={{ backgroundColor: "#009879", color: "white" }}>Police Number</th>
-                <th scope="col" style={{ backgroundColor: "#009879", color: "white" }}>Unit Type</th>
-                <th scope="col" style={{ backgroundColor: "#009879", color: "white" }}>Contract End</th>
-                <th scope="col" style={{ backgroundColor: "#009879", color: "white" }}>Rent Price</th>
-                <th scope="col" style={{ backgroundColor: "#009879", color: "white" }}>KM</th>
-                <th scope="col" style={{ backgroundColor: "#009879", color: "white" }}>Uji Emisi</th>
-                <th scope="col" style={{ backgroundColor: "#009879", color: "white" }}>Nama Driver</th>
+                <th
+                  scope="col"
+                  style={{ backgroundColor: "#009879", color: "white" }}
+                >
+                  No
+                </th>
+                <th
+                  scope="col"
+                  style={{ backgroundColor: "#009879", color: "white" }}
+                >
+                  Police Number
+                </th>
+                <th
+                  scope="col"
+                  style={{ backgroundColor: "#009879", color: "white" }}
+                >
+                  Unit Type
+                </th>
+                <th
+                  scope="col"
+                  style={{ backgroundColor: "#009879", color: "white" }}
+                >
+                  Contract End
+                </th>
+                <th
+                  scope="col"
+                  style={{ backgroundColor: "#009879", color: "white" }}
+                >
+                  Rent Price
+                </th>
+                <th
+                  scope="col"
+                  style={{ backgroundColor: "#009879", color: "white" }}
+                >
+                  KM
+                </th>
+                <th
+                  scope="col"
+                  style={{ backgroundColor: "#009879", color: "white" }}
+                >
+                  Uji Emisi
+                </th>
+                <th
+                  scope="col"
+                  style={{ backgroundColor: "#009879", color: "white" }}
+                >
+                  Nama Driver
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -200,31 +283,37 @@ const CustomerDetail: React.FC = () => {
                 <tr key={index}>
                   <td>{index + 1}</td>
                   <td>
-                    <Link to={`/partner-dashboard/customer/costumer-detail/detail-mobil`}>
-                     B 12345 DC
+                    <Link
+                      to={`/partner-dashboard/customer/costumer-detail/detail-mobil/${vehicle.nopol}`}
+                    >
+                     {vehicle.nopol}
                     </Link>
                   </td>
-                  <td>Toyota Avanza 2018</td>
-                  <td>20 June 2025</td>
-                  <td>8,400,000</td>
-                  <td>5,000</td>
-                  <td>30 Nov 2023</td>
+                  <td> {vehicle.tipe_kendaraan}</td>
+                  <td>{vehicle.contract_end}</td>
+                  <td>{vehicle.biaya_sewa}</td>
+                  <td></td>
+                  <td></td>
                   <td>
                     {isLoading ? (
                       "Loading..."
                     ) : error ? (
                       "Error loading driver"
                     ) : (
-                     <span onClick={()=>detaildriver(
-                      vehicle.id,
-                      vehicle.full_name,
-                      vehicle.photo,
-                      vehicle.home_address,
-                      vehicle.phone_number
-                      
-                      )} style={{ cursor: 'pointer', color: 'blue' }}>
-                      {vehicle.full_name}
-                    </span>
+                      <span
+                        onClick={() =>
+                          detaildriver(
+                            vehicle.id,
+                            vehicle.full_name,
+                            vehicle.photo,
+                            vehicle.home_address,
+                            vehicle.phone_number
+                          )
+                        }
+                        style={{ cursor: "pointer", color: "blue" }}
+                      >
+                        {vehicle.full_name}
+                      </span>
                     )}
                   </td>
                 </tr>
@@ -235,6 +324,6 @@ const CustomerDetail: React.FC = () => {
       </div>
     </>
   );
-}
+};
 
 export default CustomerDetail;

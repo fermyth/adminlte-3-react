@@ -86,8 +86,8 @@ const Customer: React.FC = () => {
     }
   };
 
-  const handleCompanyClick = (idcomp: string, nama_customer: string) => {
-    const selectedCompany = { idcomp, nama_customer };
+  const handleCompanyClick = (idcomp: string, nama_customer: string, idperusahaan:string, alamat:string, kontak:string) => {
+    const selectedCompany = { idcomp, nama_customer, idperusahaan, alamat, kontak };
    // alert(idcomp)
     localStorage.setItem("selecteddataCompany", JSON.stringify(selectedCompany));
     navigate('/partner-dashboard/customer/costumer-detail');
@@ -142,7 +142,7 @@ const Customer: React.FC = () => {
                 <span
                  // to="/partner-dashboard/customer/costumer-detail"
                   style={{ color: "#007bff", fontWeight: "bold" }}
-                  onClick={() => handleCompanyClick(company.id_company.toString(), company.nama_perusahaan)}
+                  onClick={() => handleCompanyClick(company.id_company.toString(), company.nama_perusahaan,company.id,company.alamat,company.kontak)}
                 >
                   {company.nama_perusahaan}
                 </span>
@@ -153,7 +153,8 @@ const Customer: React.FC = () => {
               <td className="actions-cell">
                 <Button
                   variant="info"
-                  onClick={() => navigate(`/partner-dashboard/add-mobil/${company.id}`)}
+                  // onClick={() => navigate(`/partner-dashboard/add-mobil/${company.id}`)}
+                  onClick={() => handleCompanyClick(company.id_company.toString(), company.nama_perusahaan,company.id,company.alamat,company.kontak)}
                   className={`btn btn-info ${location.pathname.includes("add-mobil") ? "active" : ""}`}
                   style={{
                     fontWeight: "bold",
@@ -162,7 +163,7 @@ const Customer: React.FC = () => {
                     alignItems: "center",
                   }}
                 >
-                  <FaCar style={{ marginRight: "5px" }} /> Mobil
+                  <FaCar style={{ marginRight: "5px" }} />Detail Mobil
                 </Button>
 
                 <Button
