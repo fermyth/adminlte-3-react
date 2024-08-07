@@ -71,7 +71,7 @@ const MobilPartner: React.FC = () => {
         </Col>
         <Col className="text-right">
           <Link
-            to="/partner-dashboard/add-mobil-partner"
+            to={`/partner-dashboard/add-mobil-partner?perusahaanId=${perusahaanID}`}
             className="btn btn-success d-inline-flex align-items-center font-weight-bold"
           >
             <FaPlus className="mr-1" /> Create
