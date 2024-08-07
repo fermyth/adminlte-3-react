@@ -17,8 +17,34 @@ const DetailCustomerMobil: React.FC = () => {
         const response = await axios.get(
           `http://localhost:5182/api/v1/mobil-detail/${nopol}`
         );
-        setCarData(response.data);
-        console.log("Car data:", response.data);
+        const data = response.data;
+
+        if (data.jadwal) {
+          data.serviceHistories = data.jadwal.map((item: any) => {
+            try {
+              const parsed = JSON.parse(item.ket_json);
+              return {
+                km: parsed.km || "N/A",
+                lokasi_service: parsed.lokasi || "N/A",
+                servis: parsed.service || "N/A",
+                keterangan: parsed.keterangan || "N/A",
+                status: item.status || "N/A"
+              };
+            } catch (e) {
+              console.error("Error parsing ket_json:", e);
+              return {
+                km: "N/A",
+                lokasi_service: "N/A",
+                servis: "N/A",
+                keterangan: "N/A",
+                status: item.status || "N/A"
+              };
+            }
+          });
+        }
+
+        setCarData(data);
+        console.log("Car data:", data);
       } catch (error: any) {
         if (error.response) {
           setError(`Error fetching car data: ${error.response.data.message}`);
@@ -224,6 +250,12 @@ const DetailCustomerMobil: React.FC = () => {
                 </tr>
                 <tr>
                   <td>
+                    <strong>Jangka Waktu Sewa:</strong>
+                  </td>
+                  <td>{carData.jangka_waktu_sewa}</td>
+                </tr>
+                <tr>
+                  <td>
                     <strong>Perusahaan:</strong>
                   </td>
                   <td>{carData.perusahaan}</td>
@@ -276,13 +308,17 @@ const DetailCustomerMobil: React.FC = () => {
                 <td>
                   <strong>Keterangan</strong>
                 </td>
+                <td>
+                  <strong>Status</strong>
+                </td>
               </tr>
               {carData.serviceHistories.map((history: any, index: number) => (
                 <tr key={index}>
                   <td>{history.km}</td>
-                  <td>{history.lokasi}</td>
+                  <td>{history.lokasi_service}</td>
                   <td>{history.servis}</td>
                   <td>{history.keterangan}</td>
+                  <td>{history.status}</td>
                 </tr>
               ))}
             </tbody>
@@ -306,6 +342,9 @@ const DetailCustomerMobil: React.FC = () => {
                 <td>
                   <strong>Keterangan</strong>
                 </td>
+                <td>
+                  <strong>Status</strong>
+                </td>
               </tr>
               {carData.accidentHistories.map((history: any, index: number) => (
                 <tr key={index}>
@@ -313,6 +352,7 @@ const DetailCustomerMobil: React.FC = () => {
                   <td>{history.lokasi}</td>
                   <td>{history.penyebab}</td>
                   <td>{history.keterangan}</td>
+                  <td>{history.status}</td>
                 </tr>
               ))}
             </tbody>

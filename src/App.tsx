@@ -49,6 +49,10 @@ import MobilPartner from "./pages/partner/Customer/Components/MobilPartner";
 import FormMobilPartner from "./pages/partner/Customer/Components/FormMObilPartner";
 import FormPerusahaanPartner from "./pages/partner/Customer/Components/FormPerusahaan";
 import UpdateJadwal from "./pages/partner/Jadwal/update_jadwal";
+import FormUjiEmisi from "./pages/partner/Jadwal/Form_emisi";
+import FormServisRutin from "./pages/partner/Jadwal/Form_servis_rutin";
+import FormServiseKecelakaan from "./pages/partner/Jadwal/Form_servis_kecelakaan";
+import FormStnk from "./pages/partner/Jadwal/Form_stnk";
 
 const { VITE_NODE_ENV } = import.meta.env;
 
@@ -144,6 +148,10 @@ const App = () => {
             <Route path="update_jadwal" element={<UpdateJadwal/>}/>
             <Route path="detail-costumer" element={<DetailCostumer />} />
             <Route path="form-perusahaan/:idpartner" element={<FormPerusahaanPartner />} />
+            <Route path="jadwal/update_emisi/:id/:type" element={<FormUjiEmisi />} />
+            <Route path="jadwal/update_service_rutin/:id/:type" element={<FormServisRutin />} />
+            <Route path="jadwal/update_service_kecelakaan/:id/:type" element={<FormServiseKecelakaan />} />
+            <Route path="jadwal/update_stnk/:id/:type" element={<FormStnk />} />
             <Route
               path="update-form-perusahaan"
               element={<UpdateFormPerusahaanInternal />}

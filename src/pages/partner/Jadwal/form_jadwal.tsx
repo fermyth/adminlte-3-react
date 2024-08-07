@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Form, Button, Card } from "react-bootstrap";
 import axios from "axios";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { FaArrowLeft, FaTools } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -16,41 +16,31 @@ interface ServiceRecord {
 }
 
 const FormJadwal: React.FC = () => {
-  const location = useLocation();
-  const record: ServiceRecord = location.state?.record;
-
-  const [km, setKm] = useState(record?.km || "");
-  const [tgl_service, settglservice] = useState(null);
-  const [plat_nomor, setplatnomor] = useState(null);
-  const [lokasi, setlokasi] = useState(null);
-  const [type, setype] = useState(null);
-  const [options, setOptions] = useState([]);
-  const [isExistingCompany, setIsExistingCompany] = useState(true);
-  const [loading, setLoading] = useState(true); // Tambah state loading
-
   const navigate = useNavigate();
+
+  const [km, setKm] = useState("");
+  const [tgl_service, settglservice] = useState<string | null>(null);
+  const [plat_nomor, setplatnomor] = useState<any>(null);
+  const [lokasi, setlokasi] = useState<string | null>(null);
+  const [type, setype] = useState<string | null>(null);
+  const [options, setOptions] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
-      setLoading(true); // Set loading ke true saat memulai fetch
+      setLoading(true); 
       try {
-        //  alert(idpartner);
-        const response = await axios.get(
-          "http://localhost:5182/api/v1/nopol"
-        );
+        const response = await axios.get("http://localhost:5182/api/v1/nopol");
         const data = response.data;
-        console.log("cekdata", response.data);
-        const formattedOptions = data.map((item) => ({
+        const formattedOptions = data.map((item: any) => ({
           value: item.id,
           label: item.nopol,
-          mobilid: item.id
         }));
-        console.log("cekdataitem", formattedOptions);
         setOptions(formattedOptions);
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
-        setLoading(false); // Set loading ke false setelah fetch selesai
+        setLoading(false); 
       }
     };
 
@@ -61,51 +51,31 @@ const FormJadwal: React.FC = () => {
     e.preventDefault();
 
     const formData = {
-      id: record.id,
-      km,
-      lokasi,
-      servis,
-      keterangan,
+      mobilsId: plat_nomor?.value,
+      tgl_jadwal: tgl_service,
+      lokasi_service: lokasi,
+      type_service: type,
+      ket_json: JSON.stringify({  lokasi  }), 
+      status: "Scheduled", 
     };
 
     try {
-      await axios.put(`YOUR_SERVICE_API_URL/${record.id}`, formData, {
+      await axios.post("http://localhost:5182/api/v1/jadwals", formData, {
         headers: {
           "Content-Type": "application/json",
         },
       });
 
-      toast.success("Data servis berhasil diperbarui!");
-      navigate("/internal");
+      toast.success("Jadwal berhasil ditambahkan!");
+      navigate("/partner-dashboard/jadwal");
     } catch (error) {
-      console.error("Ada kesalahan dalam memperbarui data:", error);
-      toast.error(
-        "Terjadi kesalahan saat memperbarui data. Silakan coba lagi."
-      );
+      console.error("Ada kesalahan dalam menambahkan jadwal:", error);
+      toast.error("Terjadi kesalahan saat menambahkan jadwal. Silakan coba lagi.");
     }
   };
-
-  const [formData, setFormData] = useState({
-    nama_perusahaan: "",
-  });
 
   const handleSelectChange = (selectedOption: any) => {
-    if (selectedOption) {
-      setFormData({
-        id_company: selectedOption.id_company,
-        nama_perusahaan: selectedOption.label,
-      });
-      setIsExistingCompany(true);
-    } else {
-      handleCreateNewCompanySearch();
-    }
-  };
-
-  const handleCreateNewCompanySearch = () => {
-    setFormData({
-      id_company: "",
-      nama_perusahaan: "",
-    });
+    setplatnomor(selectedOption);
   };
 
   return (
@@ -149,15 +119,9 @@ const FormJadwal: React.FC = () => {
         }
       `}</style>
       <div className="form-card">
-        <h1 className="text-center mb-4 text-dark font-weight-bold">
-          Form Jadwal
-        </h1>
+        <h1 className="text-center mb-4 text-dark font-weight-bold">Form Jadwal</h1>
         <div className="d-flex justify-content-between mb-3">
-          <Button
-            variant="link"
-            onClick={() => navigate(-1)}
-            className="back-button"
-          >
+          <Button variant="link" onClick={() => navigate(-1)} className="back-button">
             <FaArrowLeft size={20} />
           </Button>
         </div>
@@ -168,26 +132,22 @@ const FormJadwal: React.FC = () => {
               <h4 className="mb-0">Detail Servis</h4>
             </Card.Header>
             <Card.Body>
-              <Form.Group controlId="formKm" className="mb-3">
+              <Form.Group controlId="formTglService" className="mb-3">
                 <Form.Label>Tanggal</Form.Label>
                 <Form.Control
                   type="date"
-                  placeholder="Masukkan KM"
-                  value={tgl_service}
+                  placeholder="Masukkan Tanggal"
+                  value={tgl_service || ""}
                   onChange={(e) => settglservice(e.target.value)}
                   required
                 />
               </Form.Group>
-              <Form.Group controlId="formKm" className="mb-3">
+              <Form.Group controlId="formPlatNomor" className="mb-3">
                 <Form.Label>Plat Nomor</Form.Label>
                 <Select
-                  placeholder="Masukkan Nama Perusahaan"
+                  placeholder="Pilih Plat Nomor"
                   options={options}
-                  value={
-                    options.find(
-                      (option) => option.value
-                    ) || null
-                  }
+                  value={plat_nomor}
                   onChange={handleSelectChange}
                   isClearable
                 />
@@ -197,16 +157,16 @@ const FormJadwal: React.FC = () => {
                 <Form.Control
                   type="text"
                   placeholder="Masukkan Lokasi"
-                  value={lokasi}
+                  value={lokasi || ""}
                   onChange={(e) => setlokasi(e.target.value)}
                   required
                 />
               </Form.Group>
-              <Form.Group controlId="formServis" className="mb-3">
+              <Form.Group controlId="formTypeService" className="mb-3">
                 <Form.Label>Type Service</Form.Label>
                 <Form.Control
                   as="select"
-                  value={type}
+                  value={type || ""}
                   onChange={(e) => setype(e.target.value)}
                   required
                 >
@@ -217,17 +177,6 @@ const FormJadwal: React.FC = () => {
                   <option value="ganti_stnk">Ganti STNK</option>
                 </Form.Control>
               </Form.Group>
-              {/* <Form.Group controlId="formKeterangan" className="mb-3">
-                <Form.Label>status</Form.Label>
-                <Form.Control
-                  as="textarea"
-                  placeholder="Masukkan Keterangan"
-                  value={keterangan}
-                  onChange={(e) => setKeterangan(e.target.value)}
-                  required
-                  rows={3}
-                />
-              </Form.Group> */}
             </Card.Body>
           </Card>
 

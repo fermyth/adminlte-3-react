@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Table, Button, Form, Modal } from "react-bootstrap";
+import { Table, Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 interface Perusahaan {
   id: number;
@@ -49,11 +49,8 @@ interface Service {
 }
 
 const Jadwal: React.FC = () => {
+  const navigate = useNavigate();
   const [services, setServices] = useState<Service[]>([]);
-  const [showAddModal, setShowAddModal] = useState(false);
-  const [showEditModal, setShowEditModal] = useState(false);
-  const [showViewModal, setShowViewModal] = useState(false);
-  const [selectedService, setSelectedService] = useState<Service | null>(null);
 
   useEffect(() => {
     axios
@@ -67,58 +64,40 @@ const Jadwal: React.FC = () => {
       });
   }, []);
 
-  const handleAddModalShow = () => setShowAddModal(true);
-  const handleAddModalClose = () => setShowAddModal(false);
-
-  const handleEditModalShow = (service: Service) => {
-    setSelectedService(service);
-    setShowEditModal(true);
-  };
-  const handleEditModalClose = () => setShowEditModal(false);
-
-  const handleViewModalShow = (service: Service) => {
-    setSelectedService(service);
-    setShowViewModal(true);
-  };
-  const handleViewModalClose = () => setShowViewModal(false);
-
-  const handleAddService = (newService: Service) => {
-    setServices([...services, newService]);
-    handleAddModalClose();
-  };
-
-  const handleEditService = (updatedService: Service) => {
-    const updatedServices = services.map((service) =>
-      service.id === updatedService.id ? updatedService : service
-    );
-    setServices(updatedServices);
-    handleEditModalClose();
-  };
-
   const kirim = () => {
     alert("Pesan Berhasil Terkirim ke Driver");
   };
 
+  const update_jadwal = (id: any, type: any) => {
+    let url = null;
+    if (type === 'uji_emisi') {
+      url = `update_emisi/${id}/${type}`;
+    } else if (type === 'service_rutin') {
+      url = `update_service_rutin/${id}/${type}`;
+    } else if (type === 'service_kecelakaan') {
+      url = `update_service_kecelakaan/${id}/${type}`;
+    } else if (type === 'ganti_stnk') {
+      url = `update_stnk/${id}/${type}`;
+    } else {
+      alert("Halaman Tidak Ditemukan");
+    }
+    navigate(url);
+  }
+
   return (
-    <div className="container mt-">
+    <div className="container mt-5">
       <h1 className="text-center mb-4 text-dark font-weight-bold">Jadwal</h1>
 
       <div className="d-flex justify-content-end mb-3">
-      <Link
-       to={`/partner-dashboard/form_jadwal`}
-       className={`btn btn-success`}
-        style={{
-          fontWeight: 'bold',
-          textDecoration: 'none',
-          display: 'inline-flex',
-          alignItems: 'center',
-        }}
-    >
-      <i className="fas fa-plus"></i> Tambah Baru
-    </Link>
+        <Link
+          to={`/partner-dashboard/form_jadwal`}
+          className="btn btn-success font-weight-bold"
+        >
+          <i className="fas fa-plus"></i> Tambah Baru
+        </Link>
       </div>
-      <Table striped bordered hover className="text-center table-bordered">
-        <thead className="">
+      <Table striped bordered hover responsive className="text-center">
+        <thead>
           <tr>
             <th style={{ backgroundColor: "#009879", color: "white" }}>
               Tanggal
@@ -141,7 +120,7 @@ const Jadwal: React.FC = () => {
           {services.map((service: any) => (
             <tr key={service.id}>
               <td>
-                <h2>{new Date(service.tgl_jadwal).getDate()}</h2>{" "}
+                <h5>{new Date(service.tgl_jadwal).getDate()}</h5>{" "}
                 {new Date(service.tgl_jadwal).toLocaleString("default", {
                   month: "long",
                 })}
@@ -149,17 +128,16 @@ const Jadwal: React.FC = () => {
               <td>
                 <p>
                   <Link
-                    to={`/partner-dashboard/customer/costumer-detail/detail-mobil/`}
+                    to={`/partner-dashboard/customer/costumer-detail/detail-mobil/${service.tb_mobil.nopol}`}
+                    className="text-decoration-none"
                   >
-                    {service.tb_mobil.tb_perusahaan.nama_perusahaan} <br></br>
-                     <br />
-                    <span>
-                      {service.tb_mobil.nopol}
-                    </span>
+                    {service.tb_mobil.tb_perusahaan.nama_perusahaan}
+                    <br />
+                    <h5>{service.tb_mobil.nopol}</h5>
                   </Link>
                 </p>
               </td>
-              <td style={{ textAlign: "left" }}>
+              <td className="text-left">
                 <p>
                   <b>{service.type_service}</b>
                 </p>
@@ -168,9 +146,9 @@ const Jadwal: React.FC = () => {
                   <b>Lokasi: {service.lokasi_service}</b>
                 </p>
               </td>
-              <td>
+              <td className="align-middle">
                 <span
-                  className={`alert-${
+                  className={`badge badge-${
                     service.status === "Scheduled"
                       ? "info"
                       : service.status === "In Progress"
@@ -182,10 +160,10 @@ const Jadwal: React.FC = () => {
                 </span>
               </td>
               <td>
-              <Button
+                <Button
                   variant="success"
                   className="mr-2"
-                  onClick={() => kirim()}
+                  onClick={() => update_jadwal(service.id, service.type_service)}
                 >
                   <i className="fas fa-pen"></i> Update
                 </Button>
@@ -205,177 +183,20 @@ const Jadwal: React.FC = () => {
         Showing 1 to {services.length} of {services.length} entries
       </p>
 
-      {/* Add Modal */}
-      <Modal show={showAddModal} onHide={handleAddModalClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Add New Service</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form>{/* Form fields for adding a new service */}</Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleAddModalClose}>
-            Close
-          </Button>
-          <Button
-            variant="success"
-            onClick={() =>
-              handleAddService({
-                id: services.length + 1,
-                jadwal_service: "2024-08-01T00:00:00.000Z",
-                nopol_customer: "New Nopol",
-                lokasi_service: "New Location",
-                status: "Scheduled",
-                actions: "New Service",
-                mobilId: 1,
-                createdAt: "",
-                updatedAt: "",
-                mobil: {
-                  id: 1,
-                  tipe_kendaraan: "Sedan",
-                  pembuat: "Toyota",
-                  tahun: 2022,
-                  warna_kendaraan: "Hitam",
-                  nopol: "B1234XYZ",
-                  nomor_rangka: "R12345678901234567",
-                  nomor_mesin: "M12345678901234567",
-                  pilihan_aksesoris: "AC, Airbag, GPS",
-                  biaya_sewa: "500000",
-                  perusahaanId: 1,
-                  photo1: "url_to_photo1",
-                  photo2: "url_to_photo2",
-                  photo3: "url_to_photo3",
-                  photo4: "url_to_photo4",
-                  createdAt: "",
-                  updatedAt: "",
-                  perusahaan: {
-                    id: 1,
-                    nama_perusahaan: "Perusahaan ABC",
-                    alamat: "Jalan Contoh No. 123, Jakarta",
-                    kontak: "08123456789",
-                    partnerId: 1,
-                    createdAt: "",
-                    updatedAt: "",
-                  },
-                },
-              })
-            }
-          >
-            Save Changes
-          </Button>
-        </Modal.Footer>
-      </Modal>
-
-      {/* Edit Modal */}
-      <Modal show={showEditModal} onHide={handleEditModalClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Edit Service</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          {selectedService && (
-            <Form>
-              <Form.Group controlId="formJadwalService">
-                <Form.Label>Jadwal Service</Form.Label>
-                <Form.Control
-                  type="datetime-local"
-                  defaultValue={new Date(selectedService.jadwal_service)
-                    .toISOString()
-                    .slice(0, 16)}
-                />
-              </Form.Group>
-              <Form.Group controlId="formNopolCustomer">
-                <Form.Label>Nopol Customer</Form.Label>
-                <Form.Control
-                  type="text"
-                  defaultValue={selectedService.nopol_customer}
-                />
-              </Form.Group>
-              <Form.Group controlId="formLokasiService">
-                <Form.Label>Lokasi Service</Form.Label>
-                <Form.Control
-                  type="text"
-                  defaultValue={selectedService.lokasi_service}
-                />
-              </Form.Group>
-              <Form.Group controlId="formStatus">
-                <Form.Label>Status</Form.Label>
-                <Form.Control as="select" defaultValue={selectedService.status}>
-                  <option>Scheduled</option>
-                  <option>In Progress</option>
-                  <option>Completed</option>
-                </Form.Control>
-              </Form.Group>
-              <Form.Group controlId="formActions">
-                <Form.Label>Actions</Form.Label>
-                <Form.Control
-                  type="text"
-                  defaultValue={selectedService.actions}
-                />
-              </Form.Group>
-            </Form>
-          )}
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleEditModalClose}>
-            Close
-          </Button>
-          <Button
-            variant="success"
-            onClick={() =>
-              selectedService &&
-              handleEditService({
-                ...selectedService,
-                jadwal_service: (
-                  document.getElementById(
-                    "formJadwalService"
-                  ) as HTMLInputElement
-                ).value,
-                nopol_customer: (
-                  document.getElementById(
-                    "formNopolCustomer"
-                  ) as HTMLInputElement
-                ).value,
-                lokasi_service: (
-                  document.getElementById(
-                    "formLokasiService"
-                  ) as HTMLInputElement
-                ).value,
-                status: (
-                  document.getElementById("formStatus") as HTMLSelectElement
-                ).value,
-                actions: (
-                  document.getElementById("formActions") as HTMLInputElement
-                ).value,
-              })
-            }
-          >
-            Save Changes
-          </Button>
-        </Modal.Footer>
-      </Modal>
-
-      {/* View Modal */}
-      <Modal show={showViewModal} onHide={handleViewModalClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>View Service</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          {selectedService && (
-            <div>
-              <p>Jadwal Service: {selectedService.jadwal_service}</p>
-              <p>Nopol Customer: {selectedService.nopol_customer}</p>
-              <p>Lokasi Service: {selectedService.lokasi_service}</p>
-              <p>Status: {selectedService.status}</p>
-              <p>Actions: {selectedService.actions}</p>
-            </div>
-          )}
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleViewModalClose}>
-            Close
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      <style>
+        {
+          `
+            .table-bordered {
+            border-radius: 15px 15px 0 0;
+            border-top: 1px solid #009879;
+            overflow: hidden;
+          }
+          .table tbody tr:last-of-type {
+            border-bottom: 2px solid #009879;
+          }
+          `
+        }
+      </style>
     </div>
   );
 };
