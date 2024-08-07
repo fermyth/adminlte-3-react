@@ -156,7 +156,7 @@ const App = () => {
               path="update-form-perusahaan"
               element={<UpdateFormPerusahaanInternal />}
             />
-            <Route path="add-mobil-partner" element={<FormMobilPartner />} />
+            <Route path="add-mobil-partner/:perusahaanID" element={<FormMobilPartner />} />
             <Route path="add-mobil/:perusahaanID" element={<MobilPartner />} />
             <Route
               path="/partner-dashboard/customer/costumer-detail"

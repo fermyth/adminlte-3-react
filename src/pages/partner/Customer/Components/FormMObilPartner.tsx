@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Form, Button, Card, Row, Col } from "react-bootstrap";
 import axios from "axios";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation,useParams } from "react-router-dom";
 import { FaArrowLeft, FaCar, FaImage } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -18,7 +18,6 @@ const FormMobilPartner: React.FC = () => {
     pilihan_aksesoris: "",
     biaya_sewa: "",
     jangka_waktu_sewa: "",
-    perusahaanId: "",
     photo1: "",
     photo2: "",
     photo3: "",
@@ -27,10 +26,12 @@ const FormMobilPartner: React.FC = () => {
 
   const navigate = useNavigate();
   const location = useLocation();
+  const { perusahaanID } = useParams();
 
   useEffect(() => {
-    const queryParams = new URLSearchParams(location.search);
-    const perusahaanId = queryParams.get("perusahaanId");
+    // const queryParams = new URLSearchParams(location.search);
+   const perusahaanId = perusahaanID;
+//    alert(perusahaanId);
     if (perusahaanId) {
       setFormData((prevData) => ({ ...prevData, perusahaanId }));
     } else {
@@ -55,11 +56,12 @@ const FormMobilPartner: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+   
     const formDataToSend = new FormData();
     for (const key in formData) {
       formDataToSend.append(key, formData[key as keyof typeof formData]);
     }
+  //  alert('test')
 
     try {
       const response = await axios.post(
@@ -71,9 +73,10 @@ const FormMobilPartner: React.FC = () => {
           },
         }
       );
+      navigate("/partner-dashboard/customer/costumer-detail");
       if (response.status === 200) {
         toast.success("Data Mobil Berhasil Ditambahkan!");
-        navigate("/partner-dashboard/customer");
+       
       }
     } catch (error) {
       console.error("Error submitting form data:", error);
@@ -237,8 +240,8 @@ const FormMobilPartner: React.FC = () => {
                     required
                   />
                 </Form.Group>
-                <Form.Group controlId="formPerusahaan">
-                  {/* <Form.Label>Perusahaan</Form.Label> */}
+                {/* <Form.Group controlId="formPerusahaan">
+                  <Form.Label>Perusahaan</Form.Label>
                   <Form.Control
                     type="text"
                     placeholder="Masukkan Perusahaan"
@@ -246,9 +249,8 @@ const FormMobilPartner: React.FC = () => {
                     value={formData.perusahaanId}
                     onChange={handleChange}
                     required
-                    hidden
                   />
-                </Form.Group>
+                </Form.Group> */}
               </Card.Body>
             </Card>
           </Col>
