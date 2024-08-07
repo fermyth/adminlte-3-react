@@ -36,6 +36,7 @@ import SidebarInternal from "./pages/Internal/Sidebar/Sidebar";
 import Laporan_jam_kerja_internal from "./pages/Internal/Laporan_jam_kerja_Internal/Laporan_jam_kerja_internal";
 import Profil_Driver from "./pages/Driver/Profil_Driver";
 import Jadwal from "./pages/partner/Jadwal/Jadwal";
+import FormJadwal from "./pages/partner/Jadwal/form_jadwal";
 import Customer from "./pages/partner/Customer/Customer";
 import CustomerDetail from "./pages/partner/Customer/Components/DetailCustomer";
 import DetailCustomerMobil from "./pages/partner/Customer/Components/DetailCustomerMobil";
@@ -47,6 +48,7 @@ import MobilInternal from "./pages/partner/Customer/Components/MobilPartner";
 import MobilPartner from "./pages/partner/Customer/Components/MobilPartner";
 import FormMobilPartner from "./pages/partner/Customer/Components/FormMObilPartner";
 import FormPerusahaanPartner from "./pages/partner/Customer/Components/FormPerusahaan";
+import UpdateJadwal from "./pages/partner/Jadwal/update_jadwal";
 
 const { VITE_NODE_ENV } = import.meta.env;
 
@@ -138,6 +140,8 @@ const App = () => {
             <Route path="/partner-dashboard" element={<DashboardPartner />} />
             <Route path="customer" element={<Customer />} />
             <Route path="jadwal" element={<Jadwal />} />
+            <Route path="form_jadwal" element={<FormJadwal/>}/>
+            <Route path="update_jadwal" element={<UpdateJadwal/>}/>
             <Route path="detail-costumer" element={<DetailCostumer />} />
             <Route path="form-perusahaan/:idpartner" element={<FormPerusahaanPartner />} />
             <Route

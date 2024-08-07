@@ -57,7 +57,7 @@ const Jadwal: React.FC = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5182/api/v1/services")
+      .get("http://localhost:5182/api/v1/jadwals")
       .then((response) => {
         setServices(response.data);
         console.log("Data services:", response.data);
@@ -100,21 +100,23 @@ const Jadwal: React.FC = () => {
   };
 
   return (
-    <div className="container mt-5">
+    <div className="container mt-">
       <h1 className="text-center mb-4 text-dark font-weight-bold">Jadwal</h1>
 
-      <style>
-        {`
-          .table-bordered {
-            border-radius: 15px 15px 0 0;
-            border-top: 1px solid #009879;
-            overflow: hidden;
-          }
-          .table tbody tr:last-of-type {
-            border-bottom: 2px solid #009879;
-          }
-        `}
-      </style>
+      <div className="d-flex justify-content-end mb-3">
+      <Link
+       to={`/partner-dashboard/form_jadwal`}
+       className={`btn btn-success`}
+        style={{
+          fontWeight: 'bold',
+          textDecoration: 'none',
+          display: 'inline-flex',
+          alignItems: 'center',
+        }}
+    >
+      <i className="fas fa-plus"></i> Tambah Baru
+    </Link>
+      </div>
       <Table striped bordered hover className="text-center table-bordered">
         <thead className="">
           <tr>
@@ -139,26 +141,27 @@ const Jadwal: React.FC = () => {
           {services.map((service: any) => (
             <tr key={service.id}>
               <td>
-                <h2>{new Date(service.jadwal_service).getDate()}</h2>{" "}
-                {new Date(service.jadwal_service).toLocaleString("default", {
+                <h2>{new Date(service.tgl_jadwal).getDate()}</h2>{" "}
+                {new Date(service.tgl_jadwal).toLocaleString("default", {
                   month: "long",
                 })}
               </td>
               <td>
                 <p>
                   <Link
-                    to={`/partner-dashboard/customer/costumer-detail/detail-mobil/${service.tb_mobil.nopol}`}
+                    to={`/partner-dashboard/customer/costumer-detail/detail-mobil/`}
                   >
-                    {service.nopol_customer} <br />
+                    {service.tb_mobil.tb_perusahaan.nama_perusahaan} <br></br>
+                     <br />
                     <span>
-                      {service.tb_mobil.tb_perusahaan.nama_perusahaan}
+                      {service.tb_mobil.nopol}
                     </span>
                   </Link>
                 </p>
               </td>
               <td style={{ textAlign: "left" }}>
                 <p>
-                  <b>{service.actions}</b>
+                  <b>{service.type_service}</b>
                 </p>
                 <hr style={{ marginTop: -10 }} />
                 <p style={{ marginTop: -10, color: "blue" }}>
@@ -167,12 +170,25 @@ const Jadwal: React.FC = () => {
               </td>
               <td>
                 <span
-                  className={`alert-${service.status === "Scheduled" ? "info" : service.status === "In Progress" ? "warning" : "success"}`}
+                  className={`alert-${
+                    service.status === "Scheduled"
+                      ? "info"
+                      : service.status === "In Progress"
+                      ? "warning"
+                      : "success"
+                  }`}
                 >
                   {service.status}
                 </span>
               </td>
               <td>
+              <Button
+                  variant="success"
+                  className="mr-2"
+                  onClick={() => kirim()}
+                >
+                  <i className="fas fa-pen"></i> Update
+                </Button>
                 <Button
                   variant="primary"
                   className="mr-2"
