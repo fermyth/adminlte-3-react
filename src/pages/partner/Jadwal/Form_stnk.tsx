@@ -196,19 +196,34 @@ const FormStnk : React.FC<FormUjiEmisiProps> = ({ initialSkorEmisi = "", initial
                   required={!isDetail}
                 />
               </Form.Group>
-              <Form.Group controlId="formStatus" className="mb-3">
-                <Form.Label>Status</Form.Label>
+              <Form.Group controlId="formStatusUji" className="mb-3">
+              <Form.Label>Status Uji</Form.Label>
+              {!isDetail && service.status === "success" ? (
+                <Form.Control
+                  as="select"
+                  value={service.status}
+                  onChange={(e) => setStatusUji(e.target.value)}
+                  required={!isDetail}
+                >
+                  <option value="" hidden>pilih</option>
+                  <option value="success">Success</option>
+                  <option value="In Progress">In Progress</option>
+                  <option value="Scheduled">Scheduled</option>
+                </Form.Control>
+              ) : (
                 <Form.Control
                   as="select"
                   // value={service.status}
                   onChange={(e) => setStatusUji(e.target.value)}
                   required={!isDetail}
                 >
-                <option value="success">Success</option>
+                  <option value="" hidden>pilih</option>
+                  <option value="success">Success</option>
                   <option value="In Progress">In Progress</option>
-                  <option value="scheduled">Scheduled</option>
+                  <option value="Scheduled">Scheduled</option>
                 </Form.Control>
-              </Form.Group>
+              )}
+            </Form.Group>
             </Card.Body>
           </Card> 
           {!isDetail && service.status !== 'success' && (

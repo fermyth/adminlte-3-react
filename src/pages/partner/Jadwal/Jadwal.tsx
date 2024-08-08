@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Table, Button } from "react-bootstrap";
+import { Table, Button, Dropdown } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -53,6 +53,7 @@ interface Service {
 const Jadwal: React.FC = () => {
   const navigate = useNavigate();
   const [services, setServices] = useState<Service[]>([]);
+  const [selectedStatus, setSelectedStatus] = useState<string>("");
 
   useEffect(() => {
     axios
@@ -115,11 +116,26 @@ const Jadwal: React.FC = () => {
     navigate(url);
   };
 
+  const filteredServices = selectedStatus
+    ? services.filter((service) => service.status === selectedStatus)
+    : services;
+
   return (
     <div className="container mt-5">
       <h1 className="text-center mb-4 text-dark font-weight-bold">Jadwal</h1>
 
-      <div className="d-flex justify-content-end mb-3">
+      <div className="d-flex justify-content-between mb-3">
+        <Dropdown onSelect={(e) => setSelectedStatus(e || "")}>
+          <Dropdown.Toggle variant="success" id="dropdown-basic">
+            Filter Status
+          </Dropdown.Toggle>
+          <Dropdown.Menu>
+            <Dropdown.Item eventKey="">All</Dropdown.Item>
+            <Dropdown.Item eventKey="Scheduled">Scheduled</Dropdown.Item>
+            <Dropdown.Item eventKey="In Progress">In Progress</Dropdown.Item>
+            <Dropdown.Item eventKey="success">Success</Dropdown.Item>
+          </Dropdown.Menu>
+        </Dropdown>
         <Link
           to={`/partner-dashboard/form_jadwal`}
           className="btn btn-success font-weight-bold"
@@ -138,7 +154,7 @@ const Jadwal: React.FC = () => {
           </tr>
         </thead>
         <tbody>
-          {services.map((service) => (
+          {filteredServices.map((service) => (
             <tr key={service.id}>
               <td>
                 <h5>{new Date(service.tgl_jadwal).getDate()}</h5>{" "}
@@ -174,7 +190,7 @@ const Jadwal: React.FC = () => {
               <td className="align-middle">
                 <span
                   className={`badge badge-${
-                    service.status === "scheduled"
+                    service.status === "Scheduled"
                       ? "info"
                       : service.status === "In Progress"
                       ? "warning"
@@ -207,7 +223,7 @@ const Jadwal: React.FC = () => {
         </tbody>
       </Table>
       <p className="text-center mt-2">
-        Showing 1 to {services.length} of {services.length} entries
+        Showing 1 to {filteredServices.length} of {services.length} entries
       </p>
 
       <style>
