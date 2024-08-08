@@ -112,19 +112,16 @@ const CustomerDetail: React.FC = () => {
       const getDataDriver = async () => {
         setIsLoading(true);
         try {
-          // Fetch drivers data
           const driversResponse = await ApiConfig.get(
             `http://localhost:5182/api/v1/mobil/${idperusahaan}`
           );
           console.log("Drivers response:", driversResponse.data);
 
-          // Fetch full names data
           const fullNamesResponse = await ApiConfig.get(
             `http://localhost:5181/api/v1/nopoldriver/`
           );
-          const fullNamesData = fullNamesResponse.data.data; // Access the 'data' property
+          const fullNamesData = fullNamesResponse.data.data; 
 
-          // Ensure fullNamesData is an array
           if (!Array.isArray(fullNamesData)) {
             throw new Error("Full names data is not an array");
           }
@@ -146,7 +143,6 @@ const CustomerDetail: React.FC = () => {
           });
 
           console.log("Combined data:", combinedData);
-          // Set the combined data state if needed
           setDrivers(combinedData);
         } catch (err) {
           console.error("Error fetching driver data:", err);
