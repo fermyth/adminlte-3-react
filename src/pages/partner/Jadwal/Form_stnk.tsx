@@ -33,6 +33,7 @@ const FormStnk : React.FC<FormUjiEmisiProps> = ({ initialSkorEmisi = "", initial
       service ,
       keterangan : keterangan,
       penyebab ,
+      type:'stnk'
     };
    
 

@@ -1,6 +1,6 @@
 const Footer = () => {
     return (
-        <>
+    <>
             <style>
     {`
     .version-info {
@@ -11,10 +11,10 @@ const Footer = () => {
         }
         `}
     </style>
-    <div>
+    <div className=" w-75 ">
       <p className="version-info">Version 1.2</p>
       </div>
-        </>
+    </>
     )
 }
 

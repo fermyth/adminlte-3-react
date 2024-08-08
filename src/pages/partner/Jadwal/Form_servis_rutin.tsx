@@ -34,6 +34,7 @@ const FormServisRutin: React.FC<FormUjiEmisiProps> = ({ initialSkorEmisi = "", i
       service : service,
       keterangan : keterangan,
       penyebab,
+      type:'service_rutin'
     };
    
 
@@ -135,7 +136,9 @@ const FormServisRutin: React.FC<FormUjiEmisiProps> = ({ initialSkorEmisi = "", i
               <Form.Group controlId="formServis" className="mb-3">
                 <Form.Label>Servis</Form.Label>
                 <Form.Control
-                  type="text"
+                  as="textarea"
+                  style={{ resize : "none" }}
+                  rows={3}
                   placeholder="Masukkan Servis"
                   value={service}
                   onChange={(e) => setService(e.target.value)}
@@ -146,7 +149,8 @@ const FormServisRutin: React.FC<FormUjiEmisiProps> = ({ initialSkorEmisi = "", i
                 <Form.Label>Keterangan</Form.Label>
                 <Form.Control
                   as="textarea"
-                  rows={3}
+                  style={{ resize : "none" }}
+                  rows={4}
                   placeholder="Masukkan Keterangan"
                   value={keterangan}
                   onChange={(e) => setKeterangan(e.target.value)}

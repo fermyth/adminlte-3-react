@@ -211,7 +211,7 @@ const CustomerDetail: React.FC = () => {
           <div className="col-md-4"></div>
         </div>
         {/* <h2 className="mt-5 text-dark font-weight-bold">List Kendaraan</h2> */}
-        <div className="table-responsive">
+        <div className="">
           <Row className="mb-4">
             <Col>
               <h1 className="text-dark font-weight-bold">Mobil Perusahaan</h1>
@@ -321,6 +321,20 @@ const CustomerDetail: React.FC = () => {
             </tbody>
           </table>
         </div>
+        <style>
+          {
+            `
+            .table-bordered {
+            border-radius: 15px 15px 0 0;
+            border-top: 1px solid #009879;
+            overflow: hidden;
+          }
+          .table tbody tr:last-of-type {
+            border-bottom: 2px solid #009879;
+          }
+            `
+          }
+        </style>
       </div>
     </>
   );

@@ -32,6 +32,7 @@ const FormUjiEmisi: React.FC<FormUjiEmisiProps> = ({ initialSkorEmisi = "", init
       service,
       keterangan,
       penyebab,
+      type:'uji_emisi'
     };
    
 

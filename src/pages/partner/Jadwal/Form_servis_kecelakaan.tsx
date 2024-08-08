@@ -1,47 +1,109 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Form, Button, Card } from "react-bootstrap";
 import axios from "axios";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { FaArrowLeft, FaExclamationTriangle } from "react-icons/fa";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-
 interface FormUjiEmisiProps {
   initialSkorEmisi?: string;
   initialStatusUji?: string;
+  isDetail?: boolean; // Tambahkan prop untuk menandai mode detail
 }
 
+interface Perusahaan {
+  id: number;
+  nama_perusahaan: string;
+  alamat: string;
+  kontak: string;
+  partnerId: number;
+  createdAt: string;
+  updatedAt: string;
+}
 
-const FormServiseKecelakaan: React.FC<FormUjiEmisiProps> = ({ initialSkorEmisi = "", initialStatusUji = "success" }) => {
+interface Mobil {
+  id: number;
+  tipe_kendaraan: string;
+  pembuat: string;
+  tahun: number;
+  warna_kendaraan: string;
+  nopol: string;
+  nomor_rangka: string;
+  nomor_mesin: string;
+  pilihan_aksesoris: string;
+  biaya_sewa: string;
+  perusahaanId: number;
+  photo1: string;
+  photo2: string;
+  photo3: string;
+  photo4: string;
+  createdAt: string;
+  updatedAt: string;
+  tb_perusahaan: Perusahaan;
+}
+
+interface Service {
+  id: number;
+  jadwal_service: string;
+  nopol_customer: string;
+  lokasi_service: string;
+  type_service: string;
+  status: string;
+  actions: string;
+  mobilId: number;
+  createdAt: string;
+  updatedAt: string;
+  tb_mobil: Mobil;
+  ket_json: string;
+}
+
+const FormServiseKecelakaan: React.FC<FormUjiEmisiProps> = ({ initialSkorEmisi = "", initialStatusUji = "success", isDetail = false }) => {
   const [skorEmisi, setSkorEmisi] = useState(initialSkorEmisi);
   const [statusUji, setStatusUji] = useState(initialStatusUji);
   const [lokasi, setLokasi] = useState("");
   const [km, setKm] = useState("");
-  const [service, setService] = useState("");
+  const [servic, setService] = useState("");
   const [skor, setSkor] = useState("");
   const [keterangan, setKeterangan] = useState("");
   const [penyebab, setPenyebab] = useState("");
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
+  const location = useLocation();
+  const { service } = location.state as { service: Service };
+
+  console.log("asas", service);
+  
+
+  useEffect(() => {
+    if (service && service.ket_json) {
+      const ketJsonData = JSON.parse(service.ket_json);
+      setLokasi(service.lokasi_service || "");
+      setKm(ketJsonData.km || "");
+      setService(ketJsonData.service || "");
+      setSkor(ketJsonData.skor || "");
+      setKeterangan(ketJsonData.keterangan || "");
+      setPenyebab(ketJsonData.penyebab || "");
+    }
+  }, [service]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const ketJson = {
       skor,
-      km ,
-      service : service ,
+      km,
+      service,
       keterangan,
-      penyebab : penyebab,
+      penyebab,
+      type: 'service_kecelakaan'
     };
-   
 
     const formData = {
-      status:statusUji ,
-      ket_json: JSON.stringify(ketJson), 
+      status: statusUji,
+      ket_json: JSON.stringify(ketJson),
     };
-    console.log('ketJson',formData);
+    console.log('ketJson', formData);
 
     try {
       const response = await axios.put(`http://localhost:5182/api/v1/jadwals/${id}`, formData, {
@@ -49,7 +111,7 @@ const FormServiseKecelakaan: React.FC<FormUjiEmisiProps> = ({ initialSkorEmisi =
           'Content-Type': 'application/json'
         }
       });
-      console.log("Response:", response.data); 
+      console.log("Response:", response.data);
       toast.success("Data updated successfully!");
       navigate("/partner-dashboard/jadwal");
     } catch (error) {
@@ -109,10 +171,12 @@ const FormServiseKecelakaan: React.FC<FormUjiEmisiProps> = ({ initialSkorEmisi =
         }
       `}</style>
       <div className="form-card">
-        <h1 className="text-center mb-4 text-dark font-weight-bold">Update Servis Kecelakaan</h1>
+        <h1 className="text-center mb-4 text-dark font-weight-bold">
+          {isDetail ? "Detail Servis Kecelakaan" : "Update Servis Kecelakaan"}
+        </h1>
         <div className="d-flex justify-content-between mb-3">
           <Button variant="link" onClick={() => navigate(-1)} className="back-button">
-            <FaArrowLeft /> 
+            <FaArrowLeft />
           </Button>
         </div>
         <Form onSubmit={handleSubmit}>
@@ -129,37 +193,44 @@ const FormServiseKecelakaan: React.FC<FormUjiEmisiProps> = ({ initialSkorEmisi =
                   placeholder="Masukkan Penyebab"
                   value={penyebab}
                   onChange={(e) => setPenyebab(e.target.value)}
-                  required
+                  required={!isDetail}
+                  readOnly={isDetail} 
                 />
               </Form.Group>
               <Form.Group controlId="formServis" className="mb-3">
                 <Form.Label>Servis</Form.Label>
                 <Form.Control
-                  type="text"
+                  as="textarea"
+                  style={{ resize: "none" }}
+                  rows={3}
                   placeholder="Masukkan Servis"
-                  value={service}
+                  value={servic}
                   onChange={(e) => setService(e.target.value)}
-                  required
+                  required={!isDetail}
+                  readOnly={isDetail} 
                 />
               </Form.Group>
               <Form.Group controlId="formKeterangan" className="mb-3">
                 <Form.Label>Keterangan</Form.Label>
                 <Form.Control
                   as="textarea"
-                  rows={3}
+                  style={{ resize: "none" }}
+                  rows={4}
                   placeholder="Masukkan Keterangan"
                   value={keterangan}
                   onChange={(e) => setKeterangan(e.target.value)}
-                  required
+                  required={!isDetail}
+                  readOnly={isDetail} 
                 />
-                </Form.Group>
+              </Form.Group>
               <Form.Group controlId="formStatus" className="mb-3">
                 <Form.Label>Status</Form.Label>
                 <Form.Control
                   as="select"
-                  value={statusUji}
+                  value={service.status}
                   onChange={(e) => setStatusUji(e.target.value)}
-                  required
+                  required={!isDetail}
+                  disabled={isDetail}
                 >
                   <option value="success">Success</option>
                   <option value="in_progress">In Progress</option>
@@ -169,14 +240,16 @@ const FormServiseKecelakaan: React.FC<FormUjiEmisiProps> = ({ initialSkorEmisi =
             </Card.Body>
           </Card>
 
-          <div className="text-right mt-4">
-            <Button
-              type="submit"
-              className="submit-button"
-            >
-              Simpan
-            </Button>
-          </div>
+          {!isDetail && service.status !== 'success' && (
+            <div className="text-right mt-4">
+              <Button
+                type="submit"
+                className="submit-button"
+              >
+                Simpan
+              </Button>
+            </div>
+          )}
         </Form>
 
         <ToastContainer />

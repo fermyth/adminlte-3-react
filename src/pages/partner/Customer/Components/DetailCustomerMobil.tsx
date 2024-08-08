@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
+import { Carousel } from 'react-responsive-carousel';
+import 'react-responsive-carousel/lib/styles/carousel.min.css';
 
 const DetailCustomerMobil: React.FC = () => {
   const [carData, setCarData] = useState<any>(null);
@@ -20,30 +19,43 @@ const DetailCustomerMobil: React.FC = () => {
         const data = response.data;
 
         if (data.jadwal) {
-          data.serviceHistories = data.jadwal.map((item: any) => {
+          data.serviceHistories  = data.jadwal.map((item: any) => {
             try {
               const parsed = JSON.parse(item.ket_json);
+              console.log("hahahah", parsed);
+              
               return {
-                km: parsed.km || "N/A",
-                lokasi_service: parsed.lokasi || "N/A",
-                servis: parsed.service || "N/A",
-                keterangan: parsed.keterangan || "N/A",
-                status: item.status || "N/A"
+                tgl_jadwal: item.tgl_jadwal,
+                type_service: item.type_service,
+                lokasiService : item.lokasi_service,
+                km: parsed.km || "",
+                skor : parsed.skor || "",
+                penyebab:parsed.penyebab || "",
+                lokasi_service: parsed.lokasi || "",
+                servis: parsed.service || "",
+                keterangan: parsed.keterangan || "",
+                status: item.status || ""
               };
             } catch (e) {
               console.error("Error parsing ket_json:", e);
               return {
-                km: "N/A",
-                lokasi_service: "N/A",
-                servis: "N/A",
-                keterangan: "N/A",
-                status: item.status || "N/A"
+                tgl_jadwal: item.tgl_jadwal,
+                type_service: item.type_service,
+                lokasiService : item.lokasi_service,
+                km: "",
+                lokasi_service: "",
+                servis: "",
+                keterangan: "",
+                status: item.status || ""
               };
             }
           });
         }
 
-        setCarData(data);
+        const photos = [data.photo1, data.photo2, data.photo3, data.photo4]
+          .filter((photo: string | null) => photo && photo !== "");
+
+        setCarData({ ...data, images: photos });
         console.log("Car data:", data);
       } catch (error: any) {
         if (error.response) {
@@ -187,7 +199,17 @@ const DetailCustomerMobil: React.FC = () => {
 
       <div className="container">
         <div className="car-info">
-          <img src={carData.photo3} alt="Car Image" />
+        {carData.images.length > 0 ? (
+            <Carousel>
+              {carData.images.map((image: string, index: number) => (
+                <div key={index}>
+                  <img src={image} alt={`Car Image ${index + 1}`} />
+                </div>
+              ))}
+            </Carousel>
+          ) : (
+            <div>No images available</div>
+          )}
         </div>
         <div className="specs">
           <h2>Detail Kendaraan</h2>
@@ -271,22 +293,29 @@ const DetailCustomerMobil: React.FC = () => {
             <tbody>
               <tr style={{ backgroundColor: "#009879", color: "white" }}>
                 <td>
-                  <strong>Tanggal:</strong>
+                  <strong>Tanggal</strong>
                 </td>
                 <td>
-                  <strong>Lokasi:</strong>
+                  <strong>Lokasi</strong>
                 </td>
                 <td>
-                  <strong>Status:</strong>
+                  <strong>Skor</strong>
+                </td>
+                <td>
+                  <strong>Status</strong>
                 </td>
               </tr>
-              {carData.emissionHistories.map((history: any, index: number) => (
-                <tr key={index}>
-                  <td>{history.tanggal}</td>
-                  <td>{history.lokasi}</td>
-                  <td>{history.status}</td>
-                </tr>
+              {carData.serviceHistories && carData.serviceHistories.map((history: any, index: number) => (
+                history.type_service === "uji_emisi" ? (
+                  <tr key={index}>
+                    <td>{history.tgl_jadwal}</td>
+                    <td>{history.lokasiService}</td>
+                    <td>{history.skor}</td>
+                    <td>{history.status}</td>
+                  </tr>
+                ) : null
               ))}
+
             </tbody>
           </table>
         </div>
@@ -312,14 +341,16 @@ const DetailCustomerMobil: React.FC = () => {
                   <strong>Status</strong>
                 </td>
               </tr>
-              {carData.serviceHistories.map((history: any, index: number) => (
+              {carData.serviceHistories && carData.serviceHistories.map((history: any, index: number) => (  
+                history.type_service === "service_rutin" ? (
                 <tr key={index}>
                   <td>{history.km}</td>
-                  <td>{history.lokasi_service}</td>
+                  <td>{history.lokasiService}</td>
                   <td>{history.servis}</td>
                   <td>{history.keterangan}</td>
                   <td>{history.status}</td>
                 </tr>
+                 ) : null
               ))}
             </tbody>
           </table>
@@ -346,14 +377,47 @@ const DetailCustomerMobil: React.FC = () => {
                   <strong>Status</strong>
                 </td>
               </tr>
-              {carData.accidentHistories.map((history: any, index: number) => (
+              {carData.serviceHistories && carData.serviceHistories.map((history: any, index: number) => (
+             history.type_service === "service_kecelakaan" ? (  
                 <tr key={index}>
-                  <td>{history.tanggal}</td>
-                  <td>{history.lokasi}</td>
+                  <td>{history.tgl_jadwal}</td>
+                  <td>{history.lokasiService}</td>
                   <td>{history.penyebab}</td>
                   <td>{history.keterangan}</td>
                   <td>{history.status}</td>
                 </tr>
+             ):null
+            ))}
+            </tbody>
+          </table>
+        </div>
+        <div className="table-container">
+          <h2>Riwayat STNK</h2>
+          <table>
+            <tbody>
+              <tr style={{ backgroundColor: "#009879", color: "white" }}>
+                <td>
+                  <strong>Tanggal</strong>
+                </td>
+                <td>
+                  <strong>Lokasi</strong>
+                </td>
+                <td>
+                  <strong>Keterangan</strong>
+                </td>
+                <td>
+                  <strong>Status</strong>
+                </td>
+              </tr>
+              {carData.serviceHistories && carData.serviceHistories.map((history: any, index: number) => (
+                history.type_service === "ganti_stnk" ? (
+                  <tr key={index}>
+                    <td>{history.tgl_jadwal}</td>
+                    <td>{history.lokasiService}</td>
+                    <td>{history.keterangan}</td>
+                    <td>{history.status}</td>
+                  </tr>
+                ) : null
               ))}
             </tbody>
           </table>

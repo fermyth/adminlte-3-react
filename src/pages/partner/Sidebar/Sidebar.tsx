@@ -8,6 +8,7 @@ import HeaderNavbar from "./Navbar";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useAppSelector } from "@app/store/store";
 import { EventEmitter } from "events";
+import Footer from "@app/pages/Footer";
 
 const eventEmitter = new EventEmitter();
 
@@ -215,7 +216,7 @@ const Sidebar = () => {
           <Outlet />
         </div>
       </div>
-      <p className="version-info">Version 1.2</p>
+      <Footer/>
     </>
   );
 };

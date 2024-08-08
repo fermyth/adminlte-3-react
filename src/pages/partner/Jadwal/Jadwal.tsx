@@ -32,7 +32,7 @@ interface Mobil {
   photo4: string;
   createdAt: string;
   updatedAt: string;
-  perusahaan: Perusahaan;
+  tb_perusahaan: Perusahaan;
 }
 
 interface Service {
@@ -40,12 +40,14 @@ interface Service {
   jadwal_service: string;
   nopol_customer: string;
   lokasi_service: string;
+  type_service: string;
   status: string;
   actions: string;
   mobilId: number;
   createdAt: string;
   updatedAt: string;
-  mobil: Mobil;
+  tb_mobil: Mobil;
+  tgl_jadwal :string
 }
 
 const Jadwal: React.FC = () => {
@@ -68,21 +70,30 @@ const Jadwal: React.FC = () => {
     alert("Pesan Berhasil Terkirim ke Driver");
   };
 
-  const update_jadwal = (id: any, type: any) => {
-    let url = null;
-    if (type === 'uji_emisi') {
-      url = `update_emisi/${id}/${type}`;
-    } else if (type === 'service_rutin') {
-      url = `update_service_rutin/${id}/${type}`;
-    } else if (type === 'service_kecelakaan') {
-      url = `update_service_kecelakaan/${id}/${type}`;
-    } else if (type === 'ganti_stnk') {
-      url = `update_stnk/${id}/${type}`;
-    } else {
-      alert("Halaman Tidak Ditemukan");
+  const handleButtonClick = (service: Service) => {
+    const { id, type_service } = service;
+    let url = "";
+
+    switch (type_service) {
+      case 'uji_emisi':
+        url = `update_emisi/${id}/${type_service}`;
+        break;
+      case 'service_rutin':
+        url = `update_service_rutin/${id}/${type_service}`;
+        break;
+      case 'service_kecelakaan':
+        url = `update_service_kecelakaan/${id}/${type_service}`;
+        break;
+      case 'ganti_stnk':
+        url = `update_stnk/${id}/${type_service}`;
+        break;
+      default:
+        alert("Halaman Tidak Ditemukan");
+        return; 
     }
-    navigate(url);
-  }
+
+    navigate(url, { state: { service } });
+  };
 
   return (
     <div className="container mt-5">
@@ -99,25 +110,15 @@ const Jadwal: React.FC = () => {
       <Table striped bordered hover responsive className="text-center">
         <thead>
           <tr>
-            <th style={{ backgroundColor: "#009879", color: "white" }}>
-              Tanggal
-            </th>
-            <th style={{ backgroundColor: "#009879", color: "white" }}>
-              Nopol Customer
-            </th>
-            <th style={{ backgroundColor: "#009879", color: "white" }}>
-              Lokasi Service
-            </th>
-            <th style={{ backgroundColor: "#009879", color: "white" }}>
-              Status
-            </th>
-            <th style={{ backgroundColor: "#009879", color: "white" }}>
-              Actions
-            </th>
+            <th style={{ backgroundColor: "#009879", color: "white" }}>Tanggal</th>
+            <th style={{ backgroundColor: "#009879", color: "white" }}>Nopol Customer</th>
+            <th style={{ backgroundColor: "#009879", color: "white" }}>Lokasi Service</th>
+            <th style={{ backgroundColor: "#009879", color: "white" }}>Status</th>
+            <th style={{ backgroundColor: "#009879", color: "white" }}>Actions</th>
           </tr>
         </thead>
         <tbody>
-          {services.map((service: any) => (
+          {services.map((service) => (
             <tr key={service.id}>
               <td>
                 <h5>{new Date(service.tgl_jadwal).getDate()}</h5>{" "}
@@ -125,19 +126,23 @@ const Jadwal: React.FC = () => {
                   month: "long",
                 })}
               </td>
-              <td>
+              <td className="align-middle">
                 <p>
-                  <Link
-                    to={`/partner-dashboard/customer/costumer-detail/detail-mobil/${service.tb_mobil.nopol}`}
-                    className="text-decoration-none"
-                  >
-                    {service.tb_mobil.tb_perusahaan.nama_perusahaan}
-                    <br />
-                    <h5>{service.tb_mobil.nopol}</h5>
-                  </Link>
+                  {service.tb_mobil && service.tb_mobil.tb_perusahaan ? (
+                    <Link
+                      to={`/partner-dashboard/customer/costumer-detail/detail-mobil/${service.tb_mobil.nopol}`}
+                      className="text-decoration-none"
+                    >
+                      {service.tb_mobil.tb_perusahaan.nama_perusahaan}
+                      <br />
+                      <h5>{service.tb_mobil.nopol}</h5>
+                    </Link>
+                  ) : (
+                    <p>Data tidak tersedia</p>
+                  )}
                 </p>
               </td>
-              <td className="text-left">
+              <td className="text-left align-middle">
                 <p>
                   <b>{service.type_service}</b>
                 </p>
@@ -149,7 +154,7 @@ const Jadwal: React.FC = () => {
               <td className="align-middle">
                 <span
                   className={`badge badge-${
-                    service.status === "Scheduled"
+                    service.status === "scheduled"
                       ? "info"
                       : service.status === "In Progress"
                       ? "warning"
@@ -159,14 +164,16 @@ const Jadwal: React.FC = () => {
                   {service.status}
                 </span>
               </td>
-              <td>
+              <td className="align-middle">
                 <Button
-                  variant="success"
+                  variant={service.status === "success" ? "info" : "success"}
                   className="mr-2"
-                  onClick={() => update_jadwal(service.id, service.type_service)}
+                  onClick={() => handleButtonClick(service)}
                 >
-                  <i className="fas fa-pen"></i> Update
+                  <i className={service.status === "success" ? "fas fa-info-circle" : "fas fa-pen"}></i>
+                  {service.status === "success" ? " Detail" : " Update"}
                 </Button>
+
                 <Button
                   variant="primary"
                   className="mr-2"
@@ -184,9 +191,8 @@ const Jadwal: React.FC = () => {
       </p>
 
       <style>
-        {
-          `
-            .table-bordered {
+        {`
+          .table-bordered {
             border-radius: 15px 15px 0 0;
             border-top: 1px solid #009879;
             overflow: hidden;
@@ -194,8 +200,7 @@ const Jadwal: React.FC = () => {
           .table tbody tr:last-of-type {
             border-bottom: 2px solid #009879;
           }
-          `
-        }
+        `}
       </style>
     </div>
   );
