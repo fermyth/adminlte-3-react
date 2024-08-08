@@ -33,6 +33,7 @@ const CustomerDetail: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [alamat, setalamat] = useState(null);
   const [kontak, setkontak] = useState(null);
+  const [logo_perusahaan, setLogoPerusahaan] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -50,6 +51,7 @@ const CustomerDetail: React.FC = () => {
           setidperusahaan(parsejson.idperusahaan);
           setalamat(parsejson.alamat);
           setkontak(parsejson.kontak);
+          setLogoPerusahaan(parsejson.image);
         }
       } catch (error) {
         console.error("Error parsing JSON from localStorage:", error);
@@ -59,6 +61,7 @@ const CustomerDetail: React.FC = () => {
         const userData = await AsyncStorage.getItem("userData");
         if (userData) {
           const parsedData = JSON.parse(userData);
+
           setIdCompany(parsedData.id_company);
         } else {
           setIdCompany(null);
@@ -108,22 +111,54 @@ const CustomerDetail: React.FC = () => {
     if (idcustomer) {
       const getDataDriver = async () => {
         setIsLoading(true);
-
         try {
-          // alert(idcustomer)
-          const response = await ApiConfig.get(`http://localhost:5182/api/v1/mobil/${idperusahaan}`);
-          console.log("cekresdriver", response.data);
-          setDrivers(response.data);
-          setIsLoading(false);
+          // Fetch drivers data
+          const driversResponse = await ApiConfig.get(
+            `http://localhost:5182/api/v1/mobil/${idperusahaan}`
+          );
+          console.log("Drivers response:", driversResponse.data);
+
+          // Fetch full names data
+          const fullNamesResponse = await ApiConfig.get(
+            `http://localhost:5181/api/v1/nopoldriver/`
+          );
+          const fullNamesData = fullNamesResponse.data.data; // Access the 'data' property
+
+          // Ensure fullNamesData is an array
+          if (!Array.isArray(fullNamesData)) {
+            throw new Error("Full names data is not an array");
+          }
+
+          const combinedData = driversResponse.data.map((driver: any) => {
+            const fullName = fullNamesData.find(
+              (name: any) => name.nopol === driver.nopol
+            );
+            return {
+              ...driver,
+              fullName: fullName ? fullName.full_name : "Unknown",
+              phoneNumber: fullName ? fullName.phone_number : "N/A",
+              photo: fullName
+                ? fullName.photo
+                : "https://via.placeholder.com/300.png?text=No+Photo",
+              homeAddress: fullName ? fullName.home_address : "N/A",
+              fullNameId: fullName ? fullName.id : "N/A",
+            };
+          });
+
+          console.log("Combined data:", combinedData);
+          // Set the combined data state if needed
+          setDrivers(combinedData);
         } catch (err) {
+          console.error("Error fetching driver data:", err);
           setError("Failed to fetch driver data");
+        } finally {
           setIsLoading(false);
         }
       };
 
       getDataDriver();
     }
-  }, [idcustomer]);
+  }, [idcustomer, idperusahaan]);
 
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
@@ -133,30 +168,6 @@ const CustomerDetail: React.FC = () => {
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = drivers.slice(indexOfFirstItem, indexOfLastItem);
-
-  const vehicles = [
-    {
-      no: 1,
-      policeNumber: "B1233KD",
-      unitType: "Toyota Avanza 2018",
-      contractEnd: "20 June 2025",
-      rentPrice: "8,400,000",
-      km: "2,300",
-      ujiEmisi: "11 Nov 2023",
-      driverId: 1, // ID Driver untuk data ini
-    },
-    {
-      no: 2,
-      policeNumber: "B1234KD",
-      unitType: "Honda CR-V 2020",
-      contractEnd: "15 July 2024",
-      rentPrice: "10,000,000",
-      km: "5,000",
-      ujiEmisi: "30 Nov 2023",
-      driverId: 2, // ID Driver untuk data ini
-    },
-    // Tambahkan data kendaraan lainnya sesuai kebutuhan
-  ];
 
   const detaildriver = (
     id: any,
@@ -185,12 +196,7 @@ const CustomerDetail: React.FC = () => {
           <div className="col-md-4 mb-4">
             <div className="card shadow-sm bg-light">
               <div className="card-body text-center">
-                <svg width="100" height="100">
-                  <circle cx="50" cy="50" r="40" fill="#673AB7" />
-                  <circle cx="50" cy="50" r="30" fill="#FFC107" />
-                  <circle cx="50" cy="50" r="20" fill="#2196F3" />
-                  <circle cx="50" cy="50" r="10" fill="#F44336" />
-                </svg>
+                <img src={logo_perusahaan} className="img" width={300} />
               </div>
             </div>
           </div>
@@ -201,9 +207,7 @@ const CustomerDetail: React.FC = () => {
                   {nama_customer} {idcustomer}
                 </h5>
                 <p className="card-text mb-1">{kontak}</p>
-                <p className="card-text mb-1">
-                {alamat}
-                </p>
+                <p className="card-text mb-1">{alamat}</p>
                 {/* <p className="card-text mb-0">DKI Jakarta</p> */}
               </div>
             </div>
@@ -286,35 +290,29 @@ const CustomerDetail: React.FC = () => {
                     <Link
                       to={`/partner-dashboard/customer/costumer-detail/detail-mobil/${vehicle.nopol}`}
                     >
-                     {vehicle.nopol}
+                      {vehicle.nopol}
                     </Link>
                   </td>
                   <td> {vehicle.tipe_kendaraan}</td>
                   <td>{vehicle.contract_end}</td>
                   <td>{vehicle.biaya_sewa}</td>
                   <td></td>
-                  <td></td>
+                  <td>{vehicle.tb_jadwal[0].status}</td>
                   <td>
-                    {isLoading ? (
-                      "Loading..."
-                    ) : error ? (
-                      "Error loading driver"
-                    ) : (
-                      <span
-                        onClick={() =>
-                          detaildriver(
-                            vehicle.id,
-                            vehicle.full_name,
-                            vehicle.photo,
-                            vehicle.home_address,
-                            vehicle.phone_number
-                          )
-                        }
-                        style={{ cursor: "pointer", color: "blue" }}
-                      >
-                        {vehicle.full_name}
-                      </span>
-                    )}
+                    <span
+                      onClick={() =>
+                        detaildriver(
+                          vehicle.fullNameId,
+                          vehicle.fullName,
+                          vehicle.photo,
+                          vehicle.homeAddress,
+                          vehicle.phoneNumber
+                        )
+                      }
+                      style={{ cursor: "pointer", color: "blue" }}
+                    >
+                      {vehicle.fullName}
+                    </span>
                   </td>
                 </tr>
               ))}
@@ -322,8 +320,7 @@ const CustomerDetail: React.FC = () => {
           </table>
         </div>
         <style>
-          {
-            `
+          {`
             .table-bordered {
             border-radius: 15px 15px 0 0;
             border-top: 1px solid #009879;
@@ -332,8 +329,7 @@ const CustomerDetail: React.FC = () => {
           .table tbody tr:last-of-type {
             border-bottom: 2px solid #009879;
           }
-            `
-          }
+            `}
         </style>
       </div>
     </>

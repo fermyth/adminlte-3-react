@@ -100,7 +100,8 @@ const Customer: React.FC = () => {
     nama_customer: string,
     idperusahaan: string,
     alamat: string,
-    kontak: string
+    kontak: string,
+    image:string
   ) => {
     const selectedCompany = {
       idcomp,
@@ -108,6 +109,7 @@ const Customer: React.FC = () => {
       idperusahaan,
       alamat,
       kontak,
+      image,
     };
     // alert(idcomp)
     localStorage.setItem("selecteddataCompany", JSON.stringify(selectedCompany));
@@ -182,7 +184,8 @@ const Customer: React.FC = () => {
                       company.nama_perusahaan,
                       company.id,
                       company.alamat,
-                      company.kontak
+                      company.kontak,
+                      company.image,
                     )
                   }
                 >
@@ -207,7 +210,8 @@ const Customer: React.FC = () => {
                         company.nama_perusahaan,
                         company.id,
                         company.alamat,
-                        company.kontak
+                        company.kontak,
+                        company.image
                       )
                     }
                   >
