@@ -47,7 +47,7 @@ interface Service {
   createdAt: string;
   updatedAt: string;
   tb_mobil: Mobil;
-  tgl_jadwal :string
+  tgl_jadwal: string;
 }
 
 const Jadwal: React.FC = () => {
@@ -70,29 +70,49 @@ const Jadwal: React.FC = () => {
     alert("Pesan Berhasil Terkirim ke Driver");
   };
 
-  const handleButtonClick = (service: Service) => {
+  const handleButtonClick = (service: Service, action: string) => {
     const { id, type_service } = service;
     let url = "";
 
-    switch (type_service) {
-      case 'uji_emisi':
-        url = `update_emisi/${id}/${type_service}`;
-        break;
-      case 'service_rutin':
-        url = `update_service_rutin/${id}/${type_service}`;
-        break;
-      case 'service_kecelakaan':
-        url = `update_service_kecelakaan/${id}/${type_service}`;
-        break;
-      case 'ganti_stnk':
-        url = `update_stnk/${id}/${type_service}`;
-        break;
-      default:
-        alert("Halaman Tidak Ditemukan");
-        return; 
+    if (action === 'detail') {
+      switch (type_service) {
+        case 'uji_emisi':
+          url = `update_emisi/${id}/${type_service}`;
+          break;
+        case 'service_rutin':
+          url = `update_service_rutin/${id}/${type_service}`;
+          break;
+        case 'service_kecelakaan':
+          url = `update_service_kecelakaan/${id}/${type_service}`;
+          break;
+        case 'ganti_stnk':
+          url = `update_stnk/${id}/${type_service}`;
+          break;
+        default:
+          alert("Halaman Tidak Ditemukan");
+          return;
+      }
+      navigate(url, { state: { service } });
+    } else if (action === 'update') {
+      navigateToUpdate(id, type_service);
     }
+  };
 
-    navigate(url, { state: { service } });
+  const navigateToUpdate = (id: number, type: string) => {
+    let url = "";
+    if (type === 'uji_emisi') {
+      url = `update_emisi/${id}/${type}`;
+    } else if (type === 'service_rutin') {
+      url = `update_service_rutin/${id}/${type}`;
+    } else if (type === 'service_kecelakaan') {
+      url = `update_service_kecelakaan/${id}/${type}`;
+    } else if (type === 'ganti_stnk') {
+      url = `update_stnk/${id}/${type}`;
+    } else {
+      alert("Halaman Tidak Ditemukan");
+      return;
+    }
+    navigate(url);
   };
 
   return (
@@ -168,7 +188,7 @@ const Jadwal: React.FC = () => {
                 <Button
                   variant={service.status === "success" ? "info" : "success"}
                   className="mr-2"
-                  onClick={() => handleButtonClick(service)}
+                  onClick={() => handleButtonClick(service, 'detail')}
                 >
                   <i className={service.status === "success" ? "fas fa-info-circle" : "fas fa-pen"}></i>
                   {service.status === "success" ? " Detail" : " Update"}

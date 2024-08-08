@@ -9,7 +9,7 @@ import 'react-toastify/dist/ReactToastify.css';
 interface FormUjiEmisiProps {
   initialSkorEmisi?: string;
   initialStatusUji?: string;
-  isDetail?: boolean; // Tambahkan prop untuk menandai mode detail
+  isDetail?: boolean; 
 }
 
 interface Perusahaan {
@@ -58,7 +58,7 @@ interface Service {
   ket_json: string;
 }
 
-const FormServiseKecelakaan: React.FC<FormUjiEmisiProps> = ({ initialSkorEmisi = "", initialStatusUji = "success", isDetail = false }) => {
+const FormServiseKecelakaan: React.FC<FormUjiEmisiProps> = ({ initialSkorEmisi = "", initialStatusUji = "", isDetail = false }) => {
   const [skorEmisi, setSkorEmisi] = useState(initialSkorEmisi);
   const [statusUji, setStatusUji] = useState(initialStatusUji);
   const [lokasi, setLokasi] = useState("");
@@ -80,7 +80,7 @@ const FormServiseKecelakaan: React.FC<FormUjiEmisiProps> = ({ initialSkorEmisi =
       const ketJsonData = JSON.parse(service.ket_json);
       setLokasi(service.lokasi_service || "");
       setKm(ketJsonData.km || "");
-      setService(ketJsonData.service || "");
+      setService(ketJsonData.servic || "");
       setSkor(ketJsonData.skor || "");
       setKeterangan(ketJsonData.keterangan || "");
       setPenyebab(ketJsonData.penyebab || "");
@@ -93,7 +93,7 @@ const FormServiseKecelakaan: React.FC<FormUjiEmisiProps> = ({ initialSkorEmisi =
     const ketJson = {
       skor,
       km,
-      service,
+      servic,
       keterangan,
       penyebab,
       type: 'service_kecelakaan'
@@ -233,7 +233,7 @@ const FormServiseKecelakaan: React.FC<FormUjiEmisiProps> = ({ initialSkorEmisi =
                   disabled={isDetail}
                 >
                   <option value="success">Success</option>
-                  <option value="in_progress">In Progress</option>
+                  <option value="In Progress">In Progress</option>
                   <option value="scheduled">Scheduled</option>
                 </Form.Control>
               </Form.Group>

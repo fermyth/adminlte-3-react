@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Form, Button, Card } from "react-bootstrap";
 import axios from "axios";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { FaArrowLeft, FaIdCard } from "react-icons/fa";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -10,19 +10,83 @@ import 'react-toastify/dist/ReactToastify.css';
 interface FormUjiEmisiProps {
   initialSkorEmisi?: string;
   initialStatusUji?: string;
+  isDetail?: boolean; // Tambahkan prop untuk menandai mode detail
 }
 
-const FormStnk : React.FC<FormUjiEmisiProps> = ({ initialSkorEmisi = "", initialStatusUji = "success" }) => {
+interface Perusahaan {
+  id: number;
+  nama_perusahaan: string;
+  alamat: string;
+  kontak: string;
+  partnerId: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+interface Mobil {
+  id: number;
+  tipe_kendaraan: string;
+  pembuat: string;
+  tahun: number;
+  warna_kendaraan: string;
+  nopol: string;
+  nomor_rangka: string;
+  nomor_mesin: string;
+  pilihan_aksesoris: string;
+  biaya_sewa: string;
+  perusahaanId: number;
+  photo1: string;
+  photo2: string;
+  photo3: string;
+  photo4: string;
+  createdAt: string;
+  updatedAt: string;
+  tb_perusahaan: Perusahaan;
+}
+
+interface Service {
+  id: number;
+  jadwal_service: string;
+  nopol_customer: string;
+  lokasi_service: string;
+  type_service: string;
+  status: string;
+  actions: string;
+  mobilId: number;
+  createdAt: string;
+  updatedAt: string;
+  tb_mobil: Mobil;
+  ket_json: string;
+}
+
+const FormStnk : React.FC<FormUjiEmisiProps> = ({ initialSkorEmisi = "", initialStatusUji = "", isDetail = false  }) => {
   const [skorEmisi, setSkorEmisi] = useState(initialSkorEmisi);
   const [statusUji, setStatusUji] = useState(initialStatusUji);
   const [lokasi, setLokasi] = useState("");
   const [km, setKm] = useState("");
-  const [service, setService] = useState("");
+  const [servic, setService] = useState("");
   const [skor, setSkor] = useState("");
   const [keterangan, setKeterangan] = useState("");
   const [penyebab, setPenyebab] = useState("");
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
+  const location = useLocation();
+  const { service } = location.state as { service: Service };
+
+  console.log("asas", service);
+
+
+  useEffect(() => {
+    if (service && service.ket_json) {
+      const ketJsonData = JSON.parse(service.ket_json);
+      setLokasi(service.lokasi_service || "");
+      setKm(ketJsonData.km || "");
+      setService(ketJsonData.servic || "");
+      setSkor(ketJsonData.skor || "");
+      setKeterangan(ketJsonData.keterangan || "");
+      setPenyebab(ketJsonData.penyebab || "");
+    }
+  }, [service]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -129,33 +193,34 @@ const FormStnk : React.FC<FormUjiEmisiProps> = ({ initialSkorEmisi = "", initial
                   placeholder="Masukkan Lokasi"
                   value={keterangan}
                   onChange={(e) => setKeterangan(e.target.value)}
-                  required
+                  required={!isDetail}
                 />
               </Form.Group>
               <Form.Group controlId="formStatus" className="mb-3">
                 <Form.Label>Status</Form.Label>
                 <Form.Control
                   as="select"
-                  value={statusUji}
+                  value={service.status}
                   onChange={(e) => setStatusUji(e.target.value)}
-                  required
+                  required={!isDetail}
                 >
-                  <option value="success">Success</option>
-                  <option value="in_progress">In Progress</option>
+                <option value="success">Success</option>
+                  <option value="In Progress">In Progress</option>
                   <option value="scheduled">Scheduled</option>
                 </Form.Control>
               </Form.Group>
             </Card.Body>
-          </Card>
-
-          <div className="text-right mt-4">
-            <Button
-              type="submit"
-              className="submit-button"
-            >
-              Simpan
-            </Button>
-          </div>
+          </Card> 
+          {!isDetail && service.status !== 'success' && (
+            <div className="text-right mt-4">
+              <Button
+                type="submit"
+                className="submit-button"
+              >
+                Simpan
+              </Button>
+            </div>
+          )}
         </Form>
 
         <ToastContainer />
