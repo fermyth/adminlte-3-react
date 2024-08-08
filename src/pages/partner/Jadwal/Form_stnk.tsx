@@ -200,7 +200,7 @@ const FormStnk : React.FC<FormUjiEmisiProps> = ({ initialSkorEmisi = "", initial
                 <Form.Label>Status</Form.Label>
                 <Form.Control
                   as="select"
-                  value={service.status}
+                  // value={service.status}
                   onChange={(e) => setStatusUji(e.target.value)}
                   required={!isDetail}
                 >

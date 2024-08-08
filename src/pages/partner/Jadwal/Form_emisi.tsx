@@ -78,7 +78,7 @@ const FormUjiEmisi: React.FC<FormUjiEmisiProps> = ({ initialSkorEmisi = "", init
       const ketJsonData = JSON.parse(service.ket_json);
       setLokasi(service.lokasi_service || "");
       setKm(ketJsonData.km || "");
-      setService(ketJsonData.service || "");
+      setService(ketJsonData.servic || "");
       setSkor(ketJsonData.skor || "");
       setKeterangan(ketJsonData.keterangan || "");
       setPenyebab(ketJsonData.penyebab || "");
@@ -197,7 +197,7 @@ const FormUjiEmisi: React.FC<FormUjiEmisiProps> = ({ initialSkorEmisi = "", init
                 <Form.Label>Status Uji</Form.Label>
                 <Form.Control
                   as="select"
-                  value={service.status}
+                  // value={service.status}
                   onChange={(e) => setStatusUji(e.target.value)}
                   required={!isDetail}
                 >

@@ -225,13 +225,13 @@ const FormServisRutin: React.FC<FormUjiEmisiProps> = ({ initialSkorEmisi = "", i
                 <Form.Label>Status</Form.Label>
                 <Form.Control
                   as="select"
-                  value={service.status}
+                  // value={}
                   onChange={(e) => setStatusUji(e.target.value)}
                    required={!isDetail}
                 >
-                  <option value="Success">Success</option>
+                  <option value="success">Success</option>
                   <option value="In Progress">In Progress</option>
-                  <option value="Scheduled">Scheduled</option>
+                  <option value="scheduled">Scheduled</option>
                 </Form.Control>
               </Form.Group>
             </Card.Body>

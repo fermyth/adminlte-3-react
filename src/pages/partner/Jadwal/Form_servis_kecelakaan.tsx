@@ -227,7 +227,7 @@ const FormServiseKecelakaan: React.FC<FormUjiEmisiProps> = ({ initialSkorEmisi =
                 <Form.Label>Status</Form.Label>
                 <Form.Control
                   as="select"
-                  value={service.status}
+                  // value={service.status}
                   onChange={(e) => setStatusUji(e.target.value)}
                   required={!isDetail}
                   disabled={isDetail}
