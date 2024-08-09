@@ -120,7 +120,7 @@ const CustomerDetail: React.FC = () => {
           const fullNamesResponse = await ApiConfig.get(
             `http://localhost:5181/api/v1/nopoldriver/`
           );
-          const fullNamesData = fullNamesResponse.data.data; 
+          const fullNamesData = fullNamesResponse.data.data;
 
           if (!Array.isArray(fullNamesData)) {
             throw new Error("Full names data is not an array");
@@ -151,7 +151,6 @@ const CustomerDetail: React.FC = () => {
           setIsLoading(false);
         }
       };
-
       getDataDriver();
     }
   }, [idcustomer, idperusahaan]);
@@ -293,21 +292,21 @@ const CustomerDetail: React.FC = () => {
                   <td>{vehicle.contract_end}</td>
                   <td>{vehicle.biaya_sewa}</td>
                   <td></td>
-                  <td>{vehicle.tb_jadwal[0].status}</td>
+                  <td>{vehicle?.tb_jadwal?.[0]?.status ?? null}</td>
                   <td>
                     <span
                       onClick={() =>
                         detaildriver(
-                          vehicle.fullNameId,
-                          vehicle.fullName,
-                          vehicle.photo,
-                          vehicle.homeAddress,
-                          vehicle.phoneNumber
+                          vehicle.fullNameId ?? null,
+                          vehicle.fullName ?? null,
+                          vehicle.photo ?? null,
+                          vehicle.homeAddress ?? null,
+                          vehicle.phoneNumber ?? null
                         )
                       }
                       style={{ cursor: "pointer", color: "blue" }}
                     >
-                      {vehicle.fullName}
+                      {vehicle.fullName === "Unknown" ? null : vehicle.fullName}
                     </span>
                   </td>
                 </tr>
