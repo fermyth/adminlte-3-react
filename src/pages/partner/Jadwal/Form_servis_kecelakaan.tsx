@@ -106,7 +106,7 @@ const FormServiseKecelakaan: React.FC<FormUjiEmisiProps> = ({ initialSkorEmisi =
     console.log('ketJson', formData);
 
     try {
-      const response = await axios.put(`http://localhost:5182/api/v1/jadwals/${id}`, formData, {
+      const response = await axios.put(`http://trial.sigapdriver.com:8080/api/v1/jadwals/${id}`, formData, {
         headers: {
           'Content-Type': 'application/json'
         }

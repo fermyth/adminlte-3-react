@@ -113,7 +113,7 @@ const CustomerDetail: React.FC = () => {
         setIsLoading(true);
         try {
           const driversResponse = await ApiConfig.get(
-            `http://localhost:5182/api/v1/mobil/${idperusahaan}`
+            `http://trial.sigapdriver.com:8080/api/v1/mobil/${idperusahaan}`
           );
           console.log("Drivers response:", driversResponse.data);
 

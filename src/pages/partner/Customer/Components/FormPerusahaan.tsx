@@ -26,7 +26,7 @@ const FormPerusahaanPartner: React.FC = () => {
       setLoading(true);
       try {
         const response = await axios.get(
-          "http://localhost:5181/api/v1/customer_sigap"
+          "https://api_portal.sigapdriver.com/api/v1/customer_sigap"
         );
         const data = response.data.data;
         const formattedOptions = data.map((item) => ({

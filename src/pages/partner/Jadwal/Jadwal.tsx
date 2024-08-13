@@ -57,7 +57,7 @@ const Jadwal: React.FC = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5182/api/v1/jadwals")
+      .get("http://trial.sigapdriver.com:8080/api/v1/jadwals")
       .then((response) => {
         setServices(response.data);
         console.log("Data services:", response.data);
@@ -67,26 +67,66 @@ const Jadwal: React.FC = () => {
       });
   }, []);
 
-  const kirim = () => {
-    alert("Pesan Berhasil Terkirim ke Driver");
+  const kirim = async (tgl, bulan, perusahaan, nopol, type_service, lokasi) => {
+    const apiUrl = "https://api.fonnte.com/send";
+    const apiKey = "wS6aSBDMFoSDAPWA@tK6";
+    const phoneNumber = "08119826380"; // Daftar nomor telepon
+
+    // Merangkai pesan dengan menggunakan template literal
+    const message = `Tgl: ${tgl} ${bulan} \n
+    --------------------------- 
+    Perusahaan:\n${perusahaan} \n
+    ---------------------------
+    Nomor Polisi:\n${nopol} \n
+    ---------------------------
+    Service:\n${type_service} \n
+    ---------------------------
+    Lokasi:\n ${lokasi} \n
+    `;
+
+    try {
+      const formData = new FormData();
+      formData.append("target", phoneNumber);
+      formData.append("message", message);
+
+      const response = await axios.post(apiUrl, formData, {
+        headers: {
+          Authorization: apiKey,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      console.log(response.data); // Logging untuk melihat respon dari API
+      if (response.data.status) {
+        alert("Pesan berhasil dikirim!");
+      } else {
+        alert(`Gagal mengirim pesan: ${response.data.message}`);
+      }
+    } catch (error) {
+      console.error(
+        "Error mengirim pesan: ",
+        error.response ? error.response.data : error.message
+      );
+      alert("Terjadi kesalahan saat mengirim pesan.");
+    }
   };
 
   const handleButtonClick = (service: Service, action: string) => {
     const { id, type_service } = service;
     let url = "";
 
-    if (action === 'detail') {
+    if (action === "detail") {
       switch (type_service) {
-        case 'uji_emisi':
+        case "uji_emisi":
           url = `update_emisi/${id}/${type_service}`;
           break;
-        case 'service_rutin':
+        case "service_rutin":
           url = `update_service_rutin/${id}/${type_service}`;
           break;
-        case 'service_kecelakaan':
+        case "service_kecelakaan":
           url = `update_service_kecelakaan/${id}/${type_service}`;
           break;
-        case 'ganti_stnk':
+        case "ganti_stnk":
           url = `update_stnk/${id}/${type_service}`;
           break;
         default:
@@ -94,20 +134,20 @@ const Jadwal: React.FC = () => {
           return;
       }
       navigate(url, { state: { service } });
-    } else if (action === 'update') {
+    } else if (action === "update") {
       navigateToUpdate(id, type_service);
     }
   };
 
   const navigateToUpdate = (id: number, type: string) => {
     let url = "";
-    if (type === 'uji_emisi') {
+    if (type === "uji_emisi") {
       url = `update_emisi/${id}/${type}`;
-    } else if (type === 'service_rutin') {
+    } else if (type === "service_rutin") {
       url = `update_service_rutin/${id}/${type}`;
-    } else if (type === 'service_kecelakaan') {
+    } else if (type === "service_kecelakaan") {
       url = `update_service_kecelakaan/${id}/${type}`;
-    } else if (type === 'ganti_stnk') {
+    } else if (type === "ganti_stnk") {
       url = `update_stnk/${id}/${type}`;
     } else {
       alert("Halaman Tidak Ditemukan");
@@ -146,11 +186,21 @@ const Jadwal: React.FC = () => {
       <Table striped bordered hover responsive className="text-center">
         <thead>
           <tr>
-            <th style={{ backgroundColor: "#009879", color: "white" }}>Tanggal</th>
-            <th style={{ backgroundColor: "#009879", color: "white" }}>Nopol Customer</th>
-            <th style={{ backgroundColor: "#009879", color: "white" }}>Lokasi Service</th>
-            <th style={{ backgroundColor: "#009879", color: "white" }}>Status</th>
-            <th style={{ backgroundColor: "#009879", color: "white" }}>Actions</th>
+            <th style={{ backgroundColor: "#009879", color: "white" }}>
+              Tanggal
+            </th>
+            <th style={{ backgroundColor: "#009879", color: "white" }}>
+              Nopol Customer
+            </th>
+            <th style={{ backgroundColor: "#009879", color: "white" }}>
+              Lokasi Service
+            </th>
+            <th style={{ backgroundColor: "#009879", color: "white" }}>
+              Status
+            </th>
+            <th style={{ backgroundColor: "#009879", color: "white" }}>
+              Actions
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -204,16 +254,33 @@ const Jadwal: React.FC = () => {
                 <Button
                   variant={service.status === "success" ? "info" : "success"}
                   className="mr-2"
-                  onClick={() => handleButtonClick(service, 'detail')}
+                  onClick={() => handleButtonClick(service, "detail")}
                 >
-                  <i className={service.status === "success" ? "fas fa-info-circle" : "fas fa-pen"}></i>
+                  <i
+                    className={
+                      service.status === "success"
+                        ? "fas fa-info-circle"
+                        : "fas fa-pen"
+                    }
+                  ></i>
                   {service.status === "success" ? " Detail" : " Update"}
                 </Button>
 
                 <Button
                   variant="primary"
                   className="mr-2"
-                  onClick={() => kirim()}
+                  onClick={() =>
+                    kirim(
+                      new Date(service.tgl_jadwal).getDate(),
+                      new Date(service.tgl_jadwal).toLocaleString("default", {
+                        month: "long",
+                      }),
+                      service.tb_mobil.tb_perusahaan.nama_perusahaan,
+                      service.tb_mobil.nopol,
+                      service.type_service,
+                      service.lokasi_service
+                    )
+                  }
                 >
                   <i className="fas fa-paper-plane"></i> Kirim ke Driver
                 </Button>

@@ -30,7 +30,7 @@ const FormJadwal: React.FC = () => {
     const fetchData = async () => {
       setLoading(true); 
       try {
-        const response = await axios.get("http://localhost:5182/api/v1/nopol");
+        const response = await axios.get("http://trial.sigapdriver.com:8080/api/v1/nopol");
         const data = response.data;
         const formattedOptions = data.map((item: any) => ({
           value: item.id,
@@ -60,7 +60,7 @@ const FormJadwal: React.FC = () => {
     };
 
     try {
-      await axios.post("http://localhost:5182/api/v1/jadwals", formData, {
+      await axios.post("http://trial.sigapdriver.com:8080/api/v1/jadwals", formData, {
         headers: {
           "Content-Type": "application/json",
         },
