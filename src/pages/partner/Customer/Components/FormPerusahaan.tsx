@@ -149,7 +149,7 @@ const FormPerusahaanPartner: React.FC = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:5182/api/v1/perusahaan",
+        "https://api_partner_staging.sigapdriver.com/api/v1/perusahaan",
         data,
         {
           headers: {
