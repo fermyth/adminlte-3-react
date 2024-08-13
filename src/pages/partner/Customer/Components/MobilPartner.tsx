@@ -53,7 +53,7 @@ const MobilPartner: React.FC = () => {
   const handleDeleteCar = async (carId: string) => {
     if (window.confirm("Apakah Anda yakin ingin menghapus data ini?")) {
       try {
-        await axios.delete(`http://localhost:5182/api/v1/mobil/${carId}`);
+        await axios.delete(`https://api_partner_staging.sigapdriver.com/api/v1/mobil/${carId}`);
         setCars(cars.filter((car) => car.id !== carId));
         toast.success("Data berhasil dihapus!");
       } catch (error) {

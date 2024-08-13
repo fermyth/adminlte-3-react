@@ -118,7 +118,7 @@ const CustomerDetail: React.FC = () => {
           console.log("Drivers response:", driversResponse.data);
 
           const fullNamesResponse = await ApiConfig.get(
-            `http://localhost:5181/api/v1/nopoldriver/`
+            `https://api_portal.sigapdriver.com/api/v1/nopoldriver/`
           );
           const fullNamesData = fullNamesResponse.data.data;
 
