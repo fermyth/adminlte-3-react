@@ -14,7 +14,7 @@ const DetailCustomerMobil: React.FC = () => {
     const fetchCarData = async () => {
       try {
         const response = await axios.get(
-          `http://trial.sigapdriver.com:8080/api/v1/mobil-detail/${nopol}`
+          `https://api_partner_staging.sigapdriver.com/api/v1/mobil-detail/${nopol}`
         );
         const data = response.data;
 

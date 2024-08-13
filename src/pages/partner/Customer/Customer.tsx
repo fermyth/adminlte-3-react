@@ -60,7 +60,7 @@ const Customer: React.FC = () => {
       const fetchCompanies = async () => {
         try {
           const response = await fetch(
-            `http://trial.sigapdriver.com:8080/api/v1/perusahaan/${idCompany}`
+            `https://api_partner_staging.sigapdriver.com/api/v1/perusahaan/${idCompany}`
           );
           if (!response.ok) {
             throw new Error("Network response was not ok");

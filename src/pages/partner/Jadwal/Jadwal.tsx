@@ -57,7 +57,7 @@ const Jadwal: React.FC = () => {
 
   useEffect(() => {
     axios
-      .get("http://trial.sigapdriver.com:8080/api/v1/jadwals")
+      .get("https://api_partner_staging.sigapdriver.com/api/v1/jadwals")
       .then((response) => {
         setServices(response.data);
         console.log("Data services:", response.data);

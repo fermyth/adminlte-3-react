@@ -108,7 +108,7 @@ const FormStnk : React.FC<FormUjiEmisiProps> = ({ initialSkorEmisi = "", initial
     console.log('ketJson',formData);
 
     try {
-      const response = await axios.put(`http://trial.sigapdriver.com:8080/api/v1/jadwals/${id}`, formData, {
+      const response = await axios.put(`https://api_partner_staging.sigapdriver.com/api/v1/jadwals/${id}`, formData, {
         headers: {
           'Content-Type': 'application/json'
         }

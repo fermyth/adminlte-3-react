@@ -66,7 +66,7 @@ const FormMobilPartner: React.FC = () => {
 
     try {
       const response = await axios.post(
-        "http://trial.sigapdriver.com:8080/api/v1/mobil",
+        "https://api_partner_staging.sigapdriver.com/api/v1/mobil",
         formDataToSend,
         {
           headers: {
