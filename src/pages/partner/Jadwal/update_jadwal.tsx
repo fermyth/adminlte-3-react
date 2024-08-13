@@ -35,7 +35,7 @@ const UpdateJadwal: React.FC = () => {
       try {
         //  alert(idpartner);
         const response = await axios.get(
-          "http://localhost:5181/api/v1/customer_sigap"
+          "https://api_portal.sigapdriver.com/api/v1/customer_sigap"
         );
         const data = response.data.data;
         console.log("cekdata", response.data.data);

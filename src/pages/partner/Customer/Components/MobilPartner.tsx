@@ -31,7 +31,7 @@ const MobilPartner: React.FC = () => {
       const fetchCars = async () => {
         try {
           const response = await axios.get(
-            `http://localhost:5182/api/v1/mobil/${perusahaanID}`
+            `http://trial.sigapdriver.com:8080/api/v1/mobil/${perusahaanID}`
           );
           if (Array.isArray(response.data)) {
             setCars(response.data);
