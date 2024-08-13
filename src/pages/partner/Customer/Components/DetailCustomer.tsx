@@ -120,7 +120,7 @@ const CustomerDetail: React.FC = () => {
           const fullNamesResponse = await ApiConfig.get(
             `https://api_portal_staging.sigapdriver.com/api/v1/nopoldriver/`
           );
-          const fullNamesData = fullNamesResponse.data.data;
+          const fullNamesData = fullNamesResponse.data.data.data;
 
           if (!Array.isArray(fullNamesData)) {
             throw new Error("Full names data is not an array");

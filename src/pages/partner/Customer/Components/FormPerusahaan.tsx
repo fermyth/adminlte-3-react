@@ -28,7 +28,7 @@ const FormPerusahaanPartner: React.FC = () => {
         const response = await axios.get(
           "https://api_portal_staging.sigapdriver.com/api/v1/customer_sigap"
         );
-        const data = response.data.data;
+        const data = response.data.data.data;
         const formattedOptions = data.map((item) => ({
           value: item.company_name,
           label: item.company_name,

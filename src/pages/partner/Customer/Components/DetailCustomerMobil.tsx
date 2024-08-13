@@ -16,7 +16,7 @@ const DetailCustomerMobil: React.FC = () => {
         const response = await axios.get(
           `https://api_partner_staging.sigapdriver.com/api/v1/mobil-detail/${nopol}`
         );
-        const data = response.data;
+        const data = response.data.data;
 
         if (data.jadwal) {
           data.serviceHistories  = data.jadwal.map((item: any) => {
