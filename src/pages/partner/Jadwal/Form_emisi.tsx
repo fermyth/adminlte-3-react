@@ -194,7 +194,7 @@ const FormUjiEmisi: React.FC<FormUjiEmisiProps> = ({ initialSkorEmisi = "", init
                 />
               </Form.Group>
               <Form.Group controlId="formStatusUji" className="mb-3">
-              <Form.Label>Status Uji</Form.Label>
+              <Form.Label>Status Pekerjaan</Form.Label>
               {!isDetail && service.status === "success" ? (
                 <Form.Control
                   as="select"
@@ -203,7 +203,7 @@ const FormUjiEmisi: React.FC<FormUjiEmisiProps> = ({ initialSkorEmisi = "", init
                   required={!isDetail}
                 >
                   <option value="" hidden>pilih</option>
-                  <option value="success">Success</option>
+                  <option value="success">Completed</option>
                   <option value="In Progress">In Progress</option>
                   <option value="Scheduled">Scheduled</option>
                 </Form.Control>
@@ -215,7 +215,35 @@ const FormUjiEmisi: React.FC<FormUjiEmisiProps> = ({ initialSkorEmisi = "", init
                   required={!isDetail}
                 >
                   <option value="" hidden>pilih</option>
-                  <option value="success">Success</option>
+                  <option value="success">Completed</option>
+                  <option value="In Progress">In Progress</option>
+                  <option value="Scheduled">Scheduled</option>
+                </Form.Control>
+              )}
+            </Form.Group>
+              <Form.Group controlId="formStatusUji" className="mb-3">
+              <Form.Label>Status Uji</Form.Label>
+              {!isDetail && service.status === "success" ? (
+                <Form.Control
+                  as="select"
+                  value={service.status}
+                  onChange={(e) => setStatusUji(e.target.value)}
+                  required={!isDetail}
+                >
+                  <option value="" hidden>pilih</option>
+                  <option value="success">Passed</option>
+                  <option value="In Progress">In Progress</option>
+                  <option value="Scheduled">Scheduled</option>
+                </Form.Control>
+              ) : (
+                <Form.Control
+                  as="select"
+                  // value={service.status}
+                  onChange={(e) => setStatusUji(e.target.value)}
+                  required={!isDetail}
+                >
+                  <option value="" hidden>pilih</option>
+                  <option value="success">Passed</option>
                   <option value="In Progress">In Progress</option>
                   <option value="Scheduled">Scheduled</option>
                 </Form.Control>

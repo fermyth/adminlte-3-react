@@ -187,10 +187,12 @@ const FormServiseKecelakaan: React.FC<FormUjiEmisiProps> = ({ initialSkorEmisi =
             </Card.Header>
             <Card.Body>
               <Form.Group controlId="formPenyebab" className="mb-3">
-                <Form.Label>Penyebab</Form.Label>
+                <Form.Label>Damage</Form.Label>
                 <Form.Control
-                  type="text"
-                  placeholder="Masukkan Penyebab"
+                 as="textarea"
+                 style={{ resize: "none" }}
+                 rows={3}
+                  placeholder="Masukkan Kerusakan"
                   value={penyebab}
                   onChange={(e) => setPenyebab(e.target.value)}
                   required={!isDetail}
@@ -224,7 +226,7 @@ const FormServiseKecelakaan: React.FC<FormUjiEmisiProps> = ({ initialSkorEmisi =
                 />
               </Form.Group>
               <Form.Group controlId="formStatusUji" className="mb-3">
-              <Form.Label>Status Uji</Form.Label>
+              <Form.Label>Status</Form.Label>
               {!isDetail && service.status === "success" ? (
                 <Form.Control
                   as="select"
@@ -233,7 +235,7 @@ const FormServiseKecelakaan: React.FC<FormUjiEmisiProps> = ({ initialSkorEmisi =
                   required={!isDetail}
                 >
                   <option value="" hidden>pilih</option>
-                  <option value="success">Success</option>
+                  <option value="success">Completed</option>
                   <option value="In Progress">In Progress</option>
                   <option value="Scheduled">Scheduled</option>
                 </Form.Control>
@@ -245,7 +247,7 @@ const FormServiseKecelakaan: React.FC<FormUjiEmisiProps> = ({ initialSkorEmisi =
                   required={!isDetail}
                 >
                   <option value="" hidden>pilih</option>
-                  <option value="success">Success</option>
+                  <option value="success">Completed</option>
                   <option value="In Progress">In Progress</option>
                   <option value="Scheduled">Scheduled</option>
                 </Form.Control>

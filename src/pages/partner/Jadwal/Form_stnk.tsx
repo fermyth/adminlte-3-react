@@ -189,15 +189,17 @@ const FormStnk : React.FC<FormUjiEmisiProps> = ({ initialSkorEmisi = "", initial
               <Form.Group controlId="formLokasi" className="mb-3">
                 <Form.Label>Keterangan</Form.Label>
                 <Form.Control
-                  type="text"
-                  placeholder="Masukkan Lokasi"
+                   as="textarea"
+                   style={{ resize: "none" }}
+                   rows={4}
+                  placeholder="Masukkan Keterangan"
                   value={keterangan}
                   onChange={(e) => setKeterangan(e.target.value)}
                   required={!isDetail}
                 />
               </Form.Group>
               <Form.Group controlId="formStatusUji" className="mb-3">
-              <Form.Label>Status Uji</Form.Label>
+              <Form.Label>Status </Form.Label>
               {!isDetail && service.status === "success" ? (
                 <Form.Control
                   as="select"
@@ -206,7 +208,7 @@ const FormStnk : React.FC<FormUjiEmisiProps> = ({ initialSkorEmisi = "", initial
                   required={!isDetail}
                 >
                   <option value="" hidden>pilih</option>
-                  <option value="success">Success</option>
+                  <option value="success">Completed</option>
                   <option value="In Progress">In Progress</option>
                   <option value="Scheduled">Scheduled</option>
                 </Form.Control>
@@ -218,7 +220,7 @@ const FormStnk : React.FC<FormUjiEmisiProps> = ({ initialSkorEmisi = "", initial
                   required={!isDetail}
                 >
                   <option value="" hidden>pilih</option>
-                  <option value="success">Success</option>
+                  <option value="success">Completed</option>
                   <option value="In Progress">In Progress</option>
                   <option value="Scheduled">Scheduled</option>
                 </Form.Control>

@@ -163,7 +163,7 @@ const FormJadwal: React.FC = () => {
                 />
               </Form.Group>
               <Form.Group controlId="formTypeService" className="mb-3">
-                <Form.Label>Type Service</Form.Label>
+                <Form.Label>Type</Form.Label>
                 <Form.Control
                   as="select"
                   value={type || ""}

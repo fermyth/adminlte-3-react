@@ -130,7 +130,7 @@ const Customer: React.FC = () => {
 
   return (
     <div className="container mt-5">
-      <h1 className="text-center mb-4 text-dark font-weight-bold">Perusahaan</h1>
+      <h1 className="text-center mb-4 text-dark font-weight-bold">Customer</h1>
       <div className="d-flex justify-content-end mb-3">
         <Link
           to={`/partner-dashboard/form-perusahaan/${idCompany}`}
@@ -237,6 +237,9 @@ const Customer: React.FC = () => {
 
       <style>
         {`
+           .container {
+            max-width: 1300px;
+            }
           .table-bordered {
             border-radius: 15px 15px 0 0;
             border-top: 1px solid #009879;

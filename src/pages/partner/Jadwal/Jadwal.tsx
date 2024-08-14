@@ -295,6 +295,9 @@ const Jadwal: React.FC = () => {
 
       <style>
         {`
+           .container {
+            max-width: 1300px;
+            }
           .table-bordered {
             border-radius: 15px 15px 0 0;
             border-top: 1px solid #009879;

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
-import { FaHome, FaCar, FaClock } from "react-icons/fa"; // Import ikon baru
+import { FaHome, FaCar, FaClock,FaBuilding } from "react-icons/fa"; // Import ikon baru
 import "bootstrap/dist/css/bootstrap.min.css";
 import styled from "styled-components";
 import { Image } from "@profabric/react-components";
@@ -181,13 +181,24 @@ const Sidebar = () => {
                 </Link>
               </li>
               <li className="nav-item mb-2">
+              <Link
+                to="/partner-dashboard/customer"
+                className={`nav-link ${location.pathname === "/partner-dashboard/customer" ? "active" : ""}`}
+                style={{ fontWeight: "bold" }}
+                >
+               <FaBuilding className="icon" />
+               {!isCollapsed && <span>Customer</span>}
+              </Link>
+              </li>
+
+              <li className="nav-item mb-2">
                 <Link
-                  to="/partner-dashboard/customer"
-                  className={`nav-link ${location.pathname === "/partner-dashboard/customer" ? "active" : ""}`}
+                  to="/partner-dashboard/vehicle"
+                  className={`nav-link ${location.pathname === "/partner-dashboard/vehicle" ? "active" : ""}`}
                   style={{ fontWeight: "bold" }}
                 >
                   <FaCar className="icon" />
-                  {!isCollapsed && <span>Customer</span>}
+                  {!isCollapsed && <span>Vehicle</span>}
                 </Link>
               </li>
               <li className="nav-item mb-2">

@@ -222,7 +222,7 @@ const FormServisRutin: React.FC<FormUjiEmisiProps> = ({ initialSkorEmisi = "", i
                 />
                               </Form.Group>
                               <Form.Group controlId="formStatusUji" className="mb-3">
-              <Form.Label>Status Uji</Form.Label>
+              <Form.Label>Status</Form.Label>
               {!isDetail && service.status === "success" ? (
                 <Form.Control
                   as="select"
@@ -231,7 +231,7 @@ const FormServisRutin: React.FC<FormUjiEmisiProps> = ({ initialSkorEmisi = "", i
                   required={!isDetail}
                 >
                   <option value="" hidden>pilih</option>
-                  <option value="success">Success</option>
+                  <option value="success">Completed</option>
                   <option value="In Progress">In Progress</option>
                   <option value="Scheduled">Scheduled</option>
                 </Form.Control>
@@ -243,7 +243,7 @@ const FormServisRutin: React.FC<FormUjiEmisiProps> = ({ initialSkorEmisi = "", i
                   required={!isDetail}
                 >
                   <option value="" hidden>pilih</option>
-                  <option value="success">Success</option>
+                  <option value="success">Completed</option>
                   <option value="In Progress">In Progress</option>
                   <option value="Scheduled">Scheduled</option>
                 </Form.Control>
