@@ -168,7 +168,7 @@ const FormPerusahaanPartner: React.FC = () => {
   return (
     <div className="container mt-5">
       <h1 className="text-center mb-4 text-dark font-weight-bold">
-        Tambah Data Perusahaan
+        Form Company
       </h1>
       <div className="d-flex justify-content-between mb-3">
         <Button variant="link" className="text-dark" onClick={() => navigate(-1)}>
@@ -181,11 +181,11 @@ const FormPerusahaanPartner: React.FC = () => {
             <Card className="shadow-sm">
               <Card.Header className="bg-primary text-white d-flex align-items-center px-3 py-2">
                 <FaBuilding size={24} className="mr-2" />
-                <h4 className="mb-0">Form Perusahaan</h4>
+                <h4 className="mb-0">Form Data Company</h4>
               </Card.Header>
               <Card.Body>
                 <Form.Group controlId="formNamaPerusahaan">
-                  <Form.Label>Nama Perusahaan</Form.Label>
+                  <Form.Label>Company Name</Form.Label>
                   {loading ? (
                     <FaSpinner
                       size={24}
@@ -196,7 +196,7 @@ const FormPerusahaanPartner: React.FC = () => {
                     <Row>
                       <Col md={8} className="mb-8">
                         <Select
-                          placeholder="Masukkan Nama Perusahaan"
+                          placeholder="Enter Company Name"
                           options={options}
                           value={
                             options.find(
@@ -217,7 +217,7 @@ const FormPerusahaanPartner: React.FC = () => {
                           }}
                           onClick={handleCreateNewCompany}
                         >
-                          Buat Perusahaan Baru
+                          Create New Company
                         </Button>
                       </Col>
                     </Row>
@@ -226,7 +226,7 @@ const FormPerusahaanPartner: React.FC = () => {
                       <Col md={8}>
                         <Form.Control
                           type="text"
-                          placeholder="Masukkan Nama Perusahaan"
+                          placeholder="Enter Company Name"
                           name="nama_perusahaan"
                           value={formData.nama_perusahaan}
                           onChange={handleInputChange}
@@ -243,17 +243,17 @@ const FormPerusahaanPartner: React.FC = () => {
                             color: "white",
                           }}
                         >
-                          Cari Perusahaan
+                          Search...
                         </Button>
                       </Col>
                     </Row>
                   )}
                 </Form.Group>
                 <Form.Group controlId="formAlamat">
-                  <Form.Label>Alamat</Form.Label>
+                  <Form.Label>Address</Form.Label>
                   <Form.Control
                     as="textarea"
-                    placeholder="Masukkan Alamat"
+                    placeholder="Enter Address"
                     name="alamat"
                     value={formData.alamat}
                     onChange={handleInputChange}
@@ -262,10 +262,10 @@ const FormPerusahaanPartner: React.FC = () => {
                   />
                 </Form.Group>
                 <Form.Group controlId="formKontak">
-                  <Form.Label>Kontak</Form.Label>
+                  <Form.Label>Contact</Form.Label>
                   <Form.Control
                     type="text"
-                    placeholder="Masukkan Kontak"
+                    placeholder="Enter Contact"
                     name="kontak"
                     value={formData.kontak}
                     onChange={handleInputChange}
@@ -274,10 +274,10 @@ const FormPerusahaanPartner: React.FC = () => {
                   />
                 </Form.Group>
                 <Form.Group controlId="formEmailPerusahaan">
-                  <Form.Label>Email Perusahaan</Form.Label>
+                  <Form.Label>Company Email</Form.Label>
                   <Form.Control
                     type="email"
-                    placeholder="Masukkan Email Perusahaan"
+                    placeholder="Enter Company Email"
                     name="email"
                     value={formData.email}
                     onChange={handleInputChange}
@@ -292,11 +292,11 @@ const FormPerusahaanPartner: React.FC = () => {
             <Card className="shadow-sm">
               <Card.Header className="bg-primary text-white d-flex align-items-center px-3 py-2">
                 <FaUpload size={24} className="mr-2" />
-                <h4 className="mb-0">Upload Logo Perusahaan</h4>
+                <h4 className="mb-0">Upload Company Logo</h4>
               </Card.Header>
               <Card.Body>
                 <Form.Group controlId="formLogoPerusahaan">
-                  <Form.Label>Logo Perusahaan</Form.Label>
+                  <Form.Label>Company Logo</Form.Label>
                   <Form.Control
                     name="image"
                     onChange={handleFileChange}
@@ -315,7 +315,7 @@ const FormPerusahaanPartner: React.FC = () => {
               }}
               type="submit"
             >
-              Simpan
+              Save
             </Button>
           </Col>
         </Row>

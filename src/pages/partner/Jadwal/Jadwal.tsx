@@ -3,6 +3,9 @@ import axios from "axios";
 import { Table, Button, Dropdown } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Link, useNavigate } from "react-router-dom";
+import BootstrapTable from 'react-bootstrap-table-next';
+import paginationFactory from 'react-bootstrap-table2-paginator';
+import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit';
 
 interface Perusahaan {
   id: number;
@@ -160,9 +163,114 @@ const Jadwal: React.FC = () => {
     ? services.filter((service) => service.status === selectedStatus)
     : services;
 
+  const { SearchBar } = Search;
+
+  const columns = [
+    {
+      dataField: 'tgl_jadwal',
+      text: 'Date',
+      formatter: (cell, row) => (
+        <>
+          <h5>{new Date(cell).getDate()}</h5>
+          {new Date(cell).toLocaleString("default", { month: "long" })}
+        </>
+      ),
+      headerStyle: () => ({ backgroundColor: '#009879', color: 'white' }),
+    },
+    {
+      dataField: 'tb_mobil.nopol',
+      text: 'Nopol Customer',
+      formatter: (cell, row) => (
+        <Link
+          to={`/partner-dashboard/customer/costumer-detail/detail-mobil/${cell}`}
+          className="text-decoration-none"
+        >
+          {row.tb_mobil.tb_perusahaan.nama_perusahaan}
+          <br />
+          <h5>{cell}</h5>
+        </Link>
+      ),
+      headerStyle: () => ({ backgroundColor: '#009879', color: 'white' }),
+    },
+    {
+      dataField: 'type_service',
+      text: 'Service Location',
+      formatter: (cell, row) => (
+        <>
+          <p><b>{cell}</b></p>
+          <hr style={{ marginTop: -10 }} />
+          <p style={{ marginTop: -10, color: "blue" }}>
+            <b>Lokasi: {row.lokasi_service}</b>
+          </p>
+        </>
+      ),
+      headerStyle: () => ({ backgroundColor: '#009879', color: 'white' }),
+    },
+    {
+      dataField: 'status',
+      text: 'Status',
+      formatter: (cell) => (
+        <span
+          className={`badge badge-${
+            cell === "Scheduled"
+              ? "info"
+              : cell === "In Progress"
+              ? "warning"
+              : "success"
+          }`}
+        >
+          {cell}
+        </span>
+      ),
+      headerStyle: () => ({ backgroundColor: '#009879', color: 'white' }),
+    },
+    {
+      dataField: 'actions',
+      text: 'Actions',
+      formatter: (cell, row) => (
+        <>
+          <Button
+            variant={row.status === "success" ? "info" : "success"}
+            className="mr-2"
+            onClick={() => handleButtonClick(row, "detail")}
+          >
+            <i
+              className={
+                row.status === "success"
+                  ? "fas fa-info-circle"
+                  : "fas fa-pen"
+              }
+            ></i>
+            {row.status === "success" ? " Detail" : " Update"}
+          </Button>
+
+          <Button
+            variant="primary"
+            className="mr-2"
+            onClick={() =>
+              kirim(
+                new Date(row.tgl_jadwal).getDate(),
+                new Date(row.tgl_jadwal).toLocaleString("default", {
+                  month: "long",
+                }),
+                row.tb_mobil.tb_perusahaan.nama_perusahaan,
+                row.tb_mobil.nopol,
+                row.type_service,
+                row.lokasi_service
+              )
+            }
+          >
+            <i className="fas fa-paper-plane"></i> Kirim ke Driver
+          </Button>
+        </>
+      ),
+      headerStyle: () => ({ backgroundColor: '#009879', color: 'white' }),
+    },
+  ];
+
   return (
     <div className="container mt-5">
-      <h1 className="text-center mb-4 text-dark font-weight-bold">Jadwal</h1>
+      <h1 className="text-center mb-4 text-dark font-weight-bold">Scheduled Event</h1>
 
       <div className="d-flex justify-content-between mb-3">
         <Dropdown onSelect={(e) => setSelectedStatus(e || "")}>
@@ -180,118 +288,33 @@ const Jadwal: React.FC = () => {
           to={`/partner-dashboard/form_jadwal`}
           className="btn btn-success font-weight-bold"
         >
-          <i className="fas fa-plus"></i> Tambah Baru
+          <i className="fas fa-plus"></i> Add New
         </Link>
       </div>
-      <Table striped bordered hover responsive className="text-center">
-        <thead>
-          <tr>
-            <th style={{ backgroundColor: "#009879", color: "white" }}>
-              Tanggal
-            </th>
-            <th style={{ backgroundColor: "#009879", color: "white" }}>
-              Nopol Customer
-            </th>
-            <th style={{ backgroundColor: "#009879", color: "white" }}>
-              Lokasi Service
-            </th>
-            <th style={{ backgroundColor: "#009879", color: "white" }}>
-              Status
-            </th>
-            <th style={{ backgroundColor: "#009879", color: "white" }}>
-              Actions
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredServices.map((service) => (
-            <tr key={service.id}>
-              <td>
-                <h5>{new Date(service.tgl_jadwal).getDate()}</h5>{" "}
-                {new Date(service.tgl_jadwal).toLocaleString("default", {
-                  month: "long",
-                })}
-              </td>
-              <td className="align-middle">
-                <p>
-                  {service.tb_mobil && service.tb_mobil.tb_perusahaan ? (
-                    <Link
-                      to={`/partner-dashboard/customer/costumer-detail/detail-mobil/${service.tb_mobil.nopol}`}
-                      className="text-decoration-none"
-                    >
-                      {service.tb_mobil.tb_perusahaan.nama_perusahaan}
-                      <br />
-                      <h5>{service.tb_mobil.nopol}</h5>
-                    </Link>
-                  ) : (
-                    <p>Data tidak tersedia</p>
-                  )}
-                </p>
-              </td>
-              <td className="text-left align-middle">
-                <p>
-                  <b>{service.type_service}</b>
-                </p>
-                <hr style={{ marginTop: -10 }} />
-                <p style={{ marginTop: -10, color: "blue" }}>
-                  <b>Lokasi: {service.lokasi_service}</b>
-                </p>
-              </td>
-              <td className="align-middle">
-                <span
-                  className={`badge badge-${
-                    service.status === "Scheduled"
-                      ? "info"
-                      : service.status === "In Progress"
-                      ? "warning"
-                      : "success"
-                  }`}
-                >
-                  {service.status}
-                </span>
-              </td>
-              <td className="align-middle">
-                <Button
-                  variant={service.status === "success" ? "info" : "success"}
-                  className="mr-2"
-                  onClick={() => handleButtonClick(service, "detail")}
-                >
-                  <i
-                    className={
-                      service.status === "success"
-                        ? "fas fa-info-circle"
-                        : "fas fa-pen"
-                    }
-                  ></i>
-                  {service.status === "success" ? " Detail" : " Update"}
-                </Button>
 
-                <Button
-                  variant="primary"
-                  className="mr-2"
-                  onClick={() =>
-                    kirim(
-                      new Date(service.tgl_jadwal).getDate(),
-                      new Date(service.tgl_jadwal).toLocaleString("default", {
-                        month: "long",
-                      }),
-                      service.tb_mobil.tb_perusahaan.nama_perusahaan,
-                      service.tb_mobil.nopol,
-                      service.type_service,
-                      service.lokasi_service
-                    )
-                  }
-                >
-                  <i className="fas fa-paper-plane"></i> Kirim ke Driver
-                </Button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
-      <p className="text-center mt-2">
-        Showing 1 to {filteredServices.length} of {services.length} entries
-      </p>
+      <ToolkitProvider
+        keyField="id"
+        data={filteredServices}
+        columns={columns}
+        search
+      >
+        {
+          props => (
+            <div>
+              <SearchBar { ...props.searchProps } />
+              <hr />
+              <BootstrapTable
+                { ...props.baseProps }
+                pagination={paginationFactory()}
+                striped
+                bordered
+                hover
+                wrapperClasses="table-responsive"
+              />
+            </div>
+          )
+        }
+      </ToolkitProvider>
 
       <style>
         {`

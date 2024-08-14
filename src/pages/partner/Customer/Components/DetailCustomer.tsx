@@ -3,9 +3,17 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Table, Button, Row, Col } from "react-bootstrap";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import ApiConfig from "@app/libs/Api";
-import { FaEdit, FaTrashAlt, FaPlus } from "react-icons/fa";
+import { FaEdit, FaTrashAlt, FaPlus, FaCar } from "react-icons/fa";
+import BootstrapTable from "react-bootstrap-table-next";
+import paginationFactory from "react-bootstrap-table2-paginator";
+import ToolkitProvider, {
+  Search,
+} from "react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit";
+import { Dropdown, DropdownButton } from "react-bootstrap";
 
 interface DriverApiResponse {
   id: number;
@@ -17,23 +25,33 @@ interface DriverData {
   id: number;
   full_name: string;
   no_hp: string;
+  nopol: string;
+  tipe_kendaraan: string;
+  contract_end: string;
+  biaya_sewa: string;
+  tb_jadwal: Array<{status: string}>;
+  fullNameId: string | null;
+  fullName: string | null;
+  photo: string | null;
+  homeAddress: string | null;
+  phoneNumber: string | null;
 }
 
 const CustomerDetail: React.FC = () => {
   const navigate = useNavigate();
-  const [idcustomer, setidcustomer] = useState(null);
-  const [nama_customer, setnamacustomer] = useState(null);
-  const [no_hp, setno_hp] = useState(null);
+  const [idcustomer, setidcustomer] = useState<string | null>(null);
+  const [nama_customer, setnamacustomer] = useState<string | null>(null);
+  const [no_hp, setno_hp] = useState<string | null>(null);
 
   const [drivers, setDrivers] = useState<DriverData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [idCompany, setIdCompany] = useState<string | null>(null);
-  const [idperusahaan, setidperusahaan] = useState(null);
+  const [idperusahaan, setidperusahaan] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [alamat, setalamat] = useState(null);
-  const [kontak, setkontak] = useState(null);
-  const [logo_perusahaan, setLogoPerusahaan] = useState(null);
+  const [alamat, setalamat] = useState<string | null>(null);
+  const [kontak, setkontak] = useState<string | null>(null);
+  const [logo_perusahaan, setLogoPerusahaan] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -41,7 +59,6 @@ const CustomerDetail: React.FC = () => {
 
       try {
         const datausers = localStorage.getItem("selecteddataCompany");
-        // console.log('ceklagi',datausers);
         if (datausers) {
           const parsejson = JSON.parse(datausers);
           console.log("cekcekcek", parsejson);
@@ -75,37 +92,6 @@ const CustomerDetail: React.FC = () => {
 
     fetchData();
   }, []);
-
-  // useEffect(() => {
-  //   if (idcustomer) {
-  //     const getDataDriver = async () => {
-  //       setIsLoading(true);
-
-  //       try {
-  //         // alert(idcustomer)
-  //         const response = await ApiConfig.get(`drivers/${idcustomer}`);
-  //         console.log("cekresdriver", response);
-  //         const drivers: DriverData[] = response.data.data.map(
-  //           (driver: DriverApiResponse): DriverData => ({
-  //             id: driver.id,
-  //             full_name: driver.full_name,
-  //             no_hp: driver.no_hp,
-  //             photo: driver.photo,
-  //             home_address: driver.home_address,
-  //             phone_number: driver.phone_number,
-  //           })
-  //         );
-  //         setDrivers(drivers);
-  //         setIsLoading(false);
-  //       } catch (err) {
-  //         setError("Failed to fetch driver data");
-  //         setIsLoading(false);
-  //       }
-  //     };
-
-  //     getDataDriver();
-  //   }
-  // }, [idcustomer]);
 
   useEffect(() => {
     if (idcustomer) {
@@ -171,7 +157,6 @@ const CustomerDetail: React.FC = () => {
     alamat: any,
     no_hp: any
   ) => {
-    // alert(photo)
     localStorage.setItem(
       "getdatadriverpartner",
       JSON.stringify({ id, nama_lengkap, photo, alamat, no_hp })
@@ -181,152 +166,170 @@ const CustomerDetail: React.FC = () => {
     );
   };
 
+  const columns = [
+    {
+      dataField: "nopol",
+      text: "Police Number",
+      sort: true,
+      formatter: (cell: string, row: DriverData) => (
+        <Link to={`/partner-dashboard/customer/costumer-detail/detail-mobil/${cell}`}>
+          {cell || "-"}
+        </Link>
+      ),
+      headerStyle: { backgroundColor: "#009879", color: "white" },
+    },
+    {
+      dataField: "tipe_kendaraan",
+      text: "Unit Type",
+      sort: true,
+      formatter: (cell: string) => cell || "-",
+      headerStyle: { backgroundColor: "#009879", color: "white" },
+    },
+    {
+      dataField: "contract_end",
+      text: "Contract End",
+      sort: true,
+      formatter: (cell: string) => cell || "-",
+      headerStyle: { backgroundColor: "#009879", color: "white" },
+    },
+    {
+      dataField: "biaya_sewa",
+      text: "Rent Price",
+      sort: true,
+      formatter: (cell: string) => {
+        if (!cell) return "-";
+        const number = parseFloat(cell);
+        return isNaN(number) ? "-" : number.toLocaleString('id-ID', {style: 'decimal', minimumFractionDigits: 0, maximumFractionDigits: 0});
+      },
+      headerStyle: { backgroundColor: "#009879", color: "white" },
+    },
+    {
+      dataField: "km",
+      text: "KM",
+      sort: true,
+      formatter: (cell: string) => cell || "-",
+      headerStyle: { backgroundColor: "#009879", color: "white" },
+    },
+    {
+      dataField: "tb_jadwal[0].status",
+      text: "Uji Emisi",
+      sort: true,
+      formatter: (cell: string) => cell || "-",
+      headerStyle: { backgroundColor: "#009879", color: "white" },
+    },
+    {
+      dataField: "fullName",
+      text: "Driver Name",
+      sort: true,
+      formatter: (cell: string, row: DriverData) => (
+        <span
+          onClick={() =>
+            detaildriver(
+              row.fullNameId,
+              cell,
+              row.photo,
+              row.homeAddress,
+              row.phoneNumber
+            )
+          }
+          style={{ cursor: "pointer", color: "blue" }}
+        >
+          {cell === "Unknown" ? "-" : cell || "-"}
+        </span>
+      ),
+      headerStyle: { backgroundColor: "#009879", color: "white" },
+    },
+  ];
+
+  const { SearchBar } = Search;
+
   return (
     <>
-      <div className="container mt-3 mb-2">
+      <div className="container">
+        <br></br>
         <Link to="/partner-dashboard">Back To Dashboard</Link>
       </div>
-      <div className="container">
+      <div className="container-fluid" style={{padding:20}}>
         <div className="row">
           <div className="col-md-4 mb-4">
-            <div className="card shadow-sm bg-light">
-              <div className="card-body text-center">
-                <img src={logo_perusahaan} className="img" width={300} />
+            <div className="card shadow-sm bg-light" style={{minHeight: '200px', maxHeight: '300px'}}>
+              <div className="card-body text-center d-flex align-items-center justify-content-center">
+                {logo_perusahaan ? (
+                  <img src={logo_perusahaan} className="img-fluid" style={{maxWidth: '100%', maxHeight: '100%'}} alt="Company Logo" />
+                ) : (
+                  <img src='/public/company.jpg' className="img-fluid" style={{maxWidth: '50%', maxHeight: '50%'}} alt="Default Company Logo" />
+                )}
               </div>
             </div>
           </div>
           <div className="col-md-4 mb-4">
-            <div className="card shadow-sm bg-light">
-              <div className="card-body">
+            <div className="card shadow-sm bg-light" style={{minHeight: '200px', maxHeight: '300px'}}>
+              <div className="card-body d-flex flex-column justify-content-center">
                 <h5 className="card-title text-primary">
                   {nama_customer} {idcustomer}
                 </h5>
-                <p className="card-text mb-1">{kontak}</p>
+                <p className="card-text mb-1">{kontak === '0' ? '' : kontak}</p>
                 <p className="card-text mb-1">{alamat}</p>
-                {/* <p className="card-text mb-0">DKI Jakarta</p> */}
               </div>
             </div>
           </div>
           <div className="col-md-4"></div>
         </div>
-        {/* <h2 className="mt-5 text-dark font-weight-bold">List Kendaraan</h2> */}
         <div className="">
           <Row className="mb-4">
             <Col>
-              <h1 className="text-dark font-weight-bold">Mobil Perusahaan</h1>
+              <h1 className="text-dark font-weight-bold">Company Vehicles</h1>
             </Col>
             <Col className="text-right">
               <Link
                 to={`/partner-dashboard/add-mobil-partner/${idperusahaan}`}
                 className="btn btn-success d-inline-flex align-items-center font-weight-bold"
               >
-                <FaPlus className="mr-1" /> Create
+                <FaPlus className="mr-1" /> Add New
               </Link>
             </Col>
           </Row>
-          <table className="table table-bordered mt-3">
-            <thead>
-              <tr>
-                <th
-                  scope="col"
-                  style={{ backgroundColor: "#009879", color: "white" }}
-                >
-                  No
-                </th>
-                <th
-                  scope="col"
-                  style={{ backgroundColor: "#009879", color: "white" }}
-                >
-                  Police Number
-                </th>
-                <th
-                  scope="col"
-                  style={{ backgroundColor: "#009879", color: "white" }}
-                >
-                  Unit Type
-                </th>
-                <th
-                  scope="col"
-                  style={{ backgroundColor: "#009879", color: "white" }}
-                >
-                  Contract End
-                </th>
-                <th
-                  scope="col"
-                  style={{ backgroundColor: "#009879", color: "white" }}
-                >
-                  Rent Price
-                </th>
-                <th
-                  scope="col"
-                  style={{ backgroundColor: "#009879", color: "white" }}
-                >
-                  KM
-                </th>
-                <th
-                  scope="col"
-                  style={{ backgroundColor: "#009879", color: "white" }}
-                >
-                  Uji Emisi
-                </th>
-                <th
-                  scope="col"
-                  style={{ backgroundColor: "#009879", color: "white" }}
-                >
-                  Nama Driver
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {drivers.map((vehicle, index) => (
-                <tr key={index}>
-                  <td>{index + 1}</td>
-                  <td>
-                    <Link
-                      to={`/partner-dashboard/customer/costumer-detail/detail-mobil/${vehicle.nopol}`}
-                    >
-                      {vehicle.nopol}
-                    </Link>
-                  </td>
-                  <td> {vehicle.tipe_kendaraan}</td>
-                  <td>{vehicle.contract_end}</td>
-                  <td>{vehicle.biaya_sewa}</td>
-                  <td></td>
-                  <td>{vehicle?.tb_jadwal?.[0]?.status ?? null}</td>
-                  <td>
-                    <span
-                      onClick={() =>
-                        detaildriver(
-                          vehicle.fullNameId ?? null,
-                          vehicle.fullName ?? null,
-                          vehicle.photo ?? null,
-                          vehicle.homeAddress ?? null,
-                          vehicle.phoneNumber ?? null
-                        )
-                      }
-                      style={{ cursor: "pointer", color: "blue" }}
-                    >
-                      {vehicle.fullName === "Unknown" ? null : vehicle.fullName}
-                    </span>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <ToolkitProvider
+            keyField="nopol"
+            data={drivers}
+            columns={columns}
+            search
+          >
+            {(props) => (
+              <div>
+                <div className="mb-3">
+                  <SearchBar {...props.searchProps} placeholder="Search" className="form-control" />
+                </div>
+                <BootstrapTable
+                  {...props.baseProps}
+                  bootstrap4
+                  striped
+                  hover
+                  bordered={false}
+                  pagination={paginationFactory({
+                    sizePerPage: 10,
+                    showTotal: true,
+                  })}
+                  classes="table-bordered w-100"
+                />
+              </div>
+            )}
+          </ToolkitProvider>
         </div>
         <style>
           {`
             .table-bordered {
-            border-radius: 15px 15px 0 0;
-            border-top: 1px solid #009879;
-            overflow: hidden;
-          }
-          .table tbody tr:last-of-type {
-            border-bottom: 2px solid #009879;
-          }
-            `}
+              border-radius: 15px 15px 0 0;
+              border-top: 1px solid #009879;
+              overflow: hidden;
+            }
+            .table tbody tr:last-of-type {
+              border-bottom: 2px solid #009879;
+            }
+          `}
         </style>
       </div>
+      <ToastContainer />
     </>
   );
 };

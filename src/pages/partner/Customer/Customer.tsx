@@ -7,6 +7,11 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FaEdit, FaTrashAlt, FaCar } from "react-icons/fa";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import BootstrapTable from "react-bootstrap-table-next";
+import paginationFactory from "react-bootstrap-table2-paginator";
+import ToolkitProvider, {
+  Search,
+} from "react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit";
 
 interface Company {
   id: number;
@@ -101,7 +106,7 @@ const Customer: React.FC = () => {
     idperusahaan: string,
     alamat: string,
     kontak: string,
-    image:string
+    image: string
   ) => {
     const selectedCompany = {
       idcomp,
@@ -112,7 +117,10 @@ const Customer: React.FC = () => {
       image,
     };
     // alert(idcomp)
-    localStorage.setItem("selecteddataCompany", JSON.stringify(selectedCompany));
+    localStorage.setItem(
+      "selecteddataCompany",
+      JSON.stringify(selectedCompany)
+    );
     navigate("/partner-dashboard/customer/costumer-detail");
   };
 
@@ -128,6 +136,102 @@ const Customer: React.FC = () => {
     return <div>{error}</div>;
   }
 
+  const columns = [
+    {
+      dataField: "id",
+      text: "No",
+      headerStyle: { backgroundColor: "#009879", color: "white" },
+      sort: true,
+    },
+    {
+      dataField: "nama_perusahaan",
+      text: "Company Name",
+      headerStyle: { backgroundColor: "#009879", color: "white" },
+      sort: true,
+      formatter: (cell: string, row: Company) => (
+        <span
+          style={{ color: "#007bff", fontWeight: "bold", cursor: "pointer" }}
+          onClick={() =>
+            handleCompanyClick(
+              row.id.toString(),
+              row.nama_perusahaan,
+              row.id.toString(),
+              row.alamat,
+              row.kontak,
+              row.image || ""
+            )
+          }
+        >
+          {cell}
+        </span>
+      ),
+    },
+    {
+      dataField: "alamat",
+      text: "Address",
+      headerStyle: { backgroundColor: "#009879", color: "white" },
+      sort: true,
+      formatter: (cell: string | null) => (!cell || cell === "0" ? "-" : cell),
+    },
+    {
+      dataField: "kontak",
+      text: "Contact",
+      headerStyle: { backgroundColor: "#009879", color: "white" },
+      sort: true,
+      formatter: (cell: string | null) => (!cell || cell === "0" ? "-" : cell),
+    },
+    {
+      dataField: "email",
+      text: "Email",
+      headerStyle: { backgroundColor: "#009879", color: "white" },
+      sort: true,
+      formatter: (cell: string | null) => (!cell || cell === "0" ? "-" : cell),
+    },
+    {
+      dataField: "_count.tb_mobil",
+      text: "Total Car",
+      headerStyle: { backgroundColor: "#009879", color: "white" },
+      sort: true,
+      formatter: (cell: number | null) => (!cell || cell === 0 ? "-" : cell),
+    },
+    {
+      dataField: "actions",
+      text: "Actions",
+      headerStyle: { backgroundColor: "#009879", color: "white" },
+      formatter: (cell: any, row: Company) => (
+        <DropdownButton
+          id="dropdown-basic-button"
+          title="Actions"
+          variant="info"
+          className="actions-dropdown"
+        >
+          <Dropdown.Item
+            onClick={() =>
+              handleCompanyClick(
+                row.id.toString(),
+                row.nama_perusahaan,
+                row.id.toString(),
+                row.alamat,
+                row.kontak,
+                row.image || ""
+              )
+            }
+          >
+            <FaCar style={{ marginRight: "5px" }} /> Detail Mobil
+          </Dropdown.Item>
+          <Dropdown.Item onClick={() => handleEditCompany(row)}>
+            <FaEdit style={{ marginRight: "5px" }} /> Edit
+          </Dropdown.Item>
+          <Dropdown.Item onClick={() => handleDeleteCompany(row.id)}>
+            <FaTrashAlt style={{ marginRight: "5px" }} /> Delete
+          </Dropdown.Item>
+        </DropdownButton>
+      ),
+    },
+  ];
+
+  const { SearchBar } = Search;
+
   return (
     <div className="container mt-5">
       <h1 className="text-center mb-4 text-dark font-weight-bold">Customer</h1>
@@ -135,7 +239,8 @@ const Customer: React.FC = () => {
         <Link
           to={`/partner-dashboard/form-perusahaan/${idCompany}`}
           className={`btn btn-success ${
-            location.pathname === `/internal/form-perusahaan-internal/${idCompany}`
+            location.pathname ===
+            `/internal/form-perusahaan-internal/${idCompany}`
               ? "active"
               : ""
           }`}
@@ -146,92 +251,35 @@ const Customer: React.FC = () => {
             alignItems: "center",
           }}
         >
-          <i className="fas fa-plus"></i> Tambah Baru
+          <i className="fas fa-plus"></i> Add New
         </Link>
       </div>
-
-      <Table
-        striped
-        bordered
-        hover
-        responsive
-        className="text-center table-bordered"
-      >
-        <thead>
-          <tr>
-            <th style={{ backgroundColor: "#009879", color: "white" }}>Nomor</th>
-            <th style={{ backgroundColor: "#009879", color: "white" }}>
-              Nama Perusahaan
-            </th>
-            <th style={{ backgroundColor: "#009879", color: "white" }}>Alamat</th>
-            <th style={{ backgroundColor: "#009879", color: "white" }}>Kontak</th>
-            <th style={{ backgroundColor: "#009879", color: "white" }}>Email</th>
-            <th style={{ backgroundColor: "#009879", color: "white" }}>Mobil</th>
-            <th style={{ backgroundColor: "#009879", color: "white" }}>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {companies.map((company, index) => (
-            <tr key={company.id}>
-              <td>{index + 1}</td>
-              <td className="align-middle">
-                <span
-                  // to="/partner-dashboard/customer/costumer-detail"
-                  style={{ color: "#007bff", fontWeight: "bold" }}
-                  onClick={() =>
-                    handleCompanyClick(
-                      company.id_company.toString(),
-                      company.nama_perusahaan,
-                      company.id,
-                      company.alamat,
-                      company.kontak,
-                      company.image,
-                    )
-                  }
-                >
-                  {company.nama_perusahaan}
-                </span>
-              </td>
-              <td className="align-middle">{company.alamat}</td>
-              <td className="align-middle">{company.kontak}</td>
-              <td className="align-middle">{company.email}</td>
-              <td className="align-middle">{company._count.tb_mobil}</td>
-              <td className="actions-cell align-middle">
-                <DropdownButton
-                  id="dropdown-basic-button"
-                  title="Actions"
-                  variant="info"
-                  className="actions-dropdown"
-                >
-                  <Dropdown.Item
-                    onClick={() =>
-                      handleCompanyClick(
-                        company.id_company.toString(),
-                        company.nama_perusahaan,
-                        company.id,
-                        company.alamat,
-                        company.kontak,
-                        company.image
-                      )
-                    }
-                  >
-                    <FaCar style={{ marginRight: "5px" }} /> Detail Mobil
-                  </Dropdown.Item>
-                  <Dropdown.Item onClick={() => handleEditCompany(company)}>
-                    <FaEdit style={{ marginRight: "5px" }} /> Edit
-                  </Dropdown.Item>
-                  <Dropdown.Item onClick={() => handleDeleteCompany(company.id)}>
-                    <FaTrashAlt style={{ marginRight: "5px" }} /> Delete
-                  </Dropdown.Item>
-                </DropdownButton>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
-      <p className="text-center mt-2">
-        Showing 1 to {companies.length} of {companies.length} entries
-      </p>
+      
+      <ToolkitProvider keyField="id" data={companies} columns={columns} search>
+        {(props) => (
+          <div>
+            <div className="mb-3">
+              <SearchBar
+                {...props.searchProps}
+                placeholder="Search"
+                className="form-control"
+              />
+            </div>
+            <BootstrapTable
+              {...props.baseProps}
+              bootstrap4
+              striped
+              hover
+              bordered={false}
+              pagination={paginationFactory({
+                sizePerPage: 10,
+                showTotal: true,
+              })}
+              classes="table-bordered w-100"
+            />
+          </div>
+        )}
+      </ToolkitProvider>
 
       <ToastContainer />
 

@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
 
 interface DriverApiResponse {
   photo: string;
@@ -38,12 +37,12 @@ const DetailProfilePartner: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
-      
+
       try {
-        const storagedriver = localStorage.getItem('getdatadriverpartner');
+        const storagedriver = localStorage.getItem("getdatadriverpartner");
         if (storagedriver) {
           const datstorage = JSON.parse(storagedriver);
-          console.log('cekprofilpartnerdriver',datstorage)
+          console.log("cekprofilpartnerdriver", datstorage);
           setid(datstorage.id);
           setphoto(datstorage.photo);
           setnamadriver(datstorage.nama_lengkap);
@@ -51,7 +50,7 @@ const DetailProfilePartner: React.FC = () => {
           setno_hp(datstorage.no_hp);
         }
       } catch (error) {
-        console.error('Error parsing JSON from localStorage:', error);
+        console.error("Error parsing JSON from localStorage:", error);
       }
 
       try {
@@ -63,7 +62,7 @@ const DetailProfilePartner: React.FC = () => {
           setIdCompany(null);
         }
       } catch (error) {
-        console.error('Error fetching userData from AsyncStorage:', error);
+        console.error("Error fetching userData from AsyncStorage:", error);
         setError("Gagal mengambil data");
       } finally {
         setIsLoading(false);
@@ -116,7 +115,7 @@ const DetailProfilePartner: React.FC = () => {
     if (!photoAddress || photoAddress.indexOf("ttp") < 0) {
       return "https://portal.sigapdriver.com/icon_admin.png";
     }
-    return "http://operation.sigapps.com/"+photoAddress;
+    return "http://operation.sigapps.com/" + photoAddress;
   };
 
   const calculateAge = (birthdate: string) => {
@@ -286,68 +285,69 @@ const DetailProfilePartner: React.FC = () => {
           }
         `}
       </style>
-  
+
       <div className="button-container">
         <button className="back-button" onClick={() => navigate(-1)}>
           <i className="fas fa-arrow-left"></i>
         </button>
       </div>
-  
+
       <div className="profile-section">
-       <img
-  src={`http://operation.sigapps.com/${photo}`}
-  className="profile-img"
-  alt="Profile"
-/>
+        <img
+          src={photo ? `http://operation.sigapps.com/${photo}` : '/public/img/default-profile.png'}
+          className="profile-img"
+          alt="Profile"
+          onError={(e) => {
+            e.currentTarget.src = '/public/img/default-profile.png';
+          }}
+        />
         <div className="profile-details">
           <h2>Profil Driver</h2>
           <div className="profile-info">
-            <p><strong>ID Pegawai:</strong> {id}</p>
-            <p><strong>Nama:</strong> {namadirver}</p>
-            <p><strong>Alamat:</strong> {alamat}</p>
-            <p><strong>Nomor Telepon:</strong> {no_hp}</p>
+            <p>
+              <strong>ID Pegawai:</strong> {id}
+            </p>
+            <p>
+              <strong>Nama:</strong> {photo}
+            </p>
+            <p>
+              <strong>Alamat:</strong> {alamat}
+            </p>
+            <p>
+              <strong>Nomor Telepon:</strong> {no_hp}
+            </p>
           </div>
         </div>
       </div>
-  
+
       <div className="experience-section">
-        <h2>Pengalaman</h2>
+        <h2>Experience</h2>
         <table className="experience-table">
           <thead>
             <tr>
-              <th>Tahun</th>
-              <th>Perusahaan</th>
-              <th>Jabatan</th>
+              <th>Year</th>
+              <th>Company</th>
+              <th>Position</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>2014 - 2015</td>
-              <td>PT Keyence</td>
-              <td>Driver User</td>
-            </tr>
-            <tr>
-              <td>2016 - 2017</td>
-              <td>PT Epson</td>
-              <td>Driver User</td>
-            </tr>
+            
             {/* Tambahkan baris lain sesuai kebutuhan */}
           </tbody>
         </table>
       </div>
-  
+
       <div className="skills-section">
-        <h2>Keahlian</h2>
+        <h2>Skill</h2>
         <table className="skills-table">
           <tbody>
             <tr>
-              <td>2019 Lulus training lalu lintas</td>
+              <td>-</td>
             </tr>
             {/* Tambahkan baris lain sesuai kebutuhan */}
           </tbody>
         </table>
       </div>
-      
     </div>
   );
 };

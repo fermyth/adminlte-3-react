@@ -36,7 +36,7 @@ const FormMobilPartner: React.FC = () => {
     if (perusahaanId) {
       setFormData((prevData) => ({ ...prevData, perusahaanId }));
     } else {
-      toast.error("Perusahaan ID tidak ditemukan di URL");
+      toast.error("Company ID not found in URL");
     }
   }, [location.search]);
 
@@ -76,11 +76,11 @@ const FormMobilPartner: React.FC = () => {
       );
       navigate("/partner-dashboard/customer/costumer-detail");
       if (response.status === 200) {
-        toast.success("Data Mobil Berhasil Ditambahkan!");
+        toast.success("Vehicle Data Successfully Added!");
       }
     } catch (error) {
       console.error("Error submitting form data:", error);
-      toast.error("Terjadi kesalahan saat menambahkan data mobil.");
+      toast.error("An error occurred while adding vehicle data.");
     }
   };
 
@@ -110,7 +110,7 @@ const FormMobilPartner: React.FC = () => {
   return (
     <div className="container mt-5">
       <h1 className="text-center mb-4 text-dark font-weight-bold">
-        Tambah Data Mobil
+        Add Vehicle Data
       </h1>
       <div className="d-flex justify-content-between mb-3">
         <Button
@@ -127,14 +127,14 @@ const FormMobilPartner: React.FC = () => {
             <Card className="shadow-sm">
               <Card.Header style={headerStyle}>
                 <FaCar size={24} style={iconStyle} />
-                <h4 style={titleStyle}>Informasi Mobil</h4>
+                <h4 style={titleStyle}>Vehicle Information</h4>
               </Card.Header>
               <Card.Body>
                 <Form.Group controlId="formNamaMobil">
-                  <Form.Label>Nama Mobil</Form.Label>
+                  <Form.Label>Contract No</Form.Label>
                   <Form.Control
                     type="text"
-                    placeholder="Masukkan Nama Mobil"
+                    placeholder="Enter Contract No"
                     name="tipe_kendaraan"
                     value={formData.tipe_kendaraan}
                     onChange={handleChange}
@@ -142,10 +142,10 @@ const FormMobilPartner: React.FC = () => {
                   />
                 </Form.Group>
                 <Form.Group controlId="formJenisMobil">
-                  <Form.Label>Jenis Mobil</Form.Label>
+                  <Form.Label>Vehicle Type</Form.Label>
                   <Form.Control
                     type="text"
-                    placeholder="Masukkan Jenis Mobil"
+                    placeholder="Enter Vehicle Type"
                     name="pembuat"
                     value={formData.pembuat}
                     onChange={handleChange}
@@ -153,10 +153,10 @@ const FormMobilPartner: React.FC = () => {
                   />
                 </Form.Group>
                 <Form.Group controlId="formTahun">
-                  <Form.Label>Tahun</Form.Label>
+                  <Form.Label>Year</Form.Label>
                   <Form.Control
                     type="text"
-                    placeholder="Masukkan Tahun"
+                    placeholder="Enter Year"
                     name="tahun"
                     value={formData.tahun}
                     onChange={handleChange}
@@ -164,10 +164,10 @@ const FormMobilPartner: React.FC = () => {
                   />
                 </Form.Group>
                 <Form.Group controlId="formWarnaKendaraan">
-                  <Form.Label>Warna Kendaraan</Form.Label>
+                  <Form.Label>Vehicle Color</Form.Label>
                   <Form.Control
                     type="text"
-                    placeholder="Masukkan Warna Kendaraan"
+                    placeholder="Enter Vehicle Color"
                     name="warna_kendaraan"
                     value={formData.warna_kendaraan}
                     onChange={handleChange}
@@ -175,20 +175,20 @@ const FormMobilPartner: React.FC = () => {
                   />
                 </Form.Group>
                 <Form.Group controlId="formNopol">
-                  <Form.Label>Nopol</Form.Label>
+                  <Form.Label>License Plate</Form.Label>
                   <Form.Control
                     type="text"
-                    placeholder="Masukkan Nopol"
+                    placeholder="Enter License Plate"
                     name="nopol"
                     value={formData.nopol}
                     onChange={(e) => {
-                      // Ambil nilai dari event
+                      // Get value from event
                       const value = e.target.value;
-                      // Hapus karakter khusus dan ubah ke huruf besar
+                      // Remove special characters and convert to uppercase
                       const formattedValue = value
                         .replace(/[^a-zA-Z0-9]/g, "")
                         .toUpperCase();
-                      // Set nilai ke formData
+                      // Set value to formData
                       setFormData((prevData) => ({
                         ...prevData,
                         nopol: formattedValue,
@@ -198,11 +198,11 @@ const FormMobilPartner: React.FC = () => {
                   />
                 </Form.Group>
 
-                <Form.Group controlId="formNomorRangka">
-                  <Form.Label>Nomor Rangka</Form.Label>
+                {/* <Form.Group controlId="formNomorRangka">
+                  <Form.Label>Chassis Number</Form.Label>
                   <Form.Control
                     type="text"
-                    placeholder="Masukkan Nomor Rangka"
+                    placeholder="Enter Chassis Number"
                     name="nomor_rangka"
                     value={formData.nomor_rangka}
                     onChange={handleChange}
@@ -210,32 +210,32 @@ const FormMobilPartner: React.FC = () => {
                   />
                 </Form.Group>
                 <Form.Group controlId="formNomorMesin">
-                  <Form.Label>Nomor Mesin</Form.Label>
+                  <Form.Label>Engine Number</Form.Label>
                   <Form.Control
                     type="text"
-                    placeholder="Masukkan Nomor Mesin"
+                    placeholder="Enter Engine Number"
                     name="nomor_mesin"
                     value={formData.nomor_mesin}
                     onChange={handleChange}
                     required
                   />
-                </Form.Group>
-                <Form.Group controlId="formPilihanAksesoris">
-                  <Form.Label>Pilihan Aksesoris</Form.Label>
+                </Form.Group> */}
+                {/* <Form.Group controlId="formPilihanAksesoris">
+                  <Form.Label>Accessories Options</Form.Label>
                   <Form.Control
                     type="text"
-                    placeholder="Masukkan Pilihan Aksesoris"
+                    placeholder="Enter Accessories Options"
                     name="pilihan_aksesoris"
                     value={formData.pilihan_aksesoris}
                     onChange={handleChange}
                     required
                   />
-                </Form.Group>
+                </Form.Group> */}
                 <Form.Group controlId="formBiayaSewa">
-                  <Form.Label>Biaya Sewa</Form.Label>
+                  <Form.Label>Rental Fee</Form.Label>
                   <Form.Control
                     type="text"
-                    placeholder="Masukkan Biaya Sewa"
+                    placeholder="Enter Rental Fee"
                     name="biaya_sewa"
                     value={formData.biaya_sewa}
                     onChange={handleChange}
@@ -243,10 +243,10 @@ const FormMobilPartner: React.FC = () => {
                   />
                 </Form.Group>
                 <Form.Group controlId="formJangkaWaktuSewa">
-                  <Form.Label>Jangka Waktu Sewa</Form.Label>
+                  <Form.Label>Rental Period</Form.Label>
                   <Form.Control
                     type="text"
-                    placeholder="Masukkan Jangka Waktu Sewa"
+                    placeholder="Enter Rental Period"
                     name="jangka_waktu_sewa"
                     value={formData.jangka_waktu_sewa}
                     onChange={handleChange}
@@ -257,7 +257,7 @@ const FormMobilPartner: React.FC = () => {
                   <Form.Label>Contract End</Form.Label>
                   <Form.Control
                     type="date"
-                    placeholder="Masukkan Contract End"
+                    placeholder="Enter Contract End Date"
                     name="contract_end"
                     value={formData.contract_end}
                     onChange={handleChange}
@@ -271,18 +271,27 @@ const FormMobilPartner: React.FC = () => {
             <Card className="shadow-sm">
               <Card.Header style={headerStyle}>
                 <FaImage size={24} style={iconStyle} />
-                <h4 style={titleStyle}>Upload Foto Mobil</h4>
+                <h4 style={titleStyle}>Upload Vehicle Photos</h4>
               </Card.Header>
               <Card.Body>
-                {[...Array(4)].map((_, index) => (
-                  <Form.Group controlId={`formPhoto${index + 1}`} key={index}>
-                    <Form.Label>Foto {index + 1}</Form.Label>
-                    <Form.Control
-                      type="file"
-                      accept="image/*"
-                      onChange={(e) => handleFileChange(e, index)}
-                      required
-                    />
+                {['Front', 'Back', 'Left Side', 'Right Side'].map((side, index) => (
+                  <Form.Group key={index} controlId={`formPhoto${index + 1}`}>
+                    <Form.Label>{`${side} Photo`}</Form.Label>
+                    <div className="d-flex align-items-center">
+                      <Form.Control
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => handleFileChange(e as React.ChangeEvent<HTMLInputElement>, index)}
+                        required
+                      />
+                      {formData[`photo${index + 1}` as keyof typeof formData] && (
+                        <img
+                          src={URL.createObjectURL(formData[`photo${index + 1}` as keyof typeof formData] as File)}
+                          alt={`${side} preview`}
+                          style={{ width: '100px', height: '100px', objectFit: 'cover', marginLeft: '10px' }}
+                        />
+                      )}
+                    </div>
                   </Form.Group>
                 ))}
               </Card.Body>
@@ -290,7 +299,7 @@ const FormMobilPartner: React.FC = () => {
           </Col>
         </Row>
         <Button variant="success" type="submit" style={buttonStyle} block>
-          Simpan
+          Save
         </Button>
       </Form>
       <ToastContainer />

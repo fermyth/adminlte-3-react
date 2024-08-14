@@ -208,7 +208,7 @@ const Sidebar = () => {
                   style={{ fontWeight: "bold" }}
                 >
                   <FaClock className="icon" />
-                  {!isCollapsed && <span>Jadwal</span>}
+                  {!isCollapsed && <span>Scheduled Events</span>}
                 </Link>
               </li>
             </ul>

@@ -6,6 +6,8 @@ import store from '@store/store';
 import './utils/i18n';
 import './index.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css';
+import 'react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit.min.css';
 import * as serviceWorker from './serviceWorker';
 import { BrowserRouter } from 'react-router-dom';
 import ReactGA from 'react-ga4';
