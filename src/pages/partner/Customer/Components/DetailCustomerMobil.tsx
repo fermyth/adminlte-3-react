@@ -33,7 +33,7 @@ const DetailCustomerMobil: React.FC = () => {
                 skor : parsed.skor || "",
                 penyebab:parsed.penyebab || "",
                 lokasi_service: parsed.lokasi || "",
-                servis: parsed.service || "",
+                servic: parsed.servic || "",
                 keterangan: parsed.keterangan || "",
                 status: item.status || ""
               };
@@ -45,7 +45,7 @@ const DetailCustomerMobil: React.FC = () => {
                 lokasiService : item.lokasi_service,
                 km: "",
                 lokasi_service: "",
-                servis: "",
+                servic: "",
                 keterangan: "",
                 status: item.status || ""
               };
@@ -347,7 +347,7 @@ const DetailCustomerMobil: React.FC = () => {
                 <tr key={index}>
                   <td>{history.km}</td>
                   <td>{history.lokasiService}</td>
-                  <td>{history.servis}</td>
+                  <td>{history.servic}</td>
                   <td>{history.keterangan}</td>
                   <td>{history.status}</td>
                 </tr>
