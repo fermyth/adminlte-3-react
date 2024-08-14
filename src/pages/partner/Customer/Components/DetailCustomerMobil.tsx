@@ -16,13 +16,14 @@ const DetailCustomerMobil: React.FC = () => {
         const response = await axios.get(
           `https://api_partner_staging.sigapdriver.com/api/v1/mobil-detail/${nopol}`
         );
-        const data = response.data.data;
+        const data = response.data;
+        console.log('cekdatamobil',data)
 
         if (data.jadwal) {
           data.serviceHistories  = data.jadwal.map((item: any) => {
             try {
               const parsed = JSON.parse(item.ket_json);
-              console.log("hahahah", parsed);
+              console.log("cek", parsed);
               
               return {
                 tgl_jadwal: item.tgl_jadwal,
