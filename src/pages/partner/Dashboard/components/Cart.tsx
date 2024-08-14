@@ -2,15 +2,16 @@ import { useEffect, useRef } from "react";
 import { Chart, registerables } from "chart.js";
 Chart.register(...registerables);
 
-const customers = [
-  { name: "PT. EPPSJ", vehicles: 30 },
-  { name: "PT. ABCDS", vehicles: 10 },
-  { name: "PT. CDEFG", vehicles: 3 },
-  { name: "PT. GGHSG", vehicles: 2 },
-  { name: "PT. JJSHHD", vehicles: 2 },
-];
+interface Customer {
+  name: string;
+  vehicles: number;
+}
 
-const ChartComponent = () => {
+interface ChartComponentProps {
+  customers: Customer[];
+}
+
+const ChartComponent = ({ customers }: ChartComponentProps) => {
   const chartRef = useRef<HTMLCanvasElement | null>(null);
 
   const totalVehicles = customers.reduce(
@@ -71,7 +72,7 @@ const ChartComponent = () => {
         return () => chart.destroy();
       }
     }
-  }, [totalVehicles]);
+  }, [customers, totalVehicles]);
 
   return (
     <div className="container">
