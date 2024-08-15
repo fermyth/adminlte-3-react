@@ -11,7 +11,7 @@ const FormMobilPartner: React.FC = () => {
     contract_number: "",
     tipe_kendaraan: "",
     tahun: "",
-    pembuat:"-",
+    pembuat: "-",
     warna_kendaraan: "",
     nopol: "",
     nomor_rangka: "",
@@ -24,7 +24,7 @@ const FormMobilPartner: React.FC = () => {
     photo2: "",
     photo3: "",
     photo4: "",
-    vendor: ""
+    vendor: "",
   });
 
   const navigate = useNavigate();
@@ -124,6 +124,13 @@ const FormMobilPartner: React.FC = () => {
         </Button>
       </div>
       <Form onSubmit={handleSubmit}>
+        <Form.Control
+          type="hidden"
+          name="pembuat"
+          value="-"
+          onChange={handleChange}
+          required
+        />
         <Row>
           <Col md={6} className="mb-3">
             <Card className="shadow-sm">
