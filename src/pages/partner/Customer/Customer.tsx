@@ -67,13 +67,14 @@ const Customer: React.FC = () => {
           const response = await fetch(
             `https://api_partner_staging.sigapdriver.com/api/v1/perusahaan/${idCompany}`
           );
+          console.log('rescus',response)
           if (!response.ok) {
             throw new Error("Network response was not ok");
           }
           const data: Company[] = await response.json();
-          console.log("adada", data);
+          console.log("adada", data.perusahaanList);
 
-          setCompanies(data);
+          setCompanies(data.perusahaanList);
         } catch (error) {
           console.error("Failed to fetch companies:", error);
           toast.error("Gagal memuat data perusahaan.");
