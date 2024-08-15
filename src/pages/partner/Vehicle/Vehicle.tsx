@@ -120,10 +120,10 @@ const Vehicle = () => {
       formatter: (cell: string, row: any) => {
         if (!cell || !row.jangka_waktu_sewa) return "-";
         const endDate = new Date(cell);
-        const startDate = new Date(row.jangka_waktu_sewa);
-        const diffTime = Math.max(endDate.getTime() - startDate.getTime(), 0);
+        const now = new Date();
+        const diffTime = Math.max(endDate.getTime() - now.getTime(), 0);
         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-        if (diffDays > 30) {
+        if (diffDays > 90) {
           const diffMonths = Math.floor(diffDays / 30);
           return `${diffMonths} Month`;
         } else {
