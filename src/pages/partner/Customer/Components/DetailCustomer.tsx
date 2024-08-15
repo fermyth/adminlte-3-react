@@ -29,7 +29,7 @@ interface DriverData {
   tipe_kendaraan: string;
   contract_end: string;
   biaya_sewa: string;
-  tb_jadwal: Array<{status: string}>;
+  tb_jadwal: Array<{ status: string }>;
   fullNameId: string | null;
   fullName: string | null;
   photo: string | null;
@@ -99,18 +99,17 @@ const CustomerDetail: React.FC = () => {
         setIsLoading(true);
         try {
           const driversResponse = await ApiConfig.get(
-           `https://api_partner_staging.sigapdriver.com/api/v1/mobil/${idperusahaan}`
-          //   `http://localhost:5182/api/v1/mobil/${idperusahaan}`
+              `https://api_partner_staging.sigapdriver.com/api/v1/mobil/${idperusahaan}`
+            //`http://localhost:5182/api/v1/mobil/${idperusahaan}`
           );
           console.log("Drivers response:", driversResponse.data);
 
           const fullNamesResponse = await ApiConfig.get(
              `https://api_portal_staging.sigapdriver.com/api/v1/nopoldriver/`
-            //`http://localhost:5181/api/v1/nopoldriver/`
+           // `http://localhost:5181/api/v1/nopoldriver/`
           );
           const fullNamesData = fullNamesResponse.data.data.data;
           console.log("Drivers responsedd:", fullNamesResponse);
-
 
           if (!Array.isArray(fullNamesData)) {
             throw new Error("Full names data is not an array");
@@ -176,7 +175,9 @@ const CustomerDetail: React.FC = () => {
       text: "Police Number",
       sort: true,
       formatter: (cell: string, row: DriverData) => (
-        <Link to={`/partner-dashboard/customer/costumer-detail/detail-mobil/${cell}`}>
+        <Link
+          to={`/partner-dashboard/customer/costumer-detail/detail-mobil/${cell}`}
+        >
           {cell || "-"}
         </Link>
       ),
@@ -185,6 +186,13 @@ const CustomerDetail: React.FC = () => {
     {
       dataField: "tipe_kendaraan",
       text: "Unit Type",
+      sort: true,
+      formatter: (cell: string) => cell || "-",
+      headerStyle: { backgroundColor: "#009879", color: "white" },
+    },
+    {
+      dataField: "vendor",
+      text: "Vehicle Vendor",
       sort: true,
       formatter: (cell: string) => cell || "-",
       headerStyle: { backgroundColor: "#009879", color: "white" },
@@ -229,7 +237,13 @@ const CustomerDetail: React.FC = () => {
       formatter: (cell: string) => {
         if (!cell) return "-";
         const number = parseFloat(cell);
-        return isNaN(number) ? "-" : number.toLocaleString('id-ID', {style: 'decimal', minimumFractionDigits: 0, maximumFractionDigits: 0});
+        return isNaN(number)
+          ? "-"
+          : number.toLocaleString("id-ID", {
+              style: "decimal",
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 0,
+            });
       },
       headerStyle: { backgroundColor: "#009879", color: "white" },
     },
@@ -279,26 +293,42 @@ const CustomerDetail: React.FC = () => {
         <br></br>
         <Link to="/partner-dashboard">Back To Dashboard</Link>
       </div>
-      <div className="container-fluid" style={{padding:20}}>
+      <div className="container-fluid" style={{ padding: 20 }}>
         <div className="row">
           <div className="col-md-4 mb-4">
-            <div className="card shadow-sm bg-light" style={{minHeight: '200px', maxHeight: '300px'}}>
+            <div
+              className="card shadow-sm bg-light"
+              style={{ minHeight: "200px", maxHeight: "300px" }}
+            >
               <div className="card-body text-center d-flex align-items-center justify-content-center">
-                {logo_perusahaan? (
-                  <img src={logo_perusahaan} className="img-fluid" style={{maxWidth: '50%', maxHeight: '50%'}} alt="Company Logo" />
+                {logo_perusahaan ? (
+                  <img
+                    src={logo_perusahaan}
+                    className="img-fluid"
+                    style={{ maxWidth: "50%", maxHeight: "50%" }}
+                    alt="Company Logo"
+                  />
                 ) : (
-                  <img src='/public/company.jpg' className="img-fluid" style={{maxWidth: '50%', maxHeight: '50%'}} alt="Default Company Logo" />
+                  <img
+                    src="/public/company.jpg"
+                    className="img-fluid"
+                    style={{ maxWidth: "50%", maxHeight: "50%" }}
+                    alt="Default Company Logo"
+                  />
                 )}
               </div>
             </div>
           </div>
           <div className="col-md-4 mb-4">
-            <div className="card shadow-sm bg-light" style={{minHeight: '200px', maxHeight: '300px'}}>
+            <div
+              className="card shadow-sm bg-light"
+              style={{ minHeight: "200px", maxHeight: "300px" }}
+            >
               <div className="card-body d-flex flex-column justify-content-center">
                 <h5 className="card-title text-primary">
                   {nama_customer} {idcustomer}
                 </h5>
-                <p className="card-text mb-1">{kontak === '0' ? '' : kontak}</p>
+                <p className="card-text mb-1">{kontak === "0" ? "" : kontak}</p>
                 <p className="card-text mb-1">{alamat}</p>
               </div>
             </div>
@@ -328,7 +358,11 @@ const CustomerDetail: React.FC = () => {
             {(props) => (
               <div>
                 <div className="mb-3">
-                  <SearchBar {...props.searchProps} placeholder="Search" className="form-control" />
+                  <SearchBar
+                    {...props.searchProps}
+                    placeholder="Search"
+                    className="form-control"
+                  />
                 </div>
                 <BootstrapTable
                   {...props.baseProps}
@@ -362,7 +396,6 @@ const CustomerDetail: React.FC = () => {
       <ToastContainer />
       <br></br>
       <br></br>
-      
     </>
   );
 };

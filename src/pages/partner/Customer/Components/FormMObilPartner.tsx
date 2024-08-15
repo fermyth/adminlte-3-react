@@ -23,6 +23,7 @@ const FormMobilPartner: React.FC = () => {
     photo2: "",
     photo3: "",
     photo4: "",
+    vendor: ""
   });
 
   const navigate = useNavigate();
@@ -148,6 +149,17 @@ const FormMobilPartner: React.FC = () => {
                     placeholder="Enter Vehicle Type"
                     name="pembuat"
                     value={formData.pembuat}
+                    onChange={handleChange}
+                    required
+                  />
+                </Form.Group>
+                <Form.Group controlId="formNomorRangka">
+                  <Form.Label>Vehicle Vendor</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Enter Vehichle Vendor"
+                    name="vendor"
+                    value={formData.nomor_rangka}
                     onChange={handleChange}
                     required
                   />
