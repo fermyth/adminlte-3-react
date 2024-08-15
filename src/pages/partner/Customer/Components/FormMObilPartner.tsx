@@ -18,7 +18,7 @@ const FormMobilPartner: React.FC = () => {
     pilihan_aksesoris: "",
     biaya_sewa: "",
     jangka_waktu_sewa: "",
-    contract_end:"",
+    contract_end: "",
     photo1: "",
     photo2: "",
     photo3: "",
@@ -245,7 +245,7 @@ const FormMobilPartner: React.FC = () => {
                 <Form.Group controlId="formJangkaWaktuSewa">
                   <Form.Label>Rental Period</Form.Label>
                   <Form.Control
-                    type="text"
+                    type="date"
                     placeholder="Enter Rental Period"
                     name="jangka_waktu_sewa"
                     value={formData.jangka_waktu_sewa}
@@ -274,26 +274,44 @@ const FormMobilPartner: React.FC = () => {
                 <h4 style={titleStyle}>Upload Vehicle Photos</h4>
               </Card.Header>
               <Card.Body>
-                {['Front', 'Back', 'Left Side', 'Right Side'].map((side, index) => (
-                  <Form.Group key={index} controlId={`formPhoto${index + 1}`}>
-                    <Form.Label>{`${side} Photo`}</Form.Label>
-                    <div className="d-flex align-items-center">
-                      <Form.Control
-                        type="file"
-                        accept="image/*"
-                        onChange={(e) => handleFileChange(e as React.ChangeEvent<HTMLInputElement>, index)}
-                        required
-                      />
-                      {formData[`photo${index + 1}` as keyof typeof formData] && (
-                        <img
-                          src={URL.createObjectURL(formData[`photo${index + 1}` as keyof typeof formData] as File)}
-                          alt={`${side} preview`}
-                          style={{ width: '100px', height: '100px', objectFit: 'cover', marginLeft: '10px' }}
+                {["Front", "Back", "Left Side", "Right Side"].map(
+                  (side, index) => (
+                    <Form.Group key={index} controlId={`formPhoto${index + 1}`}>
+                      <Form.Label>{`${side} Photo`}</Form.Label>
+                      <div className="d-flex align-items-center">
+                        <Form.Control
+                          type="file"
+                          accept="image/*"
+                          onChange={(e) =>
+                            handleFileChange(
+                              e as React.ChangeEvent<HTMLInputElement>,
+                              index
+                            )
+                          }
+                          required
                         />
-                      )}
-                    </div>
-                  </Form.Group>
-                ))}
+                        {formData[
+                          `photo${index + 1}` as keyof typeof formData
+                        ] && (
+                          <img
+                            src={URL.createObjectURL(
+                              formData[
+                                `photo${index + 1}` as keyof typeof formData
+                              ] as File
+                            )}
+                            alt={`${side} preview`}
+                            style={{
+                              width: "100px",
+                              height: "100px",
+                              objectFit: "cover",
+                              marginLeft: "10px",
+                            }}
+                          />
+                        )}
+                      </div>
+                    </Form.Group>
+                  )
+                )}
               </Card.Body>
             </Card>
           </Col>
@@ -303,6 +321,13 @@ const FormMobilPartner: React.FC = () => {
         </Button>
       </Form>
       <ToastContainer />
+      <br></br>
+      <br></br>
+      <br></br>
+      <br></br>
+      <br></br>
+
+      <br></br>
     </div>
   );
 };

@@ -273,10 +273,10 @@ const CustomerDetail: React.FC = () => {
           <div className="col-md-4 mb-4">
             <div className="card shadow-sm bg-light" style={{minHeight: '200px', maxHeight: '300px'}}>
               <div className="card-body text-center d-flex align-items-center justify-content-center">
-                {logo_perusahaan === null || logo_perusahaan === '' ? (
-                  <img src='/public/company.jpg' className="img-fluid" style={{maxWidth: '50%', maxHeight: '50%'}} alt="Logo Perusahaan Default" />
+                {logo_perusahaan? (
+                  <img src={logo_perusahaan} className="img-fluid" style={{maxWidth: '50%', maxHeight: '50%'}} alt="Company Logo" />
                 ) : (
-                  <img src={logo_perusahaan} className="img-fluid" style={{maxWidth: '50%', maxHeight: '50%'}} alt="Logo Perusahaan" />
+                  <img src='/public/company.jpg' className="img-fluid" style={{maxWidth: '50%', maxHeight: '50%'}} alt="Default Company Logo" />
                 )}
               </div>
             </div>
