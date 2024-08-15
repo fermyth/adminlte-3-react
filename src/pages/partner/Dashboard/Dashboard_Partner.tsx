@@ -42,7 +42,7 @@ const DashboardPartner = () => {
     if(idCompany){
     const fetchData = async () => {
       try {
-        const response = await fetch(`https://api_portal_staging.sigapdriver.com/api/v1/perusahaan/${idCompany}`);
+        const response = await fetch(`https://api_partner_staging.sigapdriver.com/api/v1/perusahaan/${idCompany}`);
         const data = await response.json();
         console.log("asasas", data);
         
