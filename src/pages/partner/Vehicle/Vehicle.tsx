@@ -39,7 +39,8 @@ const Vehicle = () => {
       const fetchData = async () => {
         setIsLoading(true);
         try {
-          const response = await fetch(`http://localhost:5182/api/v1/mobil-perusahaan/${idCompany}`);
+          // const response = await fetch(`http://localhost:5182/api/v1/mobil-perusahaan/${idCompany}`);
+          const response = await fetch(`https://api_partner_staging.sigapdriver.com//api/v1/mobil-perusahaan/${idCompany}`);
           if (!response.ok) {
             throw new Error("Network response was not ok");
           }
