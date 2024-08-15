@@ -8,6 +8,8 @@ import paginationFactory from "react-bootstrap-table2-paginator";
 import ToolkitProvider, {
   Search,
 } from "react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useLocation } from "react-router-dom";
 
 interface Perusahaan {
   id: number;
@@ -59,18 +61,50 @@ const Jadwal: React.FC = () => {
   const navigate = useNavigate();
   const [services, setServices] = useState<Service[]>([]);
   const [selectedStatus, setSelectedStatus] = useState<string>("");
+  const [idCompany, setIdCompany] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const location = useLocation();
 
   useEffect(() => {
-    axios
-      .get("https://api_partner_staging.sigapdriver.com/api/v1/jadwals")
-      .then((response) => {
-        setServices(response.data);
-        console.log("Data services:", response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching data from API", error);
-      });
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+        const userData = await AsyncStorage.getItem("userData");
+        if (userData) {
+          const getstorage = JSON.parse(userData);
+          setIdCompany(getstorage.id_company);
+        } else {
+          setIdCompany(null);
+        }
+      } catch (error) {
+        setError("Gagal mengambil data");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
   }, []);
+
+  useEffect(() => {
+    if(idCompany){
+      const fetchData = async () => {
+        try {
+          const response = await fetch(`https://api_partner_staging.sigapdriver.com/api/v1/jadwals/${idCompany}`);
+          const data = await response.json();
+          console.log("Data jadwal:", data);
+          
+          setServices(data);
+        } catch (error) {
+          console.error("Gagal mengambil data:", error);
+          setError("Gagal mengambil data jadwal");
+        }
+      };
+      fetchData();
+    }
+  }, [idCompany, location.key]);
 
   const kirim = async (tgl, bulan, perusahaan, nopol, type_service, lokasi) => {
     const apiUrl = "https://api.fonnte.com/send";
