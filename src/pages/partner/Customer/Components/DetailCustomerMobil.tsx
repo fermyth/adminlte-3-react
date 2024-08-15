@@ -222,7 +222,7 @@ const DetailCustomerMobil: React.FC = () => {
                   <img
                     src={image}
                     alt={`Car Image ${index + 1}`}
-                    style={{ width: "100%", maxWidth: "73%" }}
+                    style={{ width: "50%", maxWidth: "73%" }}
                   />
                 </div>
               ))}
@@ -278,12 +278,12 @@ const DetailCustomerMobil: React.FC = () => {
                   </td>
                   <td>{carData.nomor_mesin}</td>
                 </tr> */}
-                <tr>
+                {/* <tr>
                   <td>
                     <strong>Pilihan (Aksesoris):</strong>
                   </td>
                   <td>{carData.pilihan_aksesoris}</td>
-                </tr>
+                </tr> */}
                 <tr>
                   <td>
                     <strong>Biaya Sewa:</strong>

@@ -99,14 +99,18 @@ const CustomerDetail: React.FC = () => {
         setIsLoading(true);
         try {
           const driversResponse = await ApiConfig.get(
-            `https://api_partner_staging.sigapdriver.com/api/v1/mobil/${idperusahaan}`
+            // `https://api_partner_staging.sigapdriver.com/api/v1/mobil/${idperusahaan}`
+             `http://localhost:5182/api/v1/mobil/${idperusahaan}`
           );
           console.log("Drivers response:", driversResponse.data);
 
           const fullNamesResponse = await ApiConfig.get(
-            `https://api_portal_staging.sigapdriver.com/api/v1/nopoldriver/`
+            // `https://api_portal_staging.sigapdriver.com/api/v1/nopoldriver/`
+            `http://localhost:5181/api/v1/nopoldriver/`
           );
           const fullNamesData = fullNamesResponse.data.data.data;
+          console.log("Drivers responsedd:", fullNamesResponse);
+
 
           if (!Array.isArray(fullNamesData)) {
             throw new Error("Full names data is not an array");
@@ -186,7 +190,7 @@ const CustomerDetail: React.FC = () => {
       headerStyle: { backgroundColor: "#009879", color: "white" },
     },
     {
-      dataField: "jangka_waktu",
+      dataField: "jangka_waktu_sewa",
       text: "Contract Start",
       sort: true,
       formatter: (cell: string) => cell || "-",
@@ -203,11 +207,11 @@ const CustomerDetail: React.FC = () => {
       dataField: "contract_end",
       text: "Remaining Contract",
       sort: true,
-      formatter: (cell: string) => {
-        if (!cell) return "-";
+      formatter: (cell: string, row: any) => {
+        if (!cell || !row.jangka_waktu_sewa) return "-";
         const endDate = new Date(cell);
-        const today = new Date();
-        const diffTime = Math.max(endDate.getTime() - today.getTime(), 0);
+        const startDate = new Date(row.jangka_waktu_sewa);
+        const diffTime = Math.max(endDate.getTime() - startDate.getTime(), 0);
         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
         if (diffDays > 30) {
           const diffMonths = Math.floor(diffDays / 30);
