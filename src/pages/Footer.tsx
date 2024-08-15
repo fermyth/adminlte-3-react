@@ -22,7 +22,7 @@ const Footer = () => {
         </style>
         <footer className="footer-container">
             <div style={{ width: '75%', margin: '0 auto' }}>
-                <p className="version-info">Version 1.2</p>
+                <p className="version-info">Version 1.3</p>
             </div>
         </footer>
     </>
