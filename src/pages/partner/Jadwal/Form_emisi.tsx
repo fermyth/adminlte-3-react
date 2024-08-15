@@ -118,7 +118,7 @@ const FormUjiEmisi: React.FC<FormUjiEmisiProps> = ({
 
     try {
       const response = await axios.put(
-        `http://localhost:5182/api/v1/jadwals/${id}`,
+        `https://api_partner_staging.sigapdriver.com/api/v1/jadwals/${id}`,
         formData,
         {
           headers: {

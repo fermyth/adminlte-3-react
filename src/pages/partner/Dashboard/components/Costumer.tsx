@@ -55,7 +55,7 @@ const CustomerList = () => {
       const fetchCompanies = async () => {
         try {
           const response = await fetch(
-            `http://localhost:5182/api/v1/perusahaan/${idCompany}`
+            `https://api_partner_staging.sigapdriver.com/api/v1/perusahaan/${idCompany}`
           );
           if (!response.ok) {
             throw new Error("Network response was not ok");
