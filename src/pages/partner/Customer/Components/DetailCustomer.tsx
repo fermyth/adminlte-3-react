@@ -203,17 +203,17 @@ const CustomerDetail: React.FC = () => {
       dataField: "contract_end",
       text: "Remaining Contract",
       sort: true,
-      formatter: (cell: string, row: any) => {
-        if (!row.jangka_waktu) return "-";
-        const startDate = new Date(row.jangka_waktu);
+      formatter: (cell: string) => {
+        if (!cell) return "-";
         const endDate = new Date(cell);
-        const diffTime = Math.max(endDate.getTime() - startDate.getTime(), 0);
+        const today = new Date();
+        const diffTime = Math.max(endDate.getTime() - today.getTime(), 0);
         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
         if (diffDays > 30) {
           const diffMonths = Math.floor(diffDays / 30);
-          return `${diffMonths} Bulan`;
+          return `${diffMonths} Month`;
         } else {
-          return `${diffDays} Hari`;
+          return `${diffDays} Day`;
         }
       },
       headerStyle: { backgroundColor: "#009879", color: "white" },
