@@ -85,14 +85,16 @@ const DetailCustomerMobil: React.FC = () => {
 
   if (loading) {
     return (
-      <div style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '100vh',
-        fontSize: '1.2rem',
-        fontWeight: 'bold'
-      }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+          fontSize: "1.2rem",
+          fontWeight: "bold",
+        }}
+      >
         Loading...
       </div>
     );
@@ -276,7 +278,15 @@ const DetailCustomerMobil: React.FC = () => {
                   <td>
                     <strong>Rental Fee:</strong>
                   </td>
-                  <td>{carData.biaya_sewa}</td>
+                  <td>
+                    {carData.biaya_sewa
+                      ? new Intl.NumberFormat("id-ID", {
+                          style: "decimal",
+                          minimumFractionDigits: 0,
+                          maximumFractionDigits: 0,
+                        }).format(Number(carData.biaya_sewa))
+                      : "-"}
+                  </td>
                 </tr>
                 <tr>
                   <td>
