@@ -186,6 +186,13 @@ const CustomerDetail: React.FC = () => {
       headerStyle: { backgroundColor: "#009879", color: "white" },
     },
     {
+      dataField: "jangka_waktu",
+      text: "Contract Start",
+      sort: true,
+      formatter: (cell: string) => cell || "-",
+      headerStyle: { backgroundColor: "#009879", color: "white" },
+    },
+    {
       dataField: "contract_end",
       text: "Contract End",
       sort: true,
@@ -193,20 +200,18 @@ const CustomerDetail: React.FC = () => {
       headerStyle: { backgroundColor: "#009879", color: "white" },
     },
     {
-      dataField: "contract_end",
+      dataField: "jangka_waktu",
       text: "Remaining Contract",
       sort: true,
       formatter: (cell: string) => {
         if (!cell) return "-";
-        const endDate = new Date(cell);
-        const today = new Date();
-        const diffTime = Math.max(endDate.getTime() - today.getTime(), 0);
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-        if (diffDays > 30) {
-          const diffMonths = Math.floor(diffDays / 30);
-          return `${diffMonths} Month`;
+        const contractDuration = parseInt(cell);
+        if (isNaN(contractDuration)) return "-";
+        if (contractDuration > 30) {
+          const months = Math.floor(contractDuration / 30);
+          return `${months} Bulan`;
         } else {
-          return `${diffDays} Day`;
+          return `${contractDuration} Hari`;
         }
       },
       headerStyle: { backgroundColor: "#009879", color: "white" },
