@@ -159,7 +159,7 @@ const FormMobilPartner: React.FC = () => {
                     type="text"
                     placeholder="Enter Vehichle Vendor"
                     name="vendor"
-                    value={formData.nomor_rangka}
+                    value={formData.vendor}
                     onChange={handleChange}
                     required
                   />
