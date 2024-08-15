@@ -360,6 +360,9 @@ const CustomerDetail: React.FC = () => {
         </style>
       </div>
       <ToastContainer />
+      <br></br>
+      <br></br>
+      
     </>
   );
 };
