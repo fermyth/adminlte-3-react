@@ -111,6 +111,7 @@ const FormUjiEmisi: React.FC<FormUjiEmisiProps> = ({
 
     const formData = {
       status: statusUji,
+      status_uji_emisi : status_uji_emisi,
       ket_json: JSON.stringify(ketJson),
     };
     console.log("ketJson", formData);
