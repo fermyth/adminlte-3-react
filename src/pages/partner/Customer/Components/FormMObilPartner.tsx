@@ -8,8 +8,8 @@ import "react-toastify/dist/ReactToastify.css";
 
 const FormMobilPartner: React.FC = () => {
   const [formData, setFormData] = useState({
+    contract_number: "",
     tipe_kendaraan: "",
-    pembuat: "",
     tahun: "",
     warna_kendaraan: "",
     nopol: "",
@@ -136,8 +136,8 @@ const FormMobilPartner: React.FC = () => {
                   <Form.Control
                     type="text"
                     placeholder="Enter Contract No"
-                    name="tipe_kendaraan"
-                    value={formData.tipe_kendaraan}
+                    name="contract_number"
+                    value={formData.contract_number}
                     onChange={handleChange}
                     required
                   />
@@ -147,8 +147,8 @@ const FormMobilPartner: React.FC = () => {
                   <Form.Control
                     type="text"
                     placeholder="Enter Vehicle Type"
-                    name="pembuat"
-                    value={formData.pembuat}
+                    name="tipe_kendaraan"
+                    value={formData.tipe_kendaraan}
                     onChange={handleChange}
                     required
                   />
