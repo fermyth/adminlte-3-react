@@ -99,14 +99,14 @@ const CustomerDetail: React.FC = () => {
         setIsLoading(true);
         try {
           const driversResponse = await ApiConfig.get(
-            // `https://api_partner_staging.sigapdriver.com/api/v1/mobil/${idperusahaan}`
-             `http://localhost:5182/api/v1/mobil/${idperusahaan}`
+             `https://api_partner_staging.sigapdriver.com/api/v1/mobil/${idperusahaan}`
+            // `http://localhost:5182/api/v1/mobil/${idperusahaan}`
           );
           console.log("Drivers response:", driversResponse.data);
 
           const fullNamesResponse = await ApiConfig.get(
-            // `https://api_portal_staging.sigapdriver.com/api/v1/nopoldriver/`
-            `http://localhost:5181/api/v1/nopoldriver/`
+             `https://api_portal_staging.sigapdriver.com/api/v1/nopoldriver/`
+           // `http://localhost:5181/api/v1/nopoldriver/`
           );
           const fullNamesData = fullNamesResponse.data.data.data;
           console.log("Drivers responsedd:", fullNamesResponse);
