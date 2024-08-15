@@ -11,6 +11,7 @@ const FormMobilPartner: React.FC = () => {
     contract_number: "",
     tipe_kendaraan: "",
     tahun: "",
+    pembuat:"-",
     warna_kendaraan: "",
     nopol: "",
     nomor_rangka: "",
