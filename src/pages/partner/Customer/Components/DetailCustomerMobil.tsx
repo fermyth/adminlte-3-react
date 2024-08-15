@@ -240,13 +240,13 @@ const DetailCustomerMobil: React.FC = () => {
                   <td>
                     <strong>Contract Number:</strong>
                   </td>
-                  <td>{carData.tipe_kendaraan}</td>
+                  <td>{carData.contract_number}</td>
                 </tr>
                 <tr>
                   <td>
                     <strong>Vehicle Type:</strong>
                   </td>
-                  <td>{carData.pembuat}</td>
+                  <td>{carData.tipe_kendaraan}</td>
                 </tr>
                 <tr>
                   <td>

@@ -9,6 +9,7 @@ import "react-toastify/dist/ReactToastify.css";
 const FormMobilPartner: React.FC = () => {
   const [formData, setFormData] = useState({
     contract_number: "",
+    vendor:"",
     tipe_kendaraan: "",
     tahun: "",
     pembuat: "-",

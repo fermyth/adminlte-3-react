@@ -100,7 +100,7 @@ const CustomerDetail: React.FC = () => {
         try {
           const driversResponse = await ApiConfig.get(
               `https://api_partner_staging.sigapdriver.com/api/v1/mobil/${idperusahaan}`
-            //`http://localhost:5182/api/v1/mobil/${idperusahaan}`
+           // `http://localhost:5182/api/v1/mobil/${idperusahaan}`
           );
           console.log("Drivers response:", driversResponse.data);
 
