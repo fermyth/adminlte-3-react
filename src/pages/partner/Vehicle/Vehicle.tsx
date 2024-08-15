@@ -1,9 +1,13 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, { useEffect, useState } from 'react';
-import BootstrapTable from 'react-bootstrap-table-next';
-import paginationFactory from 'react-bootstrap-table2-paginator';
-import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit';
-import { useLocation } from 'react-router-dom';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import React, { useEffect, useState } from "react";
+import BootstrapTable from "react-bootstrap-table-next";
+import paginationFactory from "react-bootstrap-table2-paginator";
+import ToolkitProvider, {
+  Search,
+} from "react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit";
+import { useLocation } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+
 
 const Vehicle = () => {
   const [companies, setCompanies] = useState<any[]>([]);
@@ -40,13 +44,15 @@ const Vehicle = () => {
         setIsLoading(true);
         try {
           // const response = await fetch(`http://localhost:5182/api/v1/mobil-perusahaan/${idCompany}`);
-          const response = await fetch(`https://api_partner_staging.sigapdriver.com/api/v1/mobil-perusahaan/${idCompany}`);
+          const response = await fetch(
+            `https://api_partner_staging.sigapdriver.com/api/v1/mobil-perusahaan/${idCompany}`
+          );
           if (!response.ok) {
             throw new Error("Network response was not ok");
           }
           const data = await response.json();
           console.log("caca", data);
-          
+
           setCompanies(data);
         } catch (error: any) {
           setError("Failed to fetch data: " + error.message);
@@ -58,66 +64,95 @@ const Vehicle = () => {
     }
   }, [idCompany, location.key]);
 
-  function formatCurrency(value : any) {
-    const numberValue = typeof value === 'string' ? parseFloat(value.replace(/[^0-9.-]/g, '')) : value;
-  
+  function formatCurrency(value: any) {
+    const numberValue =
+      typeof value === "string"
+        ? parseFloat(value.replace(/[^0-9.-]/g, ""))
+        : value;
+
     if (isNaN(numberValue)) {
-      console.error('Value is not a valid number:', value);
-      return 'Rp -'; 
+      console.error("Value is not a valid number:", value);
+      return "Rp -";
     }
-    return 'Rp ' + numberValue.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    return "Rp " + numberValue.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
   }
-  
-  
 
   const columns = [
     {
-      dataField: 'id',
-      text: 'No',
-      headerStyle: { backgroundColor: '#009879', color: 'white' },
-      sort: true
-    },
-    {
-      dataField: 'nopol',
-      text: 'Nomor Polisi',
-      headerStyle: { backgroundColor: '#009879', color: 'white' },
-      sort: true
-    },
-    {
-      dataField: 'tb_perusahaan.nama_perusahaan',
-      text: 'Perusahaan',
-      headerStyle: { backgroundColor: '#009879', color: 'white' },
-      sort: true
-    },
-    {
-      dataField: 'tipe_kendaraan',
-      text: 'Tipe Unit',
-      headerStyle: { backgroundColor: '#009879', color: 'white' },
-      sort: true
-    },
-    {
-      dataField: 'jangka_waktu_sewa',
-      text: 'Mulai Kontrak',
-      headerStyle: { backgroundColor: '#009879', color: 'white' },
-      sort: true
-    },
-    {
-      dataField: 'contract_end',
-      text: 'Akhir Kontrak',
-      headerStyle: { backgroundColor: '#009879', color: 'white' },
-      sort: true
-    },
-    {
-      dataField: 'biaya_sewa',
-      text: 'Harga Sewa',
-      headerStyle: { backgroundColor: '#009879', color: 'white' },
+      dataField: "nopol",
+      text: "Police Number",
       sort: true,
-      formatter: (cell: any) => formatCurrency(cell),
+      formatter: (cell: string, row: DriverData) => (
+        <Link to={`/partner-dashboard/customer/costumer-detail/detail-mobil/${cell}`}>
+          {cell || "-"}
+        </Link>
+      ),
+      headerStyle: { backgroundColor: "#009879", color: "white" },
+    },
+    {
+      dataField: "tb_perusahaan.nama_perusahaan",
+      text: "Company Name",
+      headerStyle: { backgroundColor: "#009879", color: "white" },
+      sort: true,
+    },
+    {
+      dataField: "tipe_kendaraan",
+      text: "Unit Type",
+      headerStyle: { backgroundColor: "#009879", color: "white" },
+      sort: true,
+    },
+    {
+      dataField: "jangka_waktu_sewa",
+      text: "Contract Start",
+      headerStyle: { backgroundColor: "#009879", color: "white" },
+      sort: true,
+    },
+    {
+      dataField: "contract_end",
+      text: "Contract End",
+      headerStyle: { backgroundColor: "#009879", color: "white" },
+      sort: true,
+    },
+    {
+      dataField: "contract_end",
+      text: "Remaining Contract",
+      sort: true,
+      formatter: (cell: string, row: any) => {
+        if (!cell || !row.jangka_waktu_sewa) return "-";
+        const endDate = new Date(cell);
+        const startDate = new Date(row.jangka_waktu_sewa);
+        const diffTime = Math.max(endDate.getTime() - startDate.getTime(), 0);
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        if (diffDays > 30) {
+          const diffMonths = Math.floor(diffDays / 30);
+          return `${diffMonths} Month`;
+        } else {
+          return `${diffDays} Day`;
+        }
+      },
+      headerStyle: { backgroundColor: "#009879", color: "white" },
+    },
+    {
+      dataField: "biaya_sewa",
+      text: "Rent Price",
+      sort: true,
+      formatter: (cell: string) => {
+        if (!cell) return "-";
+        const number = parseFloat(cell);
+        return isNaN(number)
+          ? "-"
+          : number.toLocaleString("id-ID", {
+              style: "decimal",
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 0,
+            });
+      },
+      headerStyle: { backgroundColor: "#009879", color: "white" },
     },
   ];
 
   const paginationOptions = {
-    sizePerPage: 5,
+    sizePerPage: 10,
     showTotal: true,
     hideSizePerPage: false,
     sizePerPageList: [5, 10],
@@ -126,7 +161,7 @@ const Vehicle = () => {
   const { SearchBar } = Search;
 
   return (
-    <div className="container mt-5" style={{ marginBottom: '10%' }}>
+    <div className="container mt-5" style={{ marginBottom: "10%" }}>
       <h1 className="text-center mb-4 text-dark font-weight-bold">Vehicle</h1>
 
       {isLoading ? (
@@ -140,24 +175,26 @@ const Vehicle = () => {
           columns={columns}
           search
         >
-          {
-            props => (
-              <div>
-                <div className="mb-3">
-                  <SearchBar {...props.searchProps} placeholder="Search" className="form-control" />
-                </div>
-                <BootstrapTable
-                  {...props.baseProps}
-                  bootstrap4
-                  striped
-                  hover
-                  bordered={false}
-                  pagination={paginationFactory(paginationOptions)}
-                  classes="table-bordered w-100"
+          {(props) => (
+            <div>
+              <div className="mb-3">
+                <SearchBar
+                  {...props.searchProps}
+                  placeholder="Search"
+                  className="form-control"
                 />
               </div>
-            )
-          }
+              <BootstrapTable
+                {...props.baseProps}
+                bootstrap4
+                striped
+                hover
+                bordered={false}
+                pagination={paginationFactory(paginationOptions)}
+                classes="table-bordered w-100"
+              />
+            </div>
+          )}
         </ToolkitProvider>
       )}
 
