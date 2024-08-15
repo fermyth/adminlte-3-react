@@ -282,6 +282,9 @@ const Customer: React.FC = () => {
       </ToolkitProvider>
 
       <ToastContainer />
+      <br></br>
+      <br></br>
+      <br></br>
 
       <style>
         {`

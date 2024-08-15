@@ -193,6 +193,25 @@ const CustomerDetail: React.FC = () => {
       headerStyle: { backgroundColor: "#009879", color: "white" },
     },
     {
+      dataField: "contract_end",
+      text: "Remaining Contract",
+      sort: true,
+      formatter: (cell: string) => {
+        if (!cell) return "-";
+        const endDate = new Date(cell);
+        const today = new Date();
+        const diffTime = Math.max(endDate.getTime() - today.getTime(), 0);
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        if (diffDays > 30) {
+          const diffMonths = Math.floor(diffDays / 30);
+          return `${diffMonths} Month`;
+        } else {
+          return `${diffDays} Day`;
+        }
+      },
+      headerStyle: { backgroundColor: "#009879", color: "white" },
+    },
+    {
       dataField: "biaya_sewa",
       text: "Rent Price",
       sort: true,
@@ -254,10 +273,10 @@ const CustomerDetail: React.FC = () => {
           <div className="col-md-4 mb-4">
             <div className="card shadow-sm bg-light" style={{minHeight: '200px', maxHeight: '300px'}}>
               <div className="card-body text-center d-flex align-items-center justify-content-center">
-                {logo_perusahaan ? (
-                  <img src={logo_perusahaan} className="img-fluid" style={{maxWidth: '100%', maxHeight: '100%'}} alt="Company Logo" />
+                {logo_perusahaan === null || logo_perusahaan === '' ? (
+                  <img src='/public/company.jpg' className="img-fluid" style={{maxWidth: '50%', maxHeight: '50%'}} alt="Logo Perusahaan Default" />
                 ) : (
-                  <img src='/public/company.jpg' className="img-fluid" style={{maxWidth: '50%', maxHeight: '50%'}} alt="Default Company Logo" />
+                  <img src={logo_perusahaan} className="img-fluid" style={{maxWidth: '50%', maxHeight: '50%'}} alt="Logo Perusahaan" />
                 )}
               </div>
             </div>

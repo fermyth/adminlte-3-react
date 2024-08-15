@@ -3,9 +3,11 @@ import axios from "axios";
 import { Table, Button, Dropdown } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Link, useNavigate } from "react-router-dom";
-import BootstrapTable from 'react-bootstrap-table-next';
-import paginationFactory from 'react-bootstrap-table2-paginator';
-import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit';
+import BootstrapTable from "react-bootstrap-table-next";
+import paginationFactory from "react-bootstrap-table2-paginator";
+import ToolkitProvider, {
+  Search,
+} from "react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit";
 
 interface Perusahaan {
   id: number;
@@ -167,19 +169,19 @@ const Jadwal: React.FC = () => {
 
   const columns = [
     {
-      dataField: 'tgl_jadwal',
-      text: 'Date',
+      dataField: "tgl_jadwal",
+      text: "Date",
       formatter: (cell, row) => (
         <>
           <h5>{new Date(cell).getDate()}</h5>
           {new Date(cell).toLocaleString("default", { month: "long" })}
         </>
       ),
-      headerStyle: () => ({ backgroundColor: '#009879', color: 'white' }),
+      headerStyle: () => ({ backgroundColor: "#009879", color: "white" }),
     },
     {
-      dataField: 'tb_mobil.nopol',
-      text: 'Nopol Customer',
+      dataField: "tb_mobil.nopol",
+      text: "Nopol Customer",
       formatter: (cell, row) => (
         <Link
           to={`/partner-dashboard/customer/costumer-detail/detail-mobil/${cell}`}
@@ -190,58 +192,58 @@ const Jadwal: React.FC = () => {
           <h5>{cell}</h5>
         </Link>
       ),
-      headerStyle: () => ({ backgroundColor: '#009879', color: 'white' }),
+      headerStyle: () => ({ backgroundColor: "#009879", color: "white" }),
     },
     {
-      dataField: 'type_service',
-      text: 'Service Location',
+      dataField: "type_service",
+      text: "Service Location",
       formatter: (cell, row) => (
         <>
-          <p><b>{cell}</b></p>
+          <p>
+            <b>{cell === "uji_emisi" ? "Uji Emisi" : cell === "service_rutin" ? "Servis Rutin" : cell === "service_kecelakaan" ? "Servis Kecelakaan" : cell === "ganti_stnk" ? "Ganti STNK" : cell}</b>
+          </p>
           <hr style={{ marginTop: -10 }} />
           <p style={{ marginTop: -10, color: "blue" }}>
             <b>Lokasi: {row.lokasi_service}</b>
           </p>
         </>
       ),
-      headerStyle: () => ({ backgroundColor: '#009879', color: 'white' }),
+      headerStyle: () => ({ backgroundColor: "#009879", color: "white" }),
     },
     {
-      dataField: 'status',
-      text: 'Status',
+      dataField: "status",
+      text: "Status",
       formatter: (cell) => (
         <span
           className={`badge badge-${
             cell === "Scheduled"
               ? "info"
               : cell === "In Progress"
-              ? "warning"
-              : "success"
+                ? "warning"
+                : "success"
           }`}
         >
           {cell}
         </span>
       ),
-      headerStyle: () => ({ backgroundColor: '#009879', color: 'white' }),
+      headerStyle: () => ({ backgroundColor: "#009879", color: "white" }),
     },
     {
-      dataField: 'actions',
-      text: 'Actions',
+      dataField: "actions",
+      text: "Actions",
       formatter: (cell, row) => (
         <>
           <Button
-            variant={row.status === "success" ? "info" : "success"}
+            variant={row.status === "Completed" ? "info" : "success"}
             className="mr-2"
             onClick={() => handleButtonClick(row, "detail")}
           >
             <i
               className={
-                row.status === "success"
-                  ? "fas fa-info-circle"
-                  : "fas fa-pen"
+                row.status === "Completed" ? "fas fa-info-circle" : "fas fa-pen"
               }
             ></i>
-            {row.status === "success" ? " Detail" : " Update"}
+            {row.status === "Completed" ? " Detail" : " Update"}
           </Button>
 
           <Button
@@ -264,13 +266,17 @@ const Jadwal: React.FC = () => {
           </Button>
         </>
       ),
-      headerStyle: () => ({ backgroundColor: '#009879', color: 'white' }),
+      headerStyle: () => ({ backgroundColor: "#009879", color: "white" }),
     },
   ];
 
+  const serviceTypes = ["uji_emisi", "service_rutin", "service_kecelakaan", "ganti_stnk"];
+
   return (
     <div className="container mt-5">
-      <h1 className="text-center mb-4 text-dark font-weight-bold">Scheduled Event</h1>
+      <h1 className="text-center mb-4 text-dark font-weight-bold">
+        Scheduled Event
+      </h1>
 
       <div className="d-flex justify-content-between mb-3">
         <Dropdown onSelect={(e) => setSelectedStatus(e || "")}>
@@ -281,7 +287,7 @@ const Jadwal: React.FC = () => {
             <Dropdown.Item eventKey="">All</Dropdown.Item>
             <Dropdown.Item eventKey="Scheduled">Scheduled</Dropdown.Item>
             <Dropdown.Item eventKey="In Progress">In Progress</Dropdown.Item>
-            <Dropdown.Item eventKey="success">Success</Dropdown.Item>
+            <Dropdown.Item eventKey="Completed">Completed</Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
         <Link
@@ -292,34 +298,46 @@ const Jadwal: React.FC = () => {
         </Link>
       </div>
 
-      <ToolkitProvider
-        keyField="id"
-        data={filteredServices}
-        columns={columns}
-        search
-      >
-        {
-          props => (
-            <div>
-              <SearchBar { ...props.searchProps } />
-              <hr />
-              <BootstrapTable
-                { ...props.baseProps }
-                pagination={paginationFactory()}
-                striped
-                bordered
-                hover
-                wrapperClasses="table-responsive"
-              />
-            </div>
-          )
-        }
-      </ToolkitProvider>
+      {serviceTypes.map((type) => {
+        const filteredServicesByType = filteredServices.filter(
+          (service) => service.type_service === type
+        );
+        return (
+          <React.Fragment key={type}>
+            <hr />
+            <h3>{type.replace("_", " ").charAt(0).toUpperCase() + type.replace("_", " ").slice(1)}</h3>
+            <hr />
+            <ToolkitProvider
+              keyField="id"
+              data={filteredServicesByType}
+              columns={columns}
+              search
+            >
+              {(props) => (
+                <div>
+                  <SearchBar {...props.searchProps} />
+                  <hr />
+                  <BootstrapTable
+                    {...props.baseProps}
+                    pagination={paginationFactory()}
+                    striped
+                    bordered
+                    hover
+                    wrapperClasses="table-responsive"
+                  />
+                </div>
+              )}
+            </ToolkitProvider>
+          </React.Fragment>
+        );
+      })}
 
       <style>
         {`
-           .container {
+          .container {
             max-width: 1300px;
+            max-height: 800px;
+            overflow-y: auto;
             }
           .table-bordered {
             border-radius: 15px 15px 0 0;

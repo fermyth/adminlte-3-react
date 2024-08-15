@@ -1,15 +1,21 @@
 import React, { useState, useEffect } from "react";
-import { Form, Button, Card } from "react-bootstrap";
+import { Form, Button, Card, Row, Col } from "react-bootstrap";
 import axios from "axios";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { FaArrowLeft, FaLeaf } from "react-icons/fa";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import {
+  FaArrowLeft,
+  FaBuilding,
+  FaTools,
+  FaExclamationTriangle,
+  FaLeaf,
+} from "react-icons/fa";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 interface FormUjiEmisiProps {
   initialSkorEmisi?: string;
   initialStatusUji?: string;
-  isDetail?: boolean; 
+  isDetail?: boolean;
 }
 
 interface Perusahaan {
@@ -56,9 +62,14 @@ interface Service {
   updatedAt: string;
   tb_mobil: Mobil;
   ket_json: string;
+  tgl_jadwal: string;
 }
 
-const FormUjiEmisi: React.FC<FormUjiEmisiProps> = ({ initialSkorEmisi = "", initialStatusUji = "", isDetail = false }) => {
+const FormUjiEmisi: React.FC<FormUjiEmisiProps> = ({
+  initialSkorEmisi = "",
+  initialStatusUji = "",
+  isDetail = false,
+}) => {
   const [skorEmisi, setSkorEmisi] = useState(initialSkorEmisi);
   const [statusUji, setStatusUji] = useState(initialStatusUji);
   const [lokasi, setLokasi] = useState("");
@@ -67,6 +78,7 @@ const FormUjiEmisi: React.FC<FormUjiEmisiProps> = ({ initialSkorEmisi = "", init
   const [skor, setSkor] = useState("");
   const [keterangan, setKeterangan] = useState("");
   const [penyebab, setPenyebab] = useState("");
+  const [status_uji_emisi, setStatusUjiEmisi] = useState("");
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const location = useLocation();
@@ -91,61 +103,99 @@ const FormUjiEmisi: React.FC<FormUjiEmisiProps> = ({ initialSkorEmisi = "", init
     const ketJson = {
       skor,
       km,
-      service,
+      service: servic,
       keterangan,
       penyebab,
-      type:'uji_emisi'
+      type: "uji_emisi",
     };
-   
 
     const formData = {
-      status:statusUji ,
-      ket_json: JSON.stringify(ketJson), 
+      status: statusUji,
+      ket_json: JSON.stringify(ketJson),
     };
-    console.log('ketJson',formData);
+    console.log("ketJson", formData);
 
     try {
-      const response = await axios.put(`http://localhost:5182/api/v1/jadwals/${id}`, formData, {
-        headers: {
-          'Content-Type': 'application/json'
+      const response = await axios.put(
+        `http://localhost:5182/api/v1/jadwals/${id}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
         }
-      });
-      console.log("Response:", response.data); 
-      toast.success("Data updated successfully!");
+      );
+      console.log("Response:", response.data);
+      toast.success("Data berhasil diperbarui!");
       navigate("/partner-dashboard/jadwal");
     } catch (error) {
       console.error("Error updating data:", error);
-      toast.error("Error updating data. Please try again.");
+      toast.error(
+        "Terjadi kesalahan saat memperbarui data. Silakan coba lagi."
+      );
     }
   };
 
   return (
-    <div className="form-container">
+    <div className="container">
       <style>{`
-        .form-container {
-          min-height: 80vh;
-          padding: 20px;
+        .back-button {
+          color: #009879;
+          font-size: 20px;
           display: flex;
-          justify-content: center;
           align-items: center;
-          background-color: #f8f9fa;
+          text-decoration: none;
+          transition: color 0.3s ease;
+          position: absolute;
+          top: 20px;
+          left: 20px;
         }
-        .form-card {
-          max-width: 500px;
+  
+        .back-button:hover {
+          color: #007a66;
+        }
+  
+        .content {
+          display: flex;
+          justify-content: space-between;
+          gap: 20px;
           width: 100%;
+          max-width: 1200px;
         }
+  
+        .info-card, .form-card {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          gap: 20px;
+        }
+  
+        .info-card {
+          max-width: 400px;
+          margin-top: 80px;
+        }
+  
+        .form-card {
+          max-width: 600px;
+          margin-top: 80px;
+        }
+  
         .card-header {
           background-color: #009879;
           color: white;
+          text-align: center;
           display: flex;
+          justify-content: center;
           align-items: center;
           padding: 10px;
           border-bottom: 2px solid white;
           border-radius: 8px 8px 0 0;
         }
+  
         .icon {
           margin-right: 10px;
         }
+  
         .submit-button {
           background-color: #009879;
           border-color: #009879;
@@ -154,118 +204,167 @@ const FormUjiEmisi: React.FC<FormUjiEmisiProps> = ({ initialSkorEmisi = "", init
           transition: background-color 0.3s ease;
           border-radius: 5px;
         }
+  
         .submit-button:hover {
           background-color: #007a66;
         }
-        .back-button {
-          color: #009879;
-          font-size: 20px;
-          display: flex;
-          align-items: center;
-          text-decoration: none;
-          transition: color 0.3s ease;
+  
+        .text-center {
+          text-align: center;
         }
-        .back-button:hover {
-          color: #007a66;
+  
+        .text-right {
+          text-align: right;
         }
       `}</style>
-      <div className="form-card">
-        <h1 className="text-center mb-4 text-dark font-weight-bold">Update Uji Emisi</h1>
-        <div className="d-flex justify-content-between mb-3">
-          <Button variant="link" onClick={() => navigate(-1)} className="back-button">
-            <FaArrowLeft /> 
+      <br />
+      <Row>
+        <Col xs={1}>
+          <Button
+            variant="link"
+            onClick={() => navigate(-1)}
+            style={{ color: "#049879" }}
+          >
+            <FaArrowLeft />
           </Button>
-        </div>
-        <Form onSubmit={handleSubmit}>
-          <Card className="shadow-sm border-0 rounded">
+        </Col>
+        <Col xs={11}>
+          <h1 className="text-center mb-4 text-dark font-weight-bold">
+            Perbarui Uji Emisi
+          </h1>
+        </Col>
+      </Row>
+
+      <Row>
+        <Col md={6}>
+          <Card className="shadow-sm border-0 rounded mb-4">
             <Card.Header className="card-header">
-              <FaLeaf size={24} className="icon" />
-              <h4 className="mb-0">Detail Uji Emisi</h4>
+              <FaBuilding size={24} className="icon" />
+              <h4 className="mb-0">Informasi Perusahaan</h4>
             </Card.Header>
             <Card.Body>
-              <Form.Group controlId="formSkorEmisi" className="mb-3">
-                <Form.Label>Skor Emisi</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="Masukkan Skor Emisi"
-                  value={skor}
-                  onChange={(e) => setSkor(e.target.value)}
-                  required={!isDetail}
-                />
-              </Form.Group>
-              <Form.Group controlId="formStatusUji" className="mb-3">
-              <Form.Label>Status Pekerjaan</Form.Label>
-              {!isDetail && service.status === "success" ? (
-                <Form.Control
-                  as="select"
-                  value={service.status}
-                  onChange={(e) => setStatusUji(e.target.value)}
-                  required={!isDetail}
-                >
-                  <option value="" hidden>pilih</option>
-                  <option value="success">Completed</option>
-                  <option value="In Progress">In Progress</option>
-                  <option value="Scheduled">Scheduled</option>
-                </Form.Control>
-              ) : (
-                <Form.Control
-                  as="select"
-                  // value={service.status}
-                  onChange={(e) => setStatusUji(e.target.value)}
-                  required={!isDetail}
-                >
-                  <option value="" hidden>pilih</option>
-                  <option value="success">Completed</option>
-                  <option value="In Progress">In Progress</option>
-                  <option value="Scheduled">Scheduled</option>
-                </Form.Control>
-              )}
-            </Form.Group>
-              <Form.Group controlId="formStatusUji" className="mb-3">
-              <Form.Label>Status Uji</Form.Label>
-              {!isDetail && service.status === "success" ? (
-                <Form.Control
-                  as="select"
-                  value={service.status}
-                  onChange={(e) => setStatusUji(e.target.value)}
-                  required={!isDetail}
-                >
-                  <option value="" hidden>pilih</option>
-                  <option value="success">Passed</option>
-                  <option value="In Progress">In Progress</option>
-                  <option value="Scheduled">Scheduled</option>
-                </Form.Control>
-              ) : (
-                <Form.Control
-                  as="select"
-                  // value={service.status}
-                  onChange={(e) => setStatusUji(e.target.value)}
-                  required={!isDetail}
-                >
-                  <option value="" hidden>pilih</option>
-                  <option value="success">Passed</option>
-                  <option value="In Progress">In Progress</option>
-                  <option value="Scheduled">Scheduled</option>
-                </Form.Control>
-              )}
-            </Form.Group>
+              <Row className="mb-3">
+                <Col md={4}>
+                  <Card.Text>
+                    <strong>Nama Perusahaan</strong>
+                  </Card.Text>
+                </Col>
+                <Col md={8}>
+                  <Card.Text>
+                    : {service.tb_mobil.tb_perusahaan.nama_perusahaan}
+                  </Card.Text>
+                </Col>
+              </Row>
+              <hr />
+              <Row className="mb-3">
+                <Col md={4}>
+                  <Card.Text>
+                    <strong>Alamat</strong>
+                  </Card.Text>
+                </Col>
+                <Col md={8}>
+                  <Card.Text>: {service.lokasi_service}</Card.Text>
+                </Col>
+              </Row>
+              <hr />
+              <Row className="mb-3">
+                <Col md={4}>
+                  <Card.Text>
+                    <strong>Nomor Polisi</strong>
+                  </Card.Text>
+                </Col>
+                <Col md={8}>
+                  <Card.Text>: {service.tb_mobil.nopol}</Card.Text>
+                </Col>
+              </Row>
+              <hr />
+              <Row className="mb-3">
+                <Col md={4}>
+                  <Card.Text>
+                    <strong>Tanggal</strong>
+                  </Card.Text>
+                </Col>
+                <Col md={8}>
+                  <Card.Text>: {new Date(service.tgl_jadwal).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</Card.Text>
+                </Col>
+              </Row>
             </Card.Body>
           </Card>
+        </Col>
 
-          {!isDetail && service.status !== 'success' && (
-            <div className="text-right mt-4">
-              <Button
-                type="submit"
-                className="submit-button"
-              >
-                Simpan
-              </Button>
-            </div>
-          )}
-        </Form>
+        <Col md={6}>
+          <div>
+            <Card className="shadow-sm border-0 rounded">
+              <Card.Header className="card-header">
+                <FaLeaf size={24} className="icon" />
+                <h4 className="mb-0">Detail Uji Emisi</h4>
+              </Card.Header>
+              <Card.Body>
+                <Form onSubmit={handleSubmit}>
+                  <Form.Group controlId="formSkorEmisi" className="mb-3">
+                    <Form.Label>Skor Emisi</Form.Label>
+                    <Form.Control
+                      type="text"
+                      placeholder="Masukkan Skor Emisi"
+                      value={skor}
+                      onChange={(e) => setSkor(e.target.value)}
+                      required={!isDetail}
+                    />
+                  </Form.Group>
 
-        <ToastContainer />
-      </div>
+                  <Form.Group controlId="formStatusUji" className="mb-3">
+                    <Form.Label>Status Pekerjaan</Form.Label>
+                    <Form.Control
+                      as="select"
+                      value={status_uji_emisi}
+                      onChange={(e) => setStatusUjiEmisi(e.target.value)}
+                      required={!isDetail}
+                    >
+                      <option value="" hidden>
+                        Pilih
+                      </option>
+                      <option value="Passed">Passed</option>
+                      <option value="Failed">Failed</option>
+                    </Form.Control>
+                  </Form.Group>
+                  <Form.Group controlId="formStatusUji" className="mb-3">
+                    <Form.Label>Status Uji</Form.Label>
+                    <Form.Control
+                      as="select"
+                      value={statusUji}
+                      onChange={(e) => setStatusUji(e.target.value)}
+                      required={!isDetail}
+                    >
+                      <option value="" hidden>
+                        Pilih
+                      </option>
+                      <option value="Completed">Completed</option>
+                      <option value="In Progress">In Progress</option>
+                      <option value="Scheduled">Scheduled</option>
+                    </Form.Control>
+                  </Form.Group>
+
+                  {!isDetail && (
+                    <div className="text-right mt-4">
+                      <Button type="submit" className="submit-button">
+                        Simpan
+                      </Button>
+                    </div>
+                  )}
+                </Form>
+              </Card.Body>
+            </Card>
+
+            <ToastContainer />
+          </div>
+        </Col>
+      </Row>
+      <br></br>
+      <br></br>
+      <br></br>
+      <br></br>
+      <br></br>
+      <br></br>
     </div>
   );
 };
