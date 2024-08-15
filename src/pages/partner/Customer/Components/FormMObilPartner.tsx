@@ -25,7 +25,6 @@ const FormMobilPartner: React.FC = () => {
     photo2: "",
     photo3: "",
     photo4: "",
-    vendor: "",
   });
 
   const navigate = useNavigate();
