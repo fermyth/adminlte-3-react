@@ -276,7 +276,7 @@ const Customer: React.FC = () => {
                 sizePerPage: 10,
                 showTotal: true,
               })}
-              classes="table-bordered w-100"
+              classes="table"
             />
           </div>
         )}
