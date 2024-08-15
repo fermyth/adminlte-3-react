@@ -58,7 +58,7 @@ const DashboardPartner = () => {
     if(idCompany){
     const fetchData = async () => {
       try {
-        const response = await fetch(`https://api_partner_staging.sigapdriver.com/api/v1/mobil-ending-soon/${idCompany}`);
+        const response = await fetch(`https://api_partner_staging.sigapdriver.com/api/V1/mobil-ending-soon/${idCompany}`);
         const data = await response.json();
         console.log("asasas", data);
         
@@ -74,7 +74,7 @@ const DashboardPartner = () => {
     if(idCompany){
     const fetchData = async () => {
       try {
-        const response = await fetch(`https://api_partner_staging.sigapdriver.com/api/v1/mobil-ending-soon2/${idCompany}`);
+        const response = await fetch(`https://api_partner_staging.sigapdriver.com/api/V1/mobil-ending-soon2/${idCompany}`);
         const data = await response.json();
         console.log("asasas", data);
         
@@ -90,7 +90,7 @@ const DashboardPartner = () => {
     if(idCompany){
     const fetchData = async () => {
       try {
-        const response = await fetch(`https://api_partner_staging.sigapdriver.com/api/v1/jadwals-stnk-renewal/${idCompany}`);
+        const response = await fetch(`https://api_partner_staging.sigapdriver.com/api/V1/jadwals-stnk-renewal/${idCompany}`);
         const data = await response.json();
         console.log("stnk", data);
         
@@ -106,7 +106,7 @@ const DashboardPartner = () => {
     if(idCompany){
     const fetchData = async () => {
       try {
-        const response = await fetch(`https://api_partner_staging.sigapdriver.com/api/v1/jadwals-emission-test/${idCompany}`);
+        const response = await fetch(`https://api_partner_staging.sigapdriver.com/api/V1/jadwals-emission-test/${idCompany}`);
         const data = await response.json();
         console.log("asasas", data);
         
@@ -122,7 +122,7 @@ const DashboardPartner = () => {
     if(idCompany){
     const fetchData = async () => {
       try {
-        const response = await fetch(`https://api_partner_staging.sigapdriver.com/api/v1/jadwals-service_rutin/${idCompany}`);
+        const response = await fetch(`https://api_partner_staging.sigapdriver.com/api/V1/jadwals-service_rutin/${idCompany}`);
         const data = await response.json();
         console.log("asasas", data);
         
