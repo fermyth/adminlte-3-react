@@ -232,73 +232,55 @@ const DetailCustomerMobil: React.FC = () => {
           )}
         </div>
         <div className="specs">
-          <h2>Detail Kendaraan</h2>
+          <h2>Vehicle Details</h2>
           <div className="table-container">
             <table style={{ fontSize: 13.5 }} className="table table-sm">
               <tbody>
                 <tr>
                   <td>
-                    <strong>Tipe Kendaraan:</strong>
+                    <strong>Contract Number:</strong>
                   </td>
                   <td>{carData.tipe_kendaraan}</td>
                 </tr>
                 <tr>
                   <td>
-                    <strong>Pembuat:</strong>
+                    <strong>Vehicle Type:</strong>
                   </td>
                   <td>{carData.pembuat}</td>
                 </tr>
                 <tr>
                   <td>
-                    <strong>Tahun:</strong>
+                    <strong>Year:</strong>
                   </td>
                   <td>{carData.tahun}</td>
                 </tr>
                 <tr>
                   <td>
-                    <strong>Warna Kendaraan:</strong>
+                    <strong>Vehicle Color:</strong>
                   </td>
                   <td>{carData.warna_kendaraan}</td>
                 </tr>
                 <tr>
                   <td>
-                    <strong>Nomor Polisi:</strong>
+                    <strong>License Plate:</strong>
                   </td>
                   <td>{carData.nopol}</td>
                 </tr>
-                {/* <tr>
-                  <td>
-                    <strong>Nomor Rangka:</strong>
-                  </td>
-                  <td>{carData.nomor_rangka}</td>
-                </tr>
                 <tr>
                   <td>
-                    <strong>Nomor Mesin:</strong>
-                  </td>
-                  <td>{carData.nomor_mesin}</td>
-                </tr> */}
-                {/* <tr>
-                  <td>
-                    <strong>Pilihan (Aksesoris):</strong>
-                  </td>
-                  <td>{carData.pilihan_aksesoris}</td>
-                </tr> */}
-                <tr>
-                  <td>
-                    <strong>Biaya Sewa:</strong>
+                    <strong>Rental Fee:</strong>
                   </td>
                   <td>{carData.biaya_sewa}</td>
                 </tr>
                 <tr>
                   <td>
-                    <strong>Jangka Waktu Sewa:</strong>
+                    <strong>Rental Period:</strong>
                   </td>
                   <td>{carData.jangka_waktu_sewa}</td>
                 </tr>
                 <tr>
                   <td>
-                    <strong>Perusahaan:</strong>
+                    <strong>Company:</strong>
                   </td>
                   <td>{carData.perusahaan}</td>
                 </tr>

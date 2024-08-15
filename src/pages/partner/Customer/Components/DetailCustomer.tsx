@@ -99,14 +99,14 @@ const CustomerDetail: React.FC = () => {
         setIsLoading(true);
         try {
           const driversResponse = await ApiConfig.get(
-             `https://api_partner_staging.sigapdriver.com/api/v1/mobil/${idperusahaan}`
-            // `http://localhost:5182/api/v1/mobil/${idperusahaan}`
+            // `https://api_partner_staging.sigapdriver.com/api/v1/mobil/${idperusahaan}`
+             `http://localhost:5182/api/v1/mobil/${idperusahaan}`
           );
           console.log("Drivers response:", driversResponse.data);
 
           const fullNamesResponse = await ApiConfig.get(
-             `https://api_portal_staging.sigapdriver.com/api/v1/nopoldriver/`
-           // `http://localhost:5181/api/v1/nopoldriver/`
+            // `https://api_portal_staging.sigapdriver.com/api/v1/nopoldriver/`
+            `http://localhost:5181/api/v1/nopoldriver/`
           );
           const fullNamesData = fullNamesResponse.data.data.data;
           console.log("Drivers responsedd:", fullNamesResponse);
@@ -210,10 +210,10 @@ const CustomerDetail: React.FC = () => {
       formatter: (cell: string, row: any) => {
         if (!cell || !row.jangka_waktu_sewa) return "-";
         const endDate = new Date(cell);
-        const startDate = new Date(row.jangka_waktu_sewa);
-        const diffTime = Math.max(endDate.getTime() - startDate.getTime(), 0);
+        const now = new Date();
+        const diffTime = Math.max(endDate.getTime() - now.getTime(), 0);
         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-        if (diffDays > 30) {
+        if (diffDays > 90) {
           const diffMonths = Math.floor(diffDays / 30);
           return `${diffMonths} Month`;
         } else {
