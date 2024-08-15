@@ -184,7 +184,14 @@ const CustomerDetail: React.FC = () => {
       headerStyle: { backgroundColor: "#009879", color: "white" },
     },
     {
-      dataField: "tipe_kendaraan",
+      dataField: "contract_number",
+      text: "Contract Number",
+      sort: true,
+      formatter: (cell: string) => cell || "-",
+      headerStyle: { backgroundColor: "#009879", color: "white" },
+    },
+    {
+      dataField: "pembuat",
       text: "Unit Type",
       sort: true,
       formatter: (cell: string) => cell || "-",

@@ -250,6 +250,12 @@ const DetailCustomerMobil: React.FC = () => {
                 </tr>
                 <tr>
                   <td>
+                    <strong>Vehicle Vendor:</strong>
+                  </td>
+                  <td>{carData.vendor}</td>
+                </tr>
+                <tr>
+                  <td>
                     <strong>Year:</strong>
                   </td>
                   <td>{carData.tahun}</td>
