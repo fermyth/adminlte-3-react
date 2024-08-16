@@ -338,7 +338,6 @@ const DetailCustomerMobil: React.FC = () => {
                         <td>{history.tgl_jadwal}</td>
                         <td>{history.lokasiService}</td>
                         <td>{history.skor}</td>
-                        <td>{history.penyebab}</td>
                         <td>{history.status}</td>
                       </tr>
                     ))}
