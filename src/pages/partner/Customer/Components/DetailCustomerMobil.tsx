@@ -31,6 +31,7 @@ const DetailCustomerMobil: React.FC = () => {
                 tgl_jadwal: item.tgl_jadwal,
                 type_service: item.type_service,
                 lokasiService: item.lokasi_service,
+                statusKerja : item.status_uji_emisi,
                 km: parsed.km || "",
                 skor: parsed.skor || "",
                 penyebab: parsed.penyebab || "",
@@ -326,6 +327,9 @@ const DetailCustomerMobil: React.FC = () => {
                       <strong>Skor</strong>
                     </td>
                     <td>
+                      <strong>status pekerjaan</strong>
+                    </td>
+                    <td>
                       <strong>Status</strong>
                     </td>
                   </tr>
@@ -338,6 +342,7 @@ const DetailCustomerMobil: React.FC = () => {
                         <td>{history.tgl_jadwal}</td>
                         <td>{history.lokasiService}</td>
                         <td>{history.skor}</td>
+                        <td>{history.statusKerja}</td>
                         <td>{history.status}</td>
                       </tr>
                     ))}

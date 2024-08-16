@@ -100,13 +100,13 @@ const CustomerDetail: React.FC = () => {
         setIsLoading(true);
         try {
           const driversResponse = await ApiConfig.get(
-              `${url}mobil/${idperusahaan}`
+              `https://api_partner_staging.sigapdriver.com/api/v1/mobil/${idperusahaan}`
           //  `http://localhost:5182/api/v1/mobil/${idperusahaan}`
           );
           console.log("Drivers response:", driversResponse.data);
 
           const fullNamesResponse = await ApiConfig.get(
-             `${url}nopoldriver/`
+             `https://api_portal_staging.sigapdriver.com/api/v1/nopoldriver/`
           //  `http://localhost:5181/api/v1/nopoldriver/`
           );
           const fullNamesData = fullNamesResponse.data.data.data;
