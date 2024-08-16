@@ -326,9 +326,6 @@ const DetailCustomerMobil: React.FC = () => {
                       <strong>Skor</strong>
                     </td>
                     <td>
-                      <strong>Penyebab</strong>
-                    </td>
-                    <td>
                       <strong>Status</strong>
                     </td>
                   </tr>
