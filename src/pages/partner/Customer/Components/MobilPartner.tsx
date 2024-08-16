@@ -6,6 +6,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import { FaEdit, FaTrashAlt, FaPlus } from "react-icons/fa";
+import { UrlServer } from "@app/libs/Api";
 
 interface Car {
   id: string;
@@ -25,13 +26,14 @@ const MobilPartner: React.FC = () => {
   const [cars, setCars] = useState<Car[]>([]);
   const navigate = useNavigate();
   const { perusahaanID } = useParams();
+  const url = UrlServer()
 
   useEffect(() => {
     if (perusahaanID) {
       const fetchCars = async () => {
         try {
           const response = await axios.get(
-            `https://api_partner_staging.sigapdriver.com/api/v1/mobil/${perusahaanID}`
+            `${url}mobil/${perusahaanID}`
           );
           if (Array.isArray(response.data)) {
             setCars(response.data);
@@ -53,7 +55,7 @@ const MobilPartner: React.FC = () => {
   const handleDeleteCar = async (carId: string) => {
     if (window.confirm("Apakah Anda yakin ingin menghapus data ini?")) {
       try {
-        await axios.delete(`https://api_partner_staging.sigapdriver.com/api/v1/mobil/${carId}`);
+        await axios.delete(`${url}mobil/${carId}`);
         setCars(cars.filter((car) => car.id !== carId));
         toast.success("Data berhasil dihapus!");
       } catch (error) {
@@ -64,7 +66,7 @@ const MobilPartner: React.FC = () => {
   };
 
   return (
-    <div className="p-4 mt-5">
+    <div className="p-4 mt-5 mb-5">
       <Row className="mb-4">
         <Col>
           <h1 className="text-dark font-weight-bold">Mobil Perusahaan</h1>

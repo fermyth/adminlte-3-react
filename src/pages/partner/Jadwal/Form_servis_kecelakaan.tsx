@@ -80,7 +80,7 @@ const FormServiseKecelakaan: React.FC<FormUjiEmisiProps> = ({
   const { id } = useParams<{ id: string }>();
   const location = useLocation();
   const { service } = location.state as { service: Service };
-
+  const url = UrlServer()
   console.log("asas", service);
 
   useEffect(() => {
@@ -115,7 +115,7 @@ const FormServiseKecelakaan: React.FC<FormUjiEmisiProps> = ({
 
     try {
       const response = await axios.put(
-        `https://api_partner_staging.sigapdriver.com/api/v1/jadwals/${id}`,
+        `${url}jadwals/${id}`,
         formData,
         {
           headers: {
@@ -133,7 +133,7 @@ const FormServiseKecelakaan: React.FC<FormUjiEmisiProps> = ({
   };
 
   return (
-    <div className="container">
+    <div className="container mb-5">
       <style>{`
         .back-button {
           color: #009879;

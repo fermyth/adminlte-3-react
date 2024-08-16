@@ -53,7 +53,7 @@ const Register = () => {
 
       dispatch(setCurrentUser(result?.user));
       toast.success("Registration is successful");
-      navigate("/");
+      navigate("/login");
     } catch (error) {
       console.error("Registration error:", error);
       const err = error as Error;

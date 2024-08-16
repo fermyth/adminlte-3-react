@@ -3,6 +3,7 @@ import CustomerList from "./components/Costumer";
 import { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useLocation } from "react-router-dom";
+import { UrlServer } from "@app/libs/Api";
 
 const DashboardPartner = () => {
   const [companies, setCompanies] = useState<any>([]);
@@ -15,6 +16,7 @@ const DashboardPartner = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const location = useLocation();
+  const url = UrlServer()
 
   useEffect(() => {
     const fetchData = async () => {
@@ -43,7 +45,7 @@ const DashboardPartner = () => {
       const fetchData = async () => {
         try {
           const response = await fetch(
-            `https://api_partner_staging.sigapdriver.com/api/v1/perusahaan/${idCompany}`
+            `${url}perusahaan/${idCompany}`
           );
           const data = await response.json();
           console.log("asasas", data);
@@ -61,7 +63,7 @@ const DashboardPartner = () => {
       const fetchData = async () => {
         try {
           const response = await fetch(
-            `https://api_partner_staging.sigapdriver.com/api/v1/mobil-ending-soon/${idCompany}`
+            `${url}mobil-ending-soon/${idCompany}`
           );
           const data = await response.json();
           console.log("asasas", data);
@@ -79,7 +81,7 @@ const DashboardPartner = () => {
       const fetchData = async () => {
         try {
           const response = await fetch(
-            `https://api_partner_staging.sigapdriver.com/api/v1/mobil-ending-soon2/${idCompany}`
+            `${url}mobil-ending-soon2/${idCompany}`
           );
           const data = await response.json();
           console.log("asasas", data);
@@ -97,7 +99,7 @@ const DashboardPartner = () => {
       const fetchData = async () => {
         try {
           const response = await fetch(
-            `https://api_partner_staging.sigapdriver.com/api/v1/jadwals-stnk-renewal/${idCompany}`
+            `${url}jadwals-stnk-renewal/${idCompany}`
           );
           const data = await response.json();
           console.log("stnk", data);
@@ -115,7 +117,7 @@ const DashboardPartner = () => {
       const fetchData = async () => {
         try {
           const response = await fetch(
-            `https://api_partner_staging.sigapdriver.com/api/v1/jadwals-emission-test/${idCompany}`
+            `${url}jadwals-emission-test/${idCompany}`
           );
           const data = await response.json();
           console.log("asasas", data);
@@ -133,7 +135,7 @@ const DashboardPartner = () => {
       const fetchData = async () => {
         try {
           const response = await fetch(
-            `https://api_partner_staging.sigapdriver.com/api/v1/jadwals-service_rutin/${idCompany}`
+            `${url}jadwals-service_rutin/${idCompany}`
           );
           const data = await response.json();
           console.log("asasas", data);

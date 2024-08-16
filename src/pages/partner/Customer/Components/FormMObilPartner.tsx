@@ -5,6 +5,7 @@ import { useNavigate, useLocation, useParams } from "react-router-dom";
 import { FaArrowLeft, FaCar, FaImage } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { UrlServer } from "@app/libs/Api";
 
 const FormMobilPartner: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -30,6 +31,7 @@ const FormMobilPartner: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { perusahaanID } = useParams();
+  const url = UrlServer()
 
   useEffect(() => {
     // const queryParams = new URLSearchParams(location.search);
@@ -68,7 +70,7 @@ const FormMobilPartner: React.FC = () => {
 
     try {
       const response = await axios.post(
-        "https://api_partner_staging.sigapdriver.com/api/v1/mobil",
+        `${url}mobil`,
         formDataToSend,
         {
           headers: {
@@ -110,7 +112,7 @@ const FormMobilPartner: React.FC = () => {
   };
 
   return (
-    <div className="container mt-5">
+    <div className="container mt-5 mb-5">
       <h1 className="text-center mb-4 text-dark font-weight-bold">
         Add Vehicle Data
       </h1>

@@ -26,7 +26,7 @@ const StyledUserImage = styled(Image)`
 
 const Sidebar = () => {
   const location = useLocation();
-  const [isCollapsed, setIsCollapsed] = useState(true);
+  const [isCollapsed, setIsCollapsed] = useState(false);
   const currentUser = useAppSelector((state) => state.auth);
   const [namapt, setnamapt] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);

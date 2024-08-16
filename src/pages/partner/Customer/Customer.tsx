@@ -12,6 +12,7 @@ import paginationFactory from "react-bootstrap-table2-paginator";
 import ToolkitProvider, {
   Search,
 } from "react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit";
+import { UrlServer } from "@app/libs/Api";
 
 interface Company {
   id: number;
@@ -34,6 +35,7 @@ const Customer: React.FC = () => {
   const [idCompany, setIdCompany] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const url = UrlServer()
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -65,7 +67,7 @@ const Customer: React.FC = () => {
       const fetchCompanies = async () => {
         try {
           const response = await fetch(
-            `https://api_partner_staging.sigapdriver.com/api/v1/perusahaan/${idCompany}`
+            `${url}perusahaan/${idCompany}`
           );
           console.log('rescus',response)
           if (!response.ok) {
@@ -234,7 +236,7 @@ const Customer: React.FC = () => {
   const { SearchBar } = Search;
 
   return (
-    <div className="container mt-5">
+    <div className="container mt-5mb-5 ">
       <h1 className="text-center mb-4 text-dark font-weight-bold">Customer</h1>
       <div className="d-flex justify-content-end mb-3">
         <Link

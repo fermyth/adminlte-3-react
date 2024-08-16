@@ -5,6 +5,7 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { FaArrowLeft, FaBuilding, FaTools } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { UrlServer } from "@app/libs/Api";
 
 interface FormServisRutinProps {
   initialStatusUji?: string;
@@ -70,6 +71,7 @@ const FormServisRutin: React.FC<FormServisRutinProps> = ({
   const { id } = useParams<{ id: string }>();
   const location = useLocation();
   const { service } = location.state as { service: Service };
+  const url = UrlServer()
 
   useEffect(() => {
     if (service && service.ket_json) {
@@ -97,7 +99,7 @@ const FormServisRutin: React.FC<FormServisRutinProps> = ({
 
     try {
       const response = await axios.put(
-        `https://api_partner_staging.sigapdriver.com/api/v1/jadwals/${id}`,
+        `${url}jadwals/${id}`,
         formData,
         {
           headers: {
@@ -115,7 +117,7 @@ const FormServisRutin: React.FC<FormServisRutinProps> = ({
   };
 
   return (
-    <div className="container">
+    <div className="container mb-5">
       <style>{`
        
 

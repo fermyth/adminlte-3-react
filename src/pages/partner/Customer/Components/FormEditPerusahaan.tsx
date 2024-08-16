@@ -93,7 +93,7 @@ const UpdateFormPerusahaanInternal: React.FC = () => {
   };
 
   return (
-    <div className="container mt-5">
+    <div className="container mt-5 mb-5 ">
       <h1 className="text-center mb-4 text-dark font-weight-bold">
         Update Data Perusahaan
       </h1>

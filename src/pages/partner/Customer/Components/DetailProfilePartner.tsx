@@ -149,7 +149,7 @@ const DetailProfilePartner: React.FC = () => {
   const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
 
   return (
-    <div className="container">
+    <div className="container mb-5">
       <style>
         {`
           body {

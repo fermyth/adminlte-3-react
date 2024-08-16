@@ -4,6 +4,7 @@ import { Link, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { toast } from "react-toastify";
+import { UrlServer } from "@app/libs/Api";
 
 interface Company {
   id: number;
@@ -25,7 +26,7 @@ const CustomerList = () => {
   const [idCompany, setIdCompany] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
+  const url = UrlServer()
   const location = useLocation();
 
   useEffect(() => {
@@ -55,7 +56,7 @@ const CustomerList = () => {
       const fetchCompanies = async () => {
         try {
           const response = await fetch(
-            `https://api_partner_staging.sigapdriver.com/api/v1/perusahaan/${idCompany}`
+            `${url}perusahaan/${idCompany}`
           );
           if (!response.ok) {
             throw new Error("Network response was not ok");

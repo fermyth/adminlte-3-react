@@ -6,6 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import Select from "react-select";
+import { UrlServer } from "@app/libs/Api";
 
 // Fungsi untuk menghapus tag HTML dari string
 const removeHTMLTags = (str: string | null | undefined): string => {
@@ -20,16 +21,17 @@ const FormPerusahaanPartner: React.FC = () => {
   const [options, setOptions] = useState([]);
   const [isExistingCompany, setIsExistingCompany] = useState(true);
   const [loading, setLoading] = useState(true);
+  const url = UrlServer()
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
         const response = await axios.get(
-          "https://api_portal_staging.sigapdriver.com/api/v1/customer_sigap"
+          `${url}customer_sigap`
         );
         const data = response.data.data.data;
-        const formattedOptions = data.map((item) => ({
+        const formattedOptions = data.map((item : any) => ({
           value: item.company_name,
           label: item.company_name,
           id_company: item.master_companies_id,
@@ -166,7 +168,7 @@ const FormPerusahaanPartner: React.FC = () => {
   };
 
   return (
-    <div className="container mt-5">
+    <div className="container mt-5 mb-5">
       <h1 className="text-center mb-4 text-dark font-weight-bold">
         Form Company
       </h1>

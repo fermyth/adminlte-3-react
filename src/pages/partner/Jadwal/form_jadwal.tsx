@@ -6,6 +6,7 @@ import { FaArrowLeft, FaTools } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Select from "react-select";
+import { UrlServer } from "@app/libs/Api";
 
 interface ServiceRecord {
   id: string;
@@ -25,12 +26,13 @@ const FormJadwal: React.FC = () => {
   const [type, setype] = useState<string | null>(null);
   const [options, setOptions] = useState([]);
   const [loading, setLoading] = useState(true);
+  const url = UrlServer()
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true); 
       try {
-        const response = await axios.get("https://api_partner_staging.sigapdriver.com/api/v1/nopol");
+        const response = await axios.get(`${url}nopol`);
         const data = response.data;
         const formattedOptions = data.map((item: any) => ({
           value: item.id,
@@ -60,7 +62,7 @@ const FormJadwal: React.FC = () => {
     };
 
     try {
-      await axios.post("https://api_partner_staging.sigapdriver.com/api/v1/jadwals", formData, {
+      await axios.post(`${url}jadwals`, formData, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -79,7 +81,7 @@ const FormJadwal: React.FC = () => {
   };
 
   return (
-    <div className="form-container">
+    <div className="form-container mb-5">
       <style>{`
         .form-container {
           min-height: 80vh;

@@ -107,7 +107,7 @@ const UpdateJadwal: React.FC = () => {
   };
 
   return (
-    <div className="form-container">
+    <div className="form-container mb-5">
       <style>{`
         .form-container {
           min-height: 80vh;

@@ -3,18 +3,20 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
+import { UrlServer } from "@app/libs/Api";
 
 const DetailCustomerMobil: React.FC = () => {
   const [carData, setCarData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const { nopol } = useParams();
+  const url = UrlServer()
 
   useEffect(() => {
     const fetchCarData = async () => {
       try {
         const response = await axios.get(
-          `https://api_partner_staging.sigapdriver.com/api/v1/mobil-detail/${nopol}`
+          `${url}mobil-detail/${nopol}`
         );
         const data = response.data;
         console.log("cekdatamobil", data);
@@ -215,7 +217,7 @@ const DetailCustomerMobil: React.FC = () => {
         `}
       </style>
       <br></br>
-      <div className="container">
+      <div className="container mb-5">
         <div className="car-info">
           {carData.images.length > 0 ? (
             <Carousel>
@@ -296,7 +298,7 @@ const DetailCustomerMobil: React.FC = () => {
                 </tr>
                 <tr>
                   <td>
-                    <strong>Company:</strong>
+                    <strong>Customer Name:</strong>
                   </td>
                   <td>{carData.perusahaan}</td>
                 </tr>
@@ -305,39 +307,51 @@ const DetailCustomerMobil: React.FC = () => {
           </div>
         </div>
 
-        <div className="table-container">
-          <h2>Riwayat Uji Emisi</h2>
-          <table>
-            <tbody>
-              <tr style={{ backgroundColor: "#009879", color: "white" }}>
-                <td>
-                  <strong>Tanggal</strong>
-                </td>
-                <td>
-                  <strong>Lokasi</strong>
-                </td>
-                <td>
-                  <strong>Skor</strong>
-                </td>
-                <td>
-                  <strong>Status</strong>
-                </td>
-              </tr>
-              {carData.serviceHistories &&
-                carData.serviceHistories.map((history: any, index: number) =>
-                  history.type_service === "uji_emisi" ? (
-                    <tr key={index}>
-                      <td>{history.tgl_jadwal}</td>
-                      <td>{history.lokasiService}</td>
-                      <td>{history.skor}</td>
-                      <td>{history.status}</td>
-                    </tr>
-                  ) : null
-                )}
-            </tbody>
-          </table>
-        </div>
+        {carData.serviceHistories &&
+          carData.serviceHistories.some(
+            (history: any) => history.type_service === "uji_emisi"
+          ) && (
+            <div className="table-container">
+              <h2>Riwayat Uji Emisi</h2>
+              <table>
+                <tbody>
+                  <tr style={{ backgroundColor: "#009879", color: "white" }}>
+                    <td>
+                      <strong>Tanggal</strong>
+                    </td>
+                    <td>
+                      <strong>Lokasi</strong>
+                    </td>
+                    <td>
+                      <strong>Skor</strong>
+                    </td>
+                    <td>
+                      <strong>Penyebab</strong>
+                    </td>
+                    <td>
+                      <strong>Status</strong>
+                    </td>
+                  </tr>
+                  {carData.serviceHistories
+                    .filter(
+                      (history: any) => history.type_service === "uji_emisi"
+                    )
+                    .map((history: any, index: number) => (
+                      <tr key={index}>
+                        <td>{history.tgl_jadwal}</td>
+                        <td>{history.lokasiService}</td>
+                        <td>{history.skor}</td>
+                        <td>{history.penyebab}</td>
+                        <td>{history.status}</td>
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+
         <br />
+        {carData.serviceHistories && carData.serviceHistories.some((history: any) => history.type_service === "service_rutin") && (
         <div className="table-container">
           <h2>Riwayat Servis Kendaraan</h2>
           <table>
@@ -359,9 +373,12 @@ const DetailCustomerMobil: React.FC = () => {
                   <strong>Status</strong>
                 </td>
               </tr>
-              {carData.serviceHistories &&
-                carData.serviceHistories.map((history: any, index: number) =>
-                  history.type_service === "service_rutin" ? (
+              {carData.serviceHistories
+                    .filter(
+                      (history: any) =>
+                        history.type_service === "service_rutin"
+                    )
+                    .map((history: any, index: number) => (
                     <tr key={index}>
                       <td>{history.km}</td>
                       <td>{history.lokasiService}</td>
@@ -369,12 +386,13 @@ const DetailCustomerMobil: React.FC = () => {
                       <td>{history.keterangan}</td>
                       <td>{history.status}</td>
                     </tr>
-                  ) : null
-                )}
+                ))}
             </tbody>
           </table>
         </div>
+        )}
         <br />
+        {carData.serviceHistories && carData.serviceHistories.some((history: any) => history.type_service === "service_kecelakaan") && (
         <div className="table-container">
           <h2>Riwayat Kecelakaan</h2>
           <table>
@@ -396,9 +414,12 @@ const DetailCustomerMobil: React.FC = () => {
                   <strong>Status</strong>
                 </td>
               </tr>
-              {carData.serviceHistories &&
-                carData.serviceHistories.map((history: any, index: number) =>
-                  history.type_service === "service_kecelakaan" ? (
+              {carData.serviceHistories
+                    .filter(
+                      (history: any) =>
+                        history.type_service === "service_kecelakaan"
+                    )
+                    .map((history: any, index: number) => (
                     <tr key={index}>
                       <td>{history.tgl_jadwal}</td>
                       <td>{history.lokasiService}</td>
@@ -406,11 +427,12 @@ const DetailCustomerMobil: React.FC = () => {
                       <td>{history.keterangan}</td>
                       <td>{history.status}</td>
                     </tr>
-                  ) : null
-                )}
+                ))}
             </tbody>
           </table>
         </div>
+        )}
+         {carData.serviceHistories && carData.serviceHistories.some((history: any) => history.type_service === "ganti_stnk") && (
         <div className="table-container">
           <h2>Riwayat STNK</h2>
           <table>
@@ -429,20 +451,23 @@ const DetailCustomerMobil: React.FC = () => {
                   <strong>Status</strong>
                 </td>
               </tr>
-              {carData.serviceHistories &&
-                carData.serviceHistories.map((history: any, index: number) =>
-                  history.type_service === "ganti_stnk" ? (
+              {carData.serviceHistories
+                    .filter(
+                      (history: any) =>
+                        history.type_service === "ganti_stnk"
+                    )
+                    .map((history: any, index: number) => (
                     <tr key={index}>
                       <td>{history.tgl_jadwal}</td>
                       <td>{history.lokasiService}</td>
                       <td>{history.keterangan}</td>
                       <td>{history.status}</td>
                     </tr>
-                  ) : null
-                )}
+                ))}
             </tbody>
           </table>
         </div>
+         )}
       </div>
     </>
   );

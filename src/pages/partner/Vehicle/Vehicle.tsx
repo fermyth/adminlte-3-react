@@ -1,3 +1,4 @@
+import { UrlServer } from "@app/libs/Api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -15,6 +16,7 @@ const Vehicle = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const location = useLocation();
+  const url = UrlServer()
 
   useEffect(() => {
     const fetchData = async () => {
@@ -45,7 +47,7 @@ const Vehicle = () => {
         try {
           // const response = await fetch(`http://localhost:5182/api/v1/mobil-perusahaan/${idCompany}`);
           const response = await fetch(
-            `https://api_partner_staging.sigapdriver.com/api/v1/mobil-perusahaan/${idCompany}`
+            `${url}mobil-perusahaan/${idCompany}`
           );
           if (!response.ok) {
             throw new Error("Network response was not ok");
@@ -82,7 +84,7 @@ const Vehicle = () => {
       dataField: "nopol",
       text: "Police Number",
       sort: true,
-      formatter: (cell: string, row: DriverData) => (
+      formatter: (cell: string, row: any) => (
         <Link to={`/partner-dashboard/customer/costumer-detail/detail-mobil/${cell}`}>
           {cell || "-"}
         </Link>
@@ -91,7 +93,7 @@ const Vehicle = () => {
     },
     {
       dataField: "tb_perusahaan.nama_perusahaan",
-      text: "Company Name",
+      text: "Customer Name",
       headerStyle: { backgroundColor: "#009879", color: "white" },
       sort: true,
     },
@@ -161,7 +163,7 @@ const Vehicle = () => {
   const { SearchBar } = Search;
 
   return (
-    <div className="container mt-5" style={{ marginBottom: "10%" }}>
+    <div className="container mt-5 mb-5" style={{ marginBottom: "10%" }}>
       <h1 className="text-center mb-4 text-dark font-weight-bold">Vehicle</h1>
 
       {isLoading ? (
@@ -175,7 +177,7 @@ const Vehicle = () => {
           columns={columns}
           search
         >
-          {(props) => (
+          {(props : any) => (
             <div>
               <div className="mb-3">
                 <SearchBar

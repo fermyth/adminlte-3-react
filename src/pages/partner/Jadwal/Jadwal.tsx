@@ -10,6 +10,7 @@ import ToolkitProvider, {
 } from "react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useLocation } from "react-router-dom";
+import { UrlServer } from "@app/libs/Api";
 
 interface Perusahaan {
   id: number;
@@ -64,6 +65,7 @@ const Jadwal: React.FC = () => {
   const [idCompany, setIdCompany] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const url = UrlServer()
 
   const location = useLocation();
 
@@ -92,7 +94,7 @@ const Jadwal: React.FC = () => {
     if(idCompany){
       const fetchData = async () => {
         try {
-          const response = await fetch(`https://api_partner_staging.sigapdriver.com/api/v1/jadwals/${idCompany}`);
+          const response = await fetch(`${url}jadwals/${idCompany}`);
           const data = await response.json();
           console.log("Data jadwal:", data);
           
@@ -106,12 +108,11 @@ const Jadwal: React.FC = () => {
     }
   }, [idCompany, location.key]);
 
-  const kirim = async (tgl, bulan, perusahaan, nopol, type_service, lokasi) => {
+  const kirim = async (tgl : any, bulan : any, perusahaan : any, nopol : any, type_service : any, lokasi: any) => {
     const apiUrl = "https://api.fonnte.com/send";
     const apiKey = "wS6aSBDMFoSDAPWA@tK6";
-    const phoneNumber = "08119826380"; // Daftar nomor telepon
+    const phoneNumber = "08119826380"; 
 
-    // Merangkai pesan dengan menggunakan template literal
     const message = `Tgl: ${tgl} ${bulan} \n
     --------------------------- 
     Perusahaan:\n${perusahaan} \n
@@ -141,7 +142,7 @@ const Jadwal: React.FC = () => {
       } else {
         alert(`Gagal mengirim pesan: ${response.data.message}`);
       }
-    } catch (error) {
+    } catch (error : any) {
       console.error(
         "Error mengirim pesan: ",
         error.response ? error.response.data : error.message
@@ -205,7 +206,7 @@ const Jadwal: React.FC = () => {
     {
       dataField: "tgl_jadwal",
       text: "Date",
-      formatter: (cell, row) => (
+      formatter: (cell : any, row : any) => (
         <>
           <h5>{new Date(cell).getDate()}</h5>
           {new Date(cell).toLocaleString("default", { month: "long" })}
@@ -216,7 +217,7 @@ const Jadwal: React.FC = () => {
     {
       dataField: "tb_mobil.nopol",
       text: "Nopol Customer",
-      formatter: (cell, row) => (
+      formatter: (cell : any, row : any) => (
         <Link
           to={`/partner-dashboard/customer/costumer-detail/detail-mobil/${cell}`}
           className="text-decoration-none"
@@ -231,7 +232,7 @@ const Jadwal: React.FC = () => {
     {
       dataField: "type_service",
       text: "Service Location",
-      formatter: (cell, row) => (
+      formatter: (cell : any, row : any) => (
         <>
           <p>
             <b>{cell === "uji_emisi" ? "Uji Emisi" : cell === "service_rutin" ? "Servis Rutin" : cell === "service_kecelakaan" ? "Servis Kecelakaan" : cell === "ganti_stnk" ? "Ganti STNK" : cell}</b>
@@ -247,7 +248,7 @@ const Jadwal: React.FC = () => {
     {
       dataField: "status",
       text: "Status",
-      formatter: (cell) => (
+      formatter: (cell : any) => (
         <span
           className={`badge badge-${
             cell === "Scheduled"
@@ -265,7 +266,7 @@ const Jadwal: React.FC = () => {
     {
       dataField: "actions",
       text: "Actions",
-      formatter: (cell, row) => (
+      formatter: (cell : any, row : any) => (
         <>
           <Button
             variant={row.status === "Completed" ? "info" : "success"}
@@ -307,7 +308,7 @@ const Jadwal: React.FC = () => {
   const serviceTypes = ["uji_emisi", "service_rutin", "service_kecelakaan", "ganti_stnk"];
 
   return (
-    <div className="container mt-5">
+    <div className="container mt-5 mb-5">
       <h1 className="text-center mb-4 text-dark font-weight-bold">
         Scheduled Event
       </h1>
@@ -347,7 +348,7 @@ const Jadwal: React.FC = () => {
               columns={columns}
               search
             >
-              {(props) => (
+              {(props : any) => (
                 <div>
                   <SearchBar {...props.searchProps} />
                   <hr />

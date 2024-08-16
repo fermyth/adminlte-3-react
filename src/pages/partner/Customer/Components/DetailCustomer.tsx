@@ -6,7 +6,7 @@ import { Table, Button, Row, Col } from "react-bootstrap";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import ApiConfig from "@app/libs/Api";
+import ApiConfig, { UrlServer } from "@app/libs/Api";
 import { FaEdit, FaTrashAlt, FaPlus, FaCar } from "react-icons/fa";
 import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory from "react-bootstrap-table2-paginator";
@@ -52,6 +52,7 @@ const CustomerDetail: React.FC = () => {
   const [alamat, setalamat] = useState<string | null>(null);
   const [kontak, setkontak] = useState<string | null>(null);
   const [logo_perusahaan, setLogoPerusahaan] = useState<string | null>(null);
+  const url = UrlServer()
 
   useEffect(() => {
     const fetchData = async () => {
@@ -99,13 +100,13 @@ const CustomerDetail: React.FC = () => {
         setIsLoading(true);
         try {
           const driversResponse = await ApiConfig.get(
-              `https://api_partner_staging.sigapdriver.com/api/v1/mobil/${idperusahaan}`
+              `${url}mobil/${idperusahaan}`
           //  `http://localhost:5182/api/v1/mobil/${idperusahaan}`
           );
           console.log("Drivers response:", driversResponse.data);
 
           const fullNamesResponse = await ApiConfig.get(
-             `https://api_portal_staging.sigapdriver.com/api/v1/nopoldriver/`
+             `${url}nopoldriver/`
           //  `http://localhost:5181/api/v1/nopoldriver/`
           );
           const fullNamesData = fullNamesResponse.data.data.data;
@@ -300,7 +301,7 @@ const CustomerDetail: React.FC = () => {
         <br></br>
         <Link to="/partner-dashboard">Back To Dashboard</Link>
       </div>
-      <div className="container-fluid" style={{ padding: 20 }}>
+      <div className="container-fluid mb-5" style={{ padding: 20 }}>
         <div className="row">
           <div className="col-md-4 mb-4">
             <div
