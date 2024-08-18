@@ -111,7 +111,7 @@ const FormStnk: React.FC<FormUjiEmisiProps> = ({
 
     try {
       const response = await axios.put(
-        `${url}jadwals/${id}`,
+        `${url}/jadwals/${id}`,
         formData,
         {
           headers: {

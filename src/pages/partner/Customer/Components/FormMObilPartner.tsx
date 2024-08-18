@@ -70,7 +70,7 @@ const FormMobilPartner: React.FC = () => {
 
     try {
       const response = await axios.post(
-        `${url}mobil`,
+        `${url}/mobil`,
         formDataToSend,
         {
           headers: {

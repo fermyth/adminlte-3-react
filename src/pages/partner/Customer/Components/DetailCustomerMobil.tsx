@@ -16,7 +16,7 @@ const DetailCustomerMobil: React.FC = () => {
     const fetchCarData = async () => {
       try {
         const response = await axios.get(
-          `${url}mobil-detail/${nopol}`
+          `${url}/mobil-detail/${nopol}`
         );
         const data = response.data;
         console.log("cekdatamobil", data);

@@ -47,7 +47,7 @@ const Vehicle = () => {
         try {
           // const response = await fetch(`http://localhost:5182/api/v1/mobil-perusahaan/${idCompany}`);
           const response = await fetch(
-            `${url}mobil-perusahaan/${idCompany}`
+            `${url}/mobil-perusahaan/${idCompany}`
           );
           if (!response.ok) {
             throw new Error("Network response was not ok");

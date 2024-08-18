@@ -8,12 +8,13 @@ const ApiConfig = axios.create({
 });
 
 const ApiPartner = () => {
-  return "http://localhost:5182/api/v1";
+  // return "http://localhost:5182/api/v1";
+  return "https://api_partner_staging.sigapdriver.com/api/v1";
 };
 
 const UrlServer = () => {
   // return "https://api_portal.sigapdriver.com";
-   return "https://api_partner_staging.sigapdriver.com/api/v1/";
+   return "https://api_partner_staging.sigapdriver.com/api/v1";
  // return "http://localhost:5181";
 };
 

@@ -56,7 +56,7 @@ const CustomerList = () => {
       const fetchCompanies = async () => {
         try {
           const response = await fetch(
-            `${url}perusahaan/${idCompany}`
+            `${url}/perusahaan/${idCompany}`
           );
           if (!response.ok) {
             throw new Error("Network response was not ok");

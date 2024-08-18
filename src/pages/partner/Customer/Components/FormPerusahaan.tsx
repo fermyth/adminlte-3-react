@@ -28,7 +28,7 @@ const FormPerusahaanPartner: React.FC = () => {
       setLoading(true);
       try {
         const response = await axios.get(
-          `${url}customer_sigap`
+          `${url}/customer_sigap`
         );
         const data = response.data.data.data;
         const formattedOptions = data.map((item : any) => ({

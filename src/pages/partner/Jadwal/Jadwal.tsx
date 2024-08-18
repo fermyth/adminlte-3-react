@@ -94,7 +94,7 @@ const Jadwal: React.FC = () => {
     if(idCompany){
       const fetchData = async () => {
         try {
-          const response = await fetch(`${url}jadwals/${idCompany}`);
+          const response = await fetch(`${url}/jadwals/${idCompany}`);
           const data = await response.json();
           console.log("Data jadwal:", data);
           

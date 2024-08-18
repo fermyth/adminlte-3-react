@@ -67,7 +67,7 @@ const Customer: React.FC = () => {
       const fetchCompanies = async () => {
         try {
           const response = await fetch(
-            `${url}perusahaan/${idCompany}`
+            `${url}/perusahaan/${idCompany}`
           );
           console.log('rescus',response)
           if (!response.ok) {

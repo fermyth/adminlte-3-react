@@ -45,7 +45,7 @@ const DashboardPartner = () => {
       const fetchData = async () => {
         try {
           const response = await fetch(
-            `${url}perusahaan/${idCompany}`
+            `${url}/perusahaan/${idCompany}`
           );
           const data = await response.json();
           console.log("asasas", data);
@@ -63,7 +63,7 @@ const DashboardPartner = () => {
       const fetchData = async () => {
         try {
           const response = await fetch(
-            `${url}mobil-ending-soon/${idCompany}`
+            `${url}/mobil-ending-soon/${idCompany}`
           );
           const data = await response.json();
           console.log("asasas", data);
@@ -81,7 +81,7 @@ const DashboardPartner = () => {
       const fetchData = async () => {
         try {
           const response = await fetch(
-            `${url}mobil-ending-soon2/${idCompany}`
+            `${url}/mobil-ending-soon2/${idCompany}`
           );
           const data = await response.json();
           console.log("asasas", data);
@@ -99,7 +99,7 @@ const DashboardPartner = () => {
       const fetchData = async () => {
         try {
           const response = await fetch(
-            `${url}jadwals-stnk-renewal/${idCompany}`
+            `${url}/jadwals-stnk-renewal/${idCompany}`
           );
           const data = await response.json();
           console.log("stnk", data);
@@ -117,7 +117,7 @@ const DashboardPartner = () => {
       const fetchData = async () => {
         try {
           const response = await fetch(
-            `${url}jadwals-emission-test/${idCompany}`
+            `${url}/jadwals-emission-test/${idCompany}`
           );
           const data = await response.json();
           console.log("asasas", data);
@@ -135,7 +135,7 @@ const DashboardPartner = () => {
       const fetchData = async () => {
         try {
           const response = await fetch(
-            `${url}jadwals-service_rutin/${idCompany}`
+            `${url}/jadwals-service_rutin/${idCompany}`
           );
           const data = await response.json();
           console.log("asasas", data);

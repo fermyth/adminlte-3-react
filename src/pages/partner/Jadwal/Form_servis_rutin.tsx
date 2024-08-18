@@ -99,7 +99,7 @@ const FormServisRutin: React.FC<FormServisRutinProps> = ({
 
     try {
       const response = await axios.put(
-        `${url}jadwals/${id}`,
+        `${url}/jadwals/${id}`,
         formData,
         {
           headers: {

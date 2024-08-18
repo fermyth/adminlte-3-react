@@ -62,7 +62,7 @@ const FormJadwal: React.FC = () => {
     };
 
     try {
-      await axios.post(`${url}jadwals`, formData, {
+      await axios.post(`${url}/jadwals`, formData, {
         headers: {
           "Content-Type": "application/json",
         },

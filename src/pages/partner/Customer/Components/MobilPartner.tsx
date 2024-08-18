@@ -33,7 +33,7 @@ const MobilPartner: React.FC = () => {
       const fetchCars = async () => {
         try {
           const response = await axios.get(
-            `${url}mobil/${perusahaanID}`
+            `${url}/mobil/${perusahaanID}`
           );
           if (Array.isArray(response.data)) {
             setCars(response.data);

@@ -9,7 +9,7 @@ import Footer from "../Footer";
 
 
 const eventEmitter = new EventEmitter();
-const apiUrl = UrlServer() + '/api/v1/laporan_driver';
+const apiUrl = UrlServer() + '/laporan_driver';
 
 interface Timesheet {
   jam_masuk: string;
@@ -92,7 +92,7 @@ function LaporanDriver() {
 
       try {
         const response = await axios.get<ApiResponse>(url);
-        console.log("nanananan", response.data.data);
+        //console.log("nanananan", response.data.data);
 
         setData(response.data.data);
         setIsFiltered(true);
