@@ -3,7 +3,7 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-import { UrlServer } from "@app/libs/Api";
+import { UrlServer, ApiPartner } from "@app/libs/Api";
 
 const DetailCustomerMobil: React.FC = () => {
   const [carData, setCarData] = useState<any>(null);
@@ -11,12 +11,13 @@ const DetailCustomerMobil: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const { nopol } = useParams();
   const url = UrlServer()
+  const url_partner = ApiPartner();
 
   useEffect(() => {
     const fetchCarData = async () => {
       try {
         const response = await axios.get(
-          `${url}/mobil-detail/${nopol}`
+          `${url_partner}/mobil-detail/${nopol}`
         );
         const data = response.data;
         console.log("cekdatamobil", data);

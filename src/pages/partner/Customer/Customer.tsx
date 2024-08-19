@@ -12,7 +12,7 @@ import paginationFactory from "react-bootstrap-table2-paginator";
 import ToolkitProvider, {
   Search,
 } from "react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit";
-import { UrlServer } from "@app/libs/Api";
+import { ApiPartner,UrlServer } from "@app/libs/Api";
 
 interface Company {
   id: number;
@@ -35,6 +35,7 @@ const Customer: React.FC = () => {
   const [idCompany, setIdCompany] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const url_partner = ApiPartner()
   const url = UrlServer()
 
   const location = useLocation();
@@ -67,7 +68,7 @@ const Customer: React.FC = () => {
       const fetchCompanies = async () => {
         try {
           const response = await fetch(
-            `${url}/perusahaan/${idCompany}`
+            `${url_partner}/perusahaan/${idCompany}`
           );
           console.log('rescus',response)
           if (!response.ok) {

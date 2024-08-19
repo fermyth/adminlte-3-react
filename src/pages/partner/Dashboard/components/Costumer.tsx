@@ -4,7 +4,7 @@ import { Link, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { toast } from "react-toastify";
-import { ApiPartner } from "@app/libs/Api";
+import { UrlServer,ApiPartner } from "@app/libs/Api";
 
 interface Company {
   id: number;
@@ -26,7 +26,8 @@ const CustomerList = () => {
   const [idCompany, setIdCompany] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const url = ApiPartner()
+  const url = UrlServer()
+  const url_partner = ApiPartner()
   const location = useLocation();
 
   useEffect(() => {
@@ -56,7 +57,7 @@ const CustomerList = () => {
       const fetchCompanies = async () => {
         try {
           const response = await fetch(
-            `${url}/perusahaan/${idCompany}`
+            `${url_partner}/perusahaan/${idCompany}`
           );
           if (!response.ok) {
             throw new Error("Network response was not ok");

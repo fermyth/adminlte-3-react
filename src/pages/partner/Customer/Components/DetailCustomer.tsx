@@ -6,7 +6,7 @@ import { Table, Button, Row, Col } from "react-bootstrap";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import ApiConfig, { UrlServer } from "@app/libs/Api";
+import ApiConfig, { UrlServer,ApiPartner } from "@app/libs/Api";
 import { FaEdit, FaTrashAlt, FaPlus, FaCar } from "react-icons/fa";
 import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory from "react-bootstrap-table2-paginator";
@@ -53,6 +53,7 @@ const CustomerDetail: React.FC = () => {
   const [kontak, setkontak] = useState<string | null>(null);
   const [logo_perusahaan, setLogoPerusahaan] = useState<string | null>(null);
   const url = UrlServer()
+  const url_partner = ApiPartner()
 
   useEffect(() => {
     const fetchData = async () => {
@@ -100,7 +101,7 @@ const CustomerDetail: React.FC = () => {
         setIsLoading(true);
         try {
           const driversResponse = await ApiConfig.get(
-              `${url}/mobil/${idperusahaan}`
+              `${url_partner}/mobil/${idperusahaan}`
           //  `http://localhost:5182/api/v1/mobil/${idperusahaan}`
           );
           console.log("Drivers response:", driversResponse.data);

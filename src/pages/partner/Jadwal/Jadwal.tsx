@@ -10,7 +10,7 @@ import ToolkitProvider, {
 } from "react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useLocation } from "react-router-dom";
-import { UrlServer } from "@app/libs/Api";
+import { UrlServer,ApiPartner } from "@app/libs/Api";
 
 interface Perusahaan {
   id: number;
@@ -66,6 +66,7 @@ const Jadwal: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const url = UrlServer()
+  const url_partner = ApiPartner()
 
   const location = useLocation();
 
@@ -94,7 +95,7 @@ const Jadwal: React.FC = () => {
     if(idCompany){
       const fetchData = async () => {
         try {
-          const response = await fetch(`${url}/jadwals/${idCompany}`);
+          const response = await fetch(`${url_partner}/jadwals/${idCompany}`);
           const data = await response.json();
           console.log("Data jadwal:", data);
           

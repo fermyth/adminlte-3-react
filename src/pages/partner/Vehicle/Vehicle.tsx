@@ -1,4 +1,4 @@
-import { UrlServer } from "@app/libs/Api";
+import { UrlServer,ApiPartner } from "@app/libs/Api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -17,6 +17,7 @@ const Vehicle = () => {
   const [error, setError] = useState<string | null>(null);
   const location = useLocation();
   const url = UrlServer()
+  const url_partner = ApiPartner()
 
   useEffect(() => {
     const fetchData = async () => {
@@ -47,7 +48,7 @@ const Vehicle = () => {
         try {
           // const response = await fetch(`http://localhost:5182/api/v1/mobil-perusahaan/${idCompany}`);
           const response = await fetch(
-            `${url}/mobil-perusahaan/${idCompany}`
+            `${url_partner}/mobil-perusahaan/${idCompany}`
           );
           if (!response.ok) {
             throw new Error("Network response was not ok");
