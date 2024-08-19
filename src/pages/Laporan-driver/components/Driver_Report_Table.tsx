@@ -90,7 +90,8 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({ data }) => {
   const handleLokasiClick = (lat: any, long: any) => {
     if (lat && long) {
       setSelectedLocation({ lat, long });
-      setShow(true);
+      window.open(`maps/${lat}/${long}`, '_blank');
+      //setShow(true);
     } else {
       alert("Data lokasi tidak tersedia");
     }

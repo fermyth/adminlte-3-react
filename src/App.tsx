@@ -25,6 +25,7 @@ import { useAppDispatch, useAppSelector } from "./store/store";
 import Driver from "./pages/Driver/Driver";
 import LaporanJamKerja from "@app/pages/Laporan-Jam-Kerja/Laporan_Jam_Kerja";
 import LaporanDriver from "./pages/Laporan-driver/Laporan_Driver";
+import Maps from "./pages/Laporan-driver/Maps";
 import LaporanHarian from "./pages/Laporan-Harian/Laporan_Harian";
 import DashboardPartner from "./pages/partner/Dashboard/Dashboard_Partner";
 import DetailCostumer from "./pages/partner/Dashboard/components/Detail_Costumer";
@@ -138,6 +139,7 @@ const App = () => {
             <Route path="/admin/driver" element={<Driver />} />
             <Route path="/admin/profil_driver" element={<Profil_Driver />} />
             <Route path="/admin/sigaps_company" element={<LaporanDriver />} />
+            <Route path="/admin/maps/:lat/:long" element={<Maps />} />
             <Route path="/admin/sigaps_driver" element={<LaporanHarian />} />
             <Route path="/admin/service_report" element={<Service />} />
             <Route path="/profile" element={<Profile />} />
