@@ -429,33 +429,26 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({ data }) => {
                                     </tr>
                                   </thead>
                                   <tbody>
-                                    {!loading ? (
-                                      activity.map((val: any, index: any) => (
-                                        <tr key={index}>
-                                          <td>{val.city}</td>
-                                          <td>{val.type}</td>
-                                          <td>
-                                            <Button
-                                              className="btn btn-dark btn-sm"
-                                              onClick={() =>
-                                                handleLokasiClick(
-                                                  val.lat,
-                                                  val.long
-                                                )
-                                              }
-                                            >
-                                              {val.lat && val.long
-                                                ? "Lihat Lokasi"
-                                                : "Lokasi Tidak Tersedia"}
-                                            </Button>
-                                          </td>
-                                        </tr>
-                                      ))
-                                    ) : (
-                                      <tr>
-                                        <td colSpan={3}>Loading...</td>
-                                      </tr>
-                                    )}
+                                  {!loading ? (  
+  activity.filter((val: any) => val.lat && val.long).map((val: any, index: any) => (  
+    <tr key={index}>  
+      <td>{val.city}</td>  
+      <td>{val.type}</td>  
+      <td>  
+        <Button  
+          className="btn btn-dark btn-sm"  
+          onClick={() => handleLokasiClick(val.lat, val.long)}  
+        >  
+          Lihat Lokasi  
+        </Button>  
+      </td>  
+    </tr>  
+  ))) :  
+  (  
+    <tr>  
+      <td colSpan={3}>Loading...</td>  
+    </tr>  
+  )}
                                   </tbody>
                                 </table>
                               </div>
