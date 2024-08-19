@@ -429,26 +429,35 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({ data }) => {
                                     </tr>
                                   </thead>
                                   <tbody>
-                                  {!loading ? (  
-  activity.filter((val: any) => val.lat && val.long).map((val: any, index: any) => (  
-    <tr key={index}>  
-      <td>{val.city}</td>  
-      <td>{val.type}</td>  
-      <td>  
-        <Button  
-          className="btn btn-dark btn-sm"  
-          onClick={() => handleLokasiClick(val.lat, val.long)}  
-        >  
-          Lihat Lokasi  
-        </Button>  
-      </td>  
-    </tr>  
-  ))) :  
-  (  
-    <tr>  
-      <td colSpan={3}>Loading...</td>  
-    </tr>  
-  )}
+                                    {!loading ? (
+                                      Array.from(new Set(activity.map(item => item.city)))
+                                        .map(city => {
+                                          const val = activity.find(item => item.city === city);
+                                          return (
+                                            <tr key={city}>
+                                              <td>{city}</td>
+                                              <td>{val.type}</td>
+                                              <td>
+                                                <Button
+                                                  className="btn btn-dark btn-sm"
+                                                  onClick={() =>
+                                                    handleLokasiClick(
+                                                      val.lat,
+                                                      val.long
+                                                    )
+                                                  }
+                                                >
+                                                  Lihat Lokasi
+                                                </Button>
+                                              </td>
+                                            </tr>
+                                          );
+                                        })
+                                    ) : (
+                                      <tr>
+                                        <td colSpan={3}>Loading...</td>
+                                      </tr>
+                                    )}
                                   </tbody>
                                 </table>
                               </div>
@@ -458,32 +467,34 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({ data }) => {
                                 </Modal.Header>
                                 <Modal.Body>
                                   {selectedLocation && (
-                                    <MapContainer
-                                      center={[
-                                        selectedLocation.lat,
-                                        selectedLocation.long,
-                                      ]}
-                                      zoom={13}
-                                      style={{ height: "400px", width: "100%" }}
-                                    >
-                                      <TileLayer
-                                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                                      />
-                                      <Marker
-                                        position={[
+                                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '400px' }}>
+                                      <MapContainer
+                                        center={[
                                           selectedLocation.lat,
                                           selectedLocation.long,
                                         ]}
-                                        icon={icon}
+                                        zoom={13}
+                                        style={{ height: "100%", width: "100%" }}
                                       >
-                                        <Popup>
-                                          Lokasi Koordinat:{" "}
-                                          {selectedLocation.lat},{" "}
-                                          {selectedLocation.long}
-                                        </Popup>
-                                      </Marker>
-                                    </MapContainer>
+                                        <TileLayer
+                                          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                                          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                                        />
+                                        <Marker
+                                          position={[
+                                            selectedLocation.lat,
+                                            selectedLocation.long,
+                                          ]}
+                                          icon={icon}
+                                        >
+                                          <Popup>
+                                            Lokasi Koordinat:{" "}
+                                            {selectedLocation.lat},{" "}
+                                            {selectedLocation.long}
+                                          </Popup>
+                                        </Marker>
+                                      </MapContainer>
+                                    </div>
                                   )}
                                 </Modal.Body>
                               </Modal>
@@ -555,6 +566,7 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({ data }) => {
                                       <th>Tipe</th>
                                       <th>Nominal</th>
                                       <th>Keterangan</th>
+                                      <th>Foto</th>
                                     </tr>
                                   </thead>
                                   <tbody>
@@ -578,6 +590,14 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({ data }) => {
                                             ).format(val.expenses_value)}
                                           </td>
                                           <td>{val.expenses_notes}</td>
+                                          <td>
+                                            <img
+                                              src={`http://backend.sigapdriver.com/storage/${val.expenses_photo}`}
+                                              alt="Foto Pengeluaran"
+                                              style={{ width: '100px', height: 'auto' }}
+                                              onClick={() => handleImageClick(`http://backend.sigapdriver.com/storage/${val.expenses_photo}`)}
+                                            />
+                                          </td>
                                         </tr>
                                       ))
                                     ) : (
