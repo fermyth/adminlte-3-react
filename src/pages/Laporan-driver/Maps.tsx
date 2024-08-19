@@ -22,7 +22,7 @@ const Maps: React.FC = () => {
 
   return (
     <section className="containers" style={{ padding: 20 }}>
-      <div style={{ height: "1000px", width: "100%" }}>
+      <div style={{ height: "620px", width: "100%" }}>
         {selectedLocation[0] !== 0 && selectedLocation[1] !== 0 && (
           <MapContainer
             center={selectedLocation}
