@@ -433,26 +433,29 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({ data }) => {
                                       Array.from(new Set(activity.map(item => item.city)))
                                         .map(city => {
                                           const val = activity.find(item => item.city === city);
-                                          return (
-                                            <tr key={city}>
-                                              <td>{city}</td>
-                                              <td>{val.type}</td>
-                                              <td>
-                                                <Button
-                                                  className="btn btn-dark btn-sm"
-                                                  onClick={() =>
-                                                    handleLokasiClick(
-                                                      val.lat,
-                                                      val.long
-                                                    )
-                                                  }
-                                                >
-                                                  Lihat Lokasi
-                                                </Button>
-                                              </td>
-                                            </tr>
-                                          );
-                                        })
+                                          if (val.lat && val.long) {
+                                            return (
+                                              <tr key={city}>
+                                                <td>{city}</td>
+                                                <td>{val.type}</td>
+                                                <td>
+                                                  <Button
+                                                    className="btn btn-dark btn-sm"
+                                                    onClick={() =>
+                                                      handleLokasiClick(
+                                                        val.lat,
+                                                        val.long
+                                                      )
+                                                    }
+                                                  >
+                                                    Lihat Lokasi
+                                                  </Button>
+                                                </td>
+                                              </tr>
+                                            );
+                                          }
+                                          return null;
+                                        }).filter(Boolean)
                                     ) : (
                                       <tr>
                                         <td colSpan={3}>Loading...</td>
@@ -461,36 +464,27 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({ data }) => {
                                   </tbody>
                                 </table>
                               </div>
-                              <Modal show={show} onHide={handleCloseModal}>
+                              <Modal show={show} onHide={handleCloseModal} centered>
                                 <Modal.Header closeButton>
                                   <Modal.Title>Lokasi</Modal.Title>
                                 </Modal.Header>
                                 <Modal.Body>
                                   {selectedLocation && (
-                                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '400px' }}>
+                                    <div style={{ height: '400px', width: '100%' }}>
                                       <MapContainer
-                                        center={[
-                                          selectedLocation.lat,
-                                          selectedLocation.long,
-                                        ]}
-                                        zoom={13}
-                                        style={{ height: "100%", width: "100%" }}
+                                        center={[selectedLocation.lat, selectedLocation.long]}
+                                        zoom={15}
+                                        style={{ height: '100%', width: '100%' }}
                                       >
-                                        <TileLayer
-                                          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                                          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                                        />
-                                        <Marker
-                                          position={[
-                                            selectedLocation.lat,
-                                            selectedLocation.long,
-                                          ]}
-                                          icon={icon}
-                                        >
+                                        {(map) => {
+                                          L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                                            attribution: '',
+                                          }).addTo(map);
+                                          return null;
+                                        }}
+                                        <Marker position={[selectedLocation.lat, selectedLocation.long]} icon={icon}>
                                           <Popup>
-                                            Lokasi Koordinat:{" "}
-                                            {selectedLocation.lat},{" "}
-                                            {selectedLocation.long}
+                                            Lokasi yang dipilih
                                           </Popup>
                                         </Marker>
                                       </MapContainer>
