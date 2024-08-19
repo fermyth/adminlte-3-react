@@ -131,8 +131,8 @@ const LaporanHarian: React.FC = () => {
   };
 
   return (
-    <Container>
-      <Row className="mt-5">
+    <>
+      <Row>
         <Col className="text-center">
           <h1 className="text-uppercase font-weight-bold">
             Laporan Harian Driver
@@ -436,9 +436,9 @@ const LaporanHarian: React.FC = () => {
         </Modal.Footer>
       </Modal>
       <div>
-        <Footer/>
+        <Footer />
       </div>
-    </Container>
+    </>
   );
 };
 
