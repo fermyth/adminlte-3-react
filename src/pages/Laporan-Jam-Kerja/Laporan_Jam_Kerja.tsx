@@ -59,6 +59,7 @@ const ContentHeader: React.FC = () => {
 
   useEffect(() => {
     const today = new Date();
+    today.setDate(today.getDate() - 1); // Mundur 1 hari dari hari ini
     let formattedDate = startDate;
     if (!startDate) {
       formattedDate = today.toISOString().split("T")[0];
