@@ -82,12 +82,14 @@ function LaporanDriver() {
     
     async (companyId: any) => {
       let url = `${apiUrl}/${startDate}/${endDate}/${companyId}`;
-      console.log('cekdatalaporandriver',url)
+    
       if (type !== "") {
         url += `/${type}`;
       } else {
         url += `/dummy`;
       }
+
+      console.log('cekdatalaporandriver',url)
       setIsLoading(true);
       setIsError(false);
       setIsNoData(false);

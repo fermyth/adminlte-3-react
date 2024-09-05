@@ -4,32 +4,32 @@ import './Service.css'; // Import CSS for styling
 function Service() {
   const events = [
     {
-      date: '20-08-2019',
-      title: 'Birthday',
+      date: '20 juni 2024',
+      title: 'start kontrak',
       icon: 'fa fa-birthday-cake',
       color: 'purple',
       description:
         'Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel, nam! Nam eveniet ut aliquam ab asperiores, accusamus iure veniam corporis incidunt reprehenderit accusantium id aut architecto harum quidem dolorem in!'
     },
     {
-      date: '20-08-2019',
-      title: 'Lunch',
-      icon: 'fa fa-utensils',
+      date: '10 agustus 2024',
+      title: 'MCU',
+      icon: 'fa fa-plus',
       color: 'orange',
       description:
         'Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel, nam! Nam eveniet ut aliquam ab asperiores, accusamus iure veniam corporis incidunt reprehenderit accusantium id aut architecto harum quidem dolorem in!'
     },
     {
-      date: '20-08-2019',
-      title: 'Exercise',
+      date: '22 november 2024',
+      title: 'Training Driver',
       icon: 'fa fa-dumbbell',
       color: 'green',
       description:
         'Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel, nam! Nam eveniet ut aliquam ab asperiores, accusamus iure veniam corporis incidunt reprehenderit accusantium id aut architecto harum quidem dolorem in!'
     },
     {
-      date: '20-08-2019',
-      title: 'Birthday',
+      date: '19 Juni 2025',
+      title: 'Finish Kontrak',
       icon: 'fa fa-birthday-cake',
       color: 'purple',
       description:
