@@ -7,7 +7,7 @@ function Service() {
       date: '20 juni 2024',
       title: 'start kontrak',
       icon: 'fa fa-birthday-cake',
-      color: 'purple',
+      color: 'blue', // Diubah menjadi abu-abu untuk background start kontrak
       description:
         'Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel, nam! Nam eveniet ut aliquam ab asperiores, accusamus iure veniam corporis incidunt reprehenderit accusantium id aut architecto harum quidem dolorem in!'
     },
@@ -15,7 +15,7 @@ function Service() {
       date: '10 agustus 2024',
       title: 'MCU',
       icon: 'fa fa-plus',
-      color: 'orange',
+      color: 'orange', // Diubah menjadi abu-abu untuk background MCU
       description:
         'Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel, nam! Nam eveniet ut aliquam ab asperiores, accusamus iure veniam corporis incidunt reprehenderit accusantium id aut architecto harum quidem dolorem in!'
     },
@@ -41,7 +41,7 @@ function Service() {
     <div className="service-container">
       <div className="timeline">
         {events.map((event, index) => (
-          <div key={index} className="timeline-event">
+          <div key={index} className={`timeline-event ${event.title === 'start kontrak' || event.title === 'MCU' ? 'grey-background' : ''}`}>
             <div className="timeline-icon" style={{ backgroundColor: event.color }}>
               <i className={event.icon} />
             </div>
