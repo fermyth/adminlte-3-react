@@ -57,7 +57,7 @@ function LaporanDriver() {
   const [isError, setIsError] = useState<boolean>(false);
   const [isNoData, setIsNoData] = useState<boolean>(false);
 
-  // Set default date to today
+  // Set default date to today 
   useEffect(() => {
     const today = new Date().toISOString().split("T")[0];
     setStartDate(today);
