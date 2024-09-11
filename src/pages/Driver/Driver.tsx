@@ -15,6 +15,7 @@ interface DriverApiResponse {
   birthdate: string;
   phone_number: string;
   ktp_address: string;
+  company_name: string;
 }
 
 interface DriverData {
@@ -25,6 +26,7 @@ interface DriverData {
   usia: number;
   handphone: string;
   alamatLengkap: string;
+  company_name: string;
 }
 
 const Driver: React.FC = () => {
@@ -61,6 +63,7 @@ const Driver: React.FC = () => {
               handphone: driver.phone_number,
               id:driver.id,
               alamatLengkap: driver.ktp_address || "",
+              company_name: driver.company_name || "",
             })
           );
           const jumlahDriver50TahunKeAtas = drivers.filter(
@@ -149,7 +152,7 @@ const Driver: React.FC = () => {
   const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
 
 
-  const detaildriver =(id : any ,nama_lengkap : any ,photo : any,alamat : any ,no_hp : any) =>{
+  const detaildriver =(id : any ,nama_lengkap : any ,photo : any,alamat : any ,no_hp : any , company_name : any) =>{
    // alert(id)
     localStorage.setItem('getdatadriver', JSON.stringify({id,nama_lengkap,photo,alamat,no_hp}));
     navigate('/admin/profil_driver');
@@ -294,6 +297,13 @@ const Driver: React.FC = () => {
                 >
                   Alamat Lengkap
                 </th>
+                <th
+                  scope="col"
+                  className="text-center align-middle nowrap"
+                  style={{ backgroundColor: "#009879", color: "white" }}
+                >
+                  Status Perusahaan
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -329,6 +339,7 @@ const Driver: React.FC = () => {
                       item.namaLengkap,
                       item.foto,
                       item.alamatLengkap,
+                      item.company_name,
                       item.handphone
                       
                       )} style={{ cursor: 'pointer', color: 'blue' }}>
@@ -348,6 +359,7 @@ const Driver: React.FC = () => {
                       {item.handphone}
                     </td>
                     <td className="align-middle ">{item.alamatLengkap}</td>
+                    <td className="align-middle ">{item.company_name}</td>
                   </tr>
                 ))
               )}

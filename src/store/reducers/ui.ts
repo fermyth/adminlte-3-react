@@ -32,7 +32,7 @@ const initialState: UiState = {
   darkMode: false,
   navbarVariant: 'navbar-light',
   sidebarSkin: 'sidebar-dark-primary',
-  menuSidebarCollapsed: true,
+  menuSidebarCollapsed: false,
   controlSidebarCollapsed: true,
   headerBorder: false,
   headerFixed: false,

@@ -31,7 +31,7 @@ const Header = () => {
 
   return (
     <>
-      <div className="">
+      <div className="fixed-top mb-4 pb-4">
         <nav
           className={getContainerClasses()}
           style={{ backgroundColor: "black" }}

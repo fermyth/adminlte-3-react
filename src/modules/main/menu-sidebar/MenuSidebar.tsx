@@ -26,7 +26,7 @@ export const MENU: IMenuItem[] = [
   },
   {
     name: i18n.t("menusidebar.label.blank"),
-    icon: "fas fa-tachometer-alt nav-icon",
+    icon: "fas fa-solid fa-clock nav-icon",
     path: "/admin/report_awh",
   },
   {
@@ -46,7 +46,7 @@ export const MENU: IMenuItem[] = [
   },
   {
     name: i18n.t("menusidebar.label.service"),
-    icon: "fas fa-solid fa-book nav-icon",
+    icon: "fas fas fa-file nav-icon",
     path: "/admin/service_report",
   },
 ];
@@ -117,6 +117,7 @@ const MenuSidebar = () => {
         className="brand-link "
         style={{ backgroundColor: "#009879", padding: "13px 13px" }}
       >
+       
         <StyledBrandImage
           src="https://www.freepik.com/free-vector/light-bulb-rocket-design_1130795.htm#fromView=search&page=1&position=37&uuid=bee3cde6-714d-41df-99b2-d0353ae6cd72"
           alt="AdminLTE Logo"
@@ -129,14 +130,14 @@ const MenuSidebar = () => {
         </span>
       </Link>
       <div className="sidebar">
-        <div className="user-panel mt-3 mb-1 d-flex">
-          <div className="image">
+        <div className="user-panel mt-3 mb-1 d-flex flex-column align-items-center">
+          <div className="image ">
             <StyledUserImage
               src="https://portal.sigapdriver.com/icon_admin.png"
               fallbackSrc="/img/default-profile.png"
               alt="User"
-              width={34}
-              height={34}
+              width={44}
+              height={44}
               rounded
             />
           </div>
@@ -156,7 +157,7 @@ const MenuSidebar = () => {
 
         <nav className="" style={{ overflowY: "hidden" }}>
           <ul
-            className={`nav nav-pills nav-sidebar flex-column${
+            className={`nav nav-pills nav-sidebar flex-column  ${
               menuItemFlat ? " nav-flat" : ""
             }${menuChildIndent ? " nav-child-indent" : ""}`}
             role="menu"

@@ -51,6 +51,7 @@ const ContentHeader: React.FC = () => {
         setIdCompany(null);
       }
     } catch (error) {
+      
       console.error("Error fetching id_company from AsyncStorage:", error);
     } finally {
       setLoading(false);
@@ -59,7 +60,7 @@ const ContentHeader: React.FC = () => {
 
   useEffect(() => {
     const today = new Date();
-    today.setDate(today.getDate() - 1); // Mundur 1 hari dari hari ini
+    today.setDate(today.getDate() - 1); 
     let formattedDate = startDate;
     if (!startDate) {
       formattedDate = today.toISOString().split("T")[0];
@@ -79,7 +80,6 @@ const ContentHeader: React.FC = () => {
       eventEmitter.off("storageChange", handleStorageChange);
     };
   }, [tglselect, startDate, fetchData]);
-
   const fetchDatagreatday = async (start: string, idCompany: string) => {
     try {
       const response = await ApiConfig.get(
@@ -129,10 +129,11 @@ const ContentHeader: React.FC = () => {
             ? awh[driver].split(" || ")[1]
             : "-",
         colorCode: calculateColor(awh[driver]),
+        exitTimeColor: getExitTimeColor(jam_keluar[driver][6]),
       }));
 
       setTableData(formattedData);
-      console.log("formattedData:", formattedData);
+      console.log("formattedData:", formattedData.exitTimeColor);
     } catch (error) {
       console.log("Error fetching data from API:", error);
     } finally {
@@ -170,7 +171,7 @@ const ContentHeader: React.FC = () => {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setLoading(true);
+    fetchData();
     calculateDates(startDate);
   };
 
@@ -186,16 +187,29 @@ const ContentHeader: React.FC = () => {
 
     const hours = parseInt(awh.split(":")[0]);
 
-    if (hours >= 55) {
+    if (hours >= 60) {
       return "#ff8566";
-    } else if (hours >= 50 && hours <= 54) {
-      return "#ffcc99";
+    } else if (hours >= 58 && hours <= 60) {
+      return "yellow";
     } else if (hours >= 40 && hours <= 49) {
       return "#ffffb3";
     } else {
       return "#ffffff";
     }
   };
+
+  const getExitTimeColor = (exitTime: string) => {
+    if (!exitTime || exitTime === "" || exitTime === "-") return "#ffffff";
+    
+    const [hours, minutes] = exitTime.split(":").map(Number);
+    
+    if (hours >= 23) return "#ffcc99"; 
+    
+    return "#ffffff"; 
+  };
+  
+  
+  
 
   return (
     <section className="containers" style={{ padding: 20 }}>
@@ -219,6 +233,9 @@ const ContentHeader: React.FC = () => {
               onChange={(e) => setStartDate(e.target.value)}
               placeholder="Pilih Tanggal"
             />
+             <button type="submit" className="btn btn-dark ml-3">
+              Filter
+            </button>
             <button
               type="button"
               className="btn btn-success custom-btn ml-3"
@@ -318,61 +335,65 @@ const ContentHeader: React.FC = () => {
                 </tr>
               </thead>
               <tbody>
-                {tableData.length > 0 ? (
-                  tableData.map((driver: any, index) => (
-                    <tr key={index}>
-                      <td className="align-middle sticky-column">
-                        {driver.name}
-                      </td>
-                      {[
-                        "monday",
-                        "tuesday",
-                        "wednesday",
-                        "thursday",
-                        "friday",
-                        "saturday",
-                        "sunday",
-                      ].flatMap((day) =>
-                        driver[day].map((time: any, idx: any) => (
-                          <td key={`${day}-${idx}`} className="text-center">
-                            {time}
-                          </td>
-                        ))
-                      )}
-                      <td
-                        className="text-center"
-                        style={{ backgroundColor: driver.colorCode }}
-                      >
-                        {driver.totalWorkHours === "00:00"
-                          ? "-"
-                          : driver.totalWorkHours}
-                      </td>
-                      <td
-                        className="text-center"
-                        style={{ backgroundColor: driver.colorCode }}
-                      >
-                        {driver.totalRestHours === "00:00"
-                          ? "-"
-                          : driver.totalRestHours}
-                      </td>
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td
-                      className="align-middle sticky-column text-center"
-                      colSpan={17}
-                    >
-                      Tidak ada data
-                    </td>
-                  </tr>
-                )}
-              </tbody>
+  {tableData.length > 0 ? (
+    tableData.map((driver: any, index) => (
+      <tr key={index}>
+        <td className="align-middle sticky-column">{driver.name}</td>
+        {[
+          "monday",
+          "tuesday",
+          "wednesday",
+          "thursday",
+          "friday",
+          "saturday",
+          "sunday",
+        ].map((day, dayIndex) => (
+          <>
+            <td key={`${day}-masuk`} className="text-center">
+              {driver[day][0]} 
+            </td>
+            <td
+              key={`${day}-keluar`}
+              className="text-center"
+              style={{ backgroundColor: getExitTimeColor(driver[day][1]) }}  
+            >
+              {driver[day][1]} 
+            </td>
+          </>
+        ))}
+        <td
+          className="text-center"
+          style={{ backgroundColor: driver.colorCode }}
+        >
+          {driver.totalWorkHours === "00:00" ? "-" : driver.totalWorkHours}
+        </td>
+        <td
+          className="text-center"
+          style={{ backgroundColor: driver.colorCode }}
+        >
+          {driver.totalRestHours === "00:00" ? "-" : driver.totalRestHours}
+        </td>
+      </tr>
+    ))
+  ) : (
+    <tr>
+      <td
+        className="align-middle sticky-column text-center"
+        colSpan={17}
+      >
+        Tidak ada data
+      </td>
+    </tr>
+  )}
+</tbody>
+
             </table>
           )}
         </div>
       </div>
+      <div className="pt-4 pb-1 ">
       <Footer/>
+      </div>
     </section>
   );
 };

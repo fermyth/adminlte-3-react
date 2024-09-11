@@ -79,7 +79,9 @@ const Main = () => {
     }
     return (
       <>
+      <div className="pb-5">
         <Header />
+      </div>
         <StyledMenuSidebar />
         <div className="content-wrapper bg-white">
           <section className="content">
