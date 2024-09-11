@@ -11,6 +11,7 @@ const eventEmitter = new EventEmitter();
 interface TableData {
   name: string;
   monday: string[];
+  company_names: string;
   tuesday: string[];
   wednesday: string[];
   thursday: string[];
@@ -29,6 +30,7 @@ const ContentHeader: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [idCompany, setIdCompany] = useState<string | null>(null);
   const [tglselect, settglselect] = useState<string | null>(null);
+  const [companyName, setCompanyName] = useState<string | null>(null);
 
   const fetchData = useCallback(async () => {
     setLoading(true);
@@ -51,7 +53,6 @@ const ContentHeader: React.FC = () => {
         setIdCompany(null);
       }
     } catch (error) {
-      
       console.error("Error fetching id_company from AsyncStorage:", error);
     } finally {
       setLoading(false);
@@ -60,7 +61,7 @@ const ContentHeader: React.FC = () => {
 
   useEffect(() => {
     const today = new Date();
-    today.setDate(today.getDate() - 1); 
+    today.setDate(today.getDate() - 1);
     let formattedDate = startDate;
     if (!startDate) {
       formattedDate = today.toISOString().split("T")[0];
@@ -80,6 +81,7 @@ const ContentHeader: React.FC = () => {
       eventEmitter.off("storageChange", handleStorageChange);
     };
   }, [tglselect, startDate, fetchData]);
+
   const fetchDatagreatday = async (start: string, idCompany: string) => {
     try {
       const response = await ApiConfig.get(
@@ -88,10 +90,14 @@ const ContentHeader: React.FC = () => {
       const data = response.data.data;
       console.log("data", data);
 
-      const { drivers, jam_masuk, jam_keluar, awh } = data;
+      // Ambil company_name dari respons dan set ke state
+      setCompanyName(data.company_name);
 
-      const formattedData = drivers.map((driver: any) => ({
+      const { drivers, jam_masuk, jam_keluar, awh, company_names } = data;
+
+      const formattedData = drivers.map((driver: any, index: number) => ({
         name: driver,
+        company_names: company_names[index], // Assuming company_names is an array matching drivers
         monday: [
           formatTime(jam_masuk[driver][0]),
           formatTime(jam_keluar[driver][0]),
@@ -129,17 +135,17 @@ const ContentHeader: React.FC = () => {
             ? awh[driver].split(" || ")[1]
             : "-",
         colorCode: calculateColor(awh[driver]),
-        exitTimeColor: getExitTimeColor(jam_keluar[driver][6]),
       }));
 
       setTableData(formattedData);
-      console.log("formattedData:", formattedData.exitTimeColor);
+      console.log("formattedData:", formattedData);
     } catch (error) {
       console.log("Error fetching data from API:", error);
     } finally {
       setLoading(false);
     }
   };
+  
 
   const formatTime = (time: string) => {
     if (typeof time !== "string" || !time.trim()) {
@@ -309,6 +315,14 @@ const ContentHeader: React.FC = () => {
                   >
                     Nama
                   </th>
+                  <th
+                    rowSpan={2}
+                    className="align-middle text-center "
+                    style={{ width: "200px" }}
+                  >
+                    perusahaan
+                  </th>
+
                   <th colSpan={14} className="text-center">
                     Work Hours
                   </th>
@@ -339,6 +353,7 @@ const ContentHeader: React.FC = () => {
     tableData.map((driver: any, index) => (
       <tr key={index}>
         <td className="align-middle sticky-column">{driver.name}</td>
+        <td className="align-middle sticky-column">{driver.company_names}</td>
         {[
           "monday",
           "tuesday",
