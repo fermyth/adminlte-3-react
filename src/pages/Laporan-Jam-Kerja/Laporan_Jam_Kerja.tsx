@@ -85,7 +85,7 @@ const ContentHeader: React.FC = () => {
   const fetchDatagreatday = async (start: string, idCompany: string) => {
     try {
       const response = await ApiConfig.get(
-        `laporan_jam_kerja/${idCompany}/${start}`
+        `/laporan_jam_kerja/${idCompany}/${start}`
       );
       const data = response.data.data;
       console.log("data", data);
