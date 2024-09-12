@@ -330,7 +330,7 @@ const ContentHeader: React.FC = () => {
                     Total Hours
                   </th>
                 </tr>
-                <tr>
+                <tr >
                   {[
                     "Monday",
                     "Tuesday",
@@ -340,8 +340,8 @@ const ContentHeader: React.FC = () => {
                     "Saturday",
                     "Sunday",
                   ].map((day, index) => (
-                    <th key={index} colSpan={2} className="text-center">
-                      {day} {dates[index]}
+                    <th key={index} colSpan={2} className="text-center" style={{ fontSize: "12px"  }}>
+                      {day} <br /> {dates[index]}
                     </th>
                   ))}
                   <th className="text-center">Work</th>
