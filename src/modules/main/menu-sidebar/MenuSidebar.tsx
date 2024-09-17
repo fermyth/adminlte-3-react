@@ -39,11 +39,11 @@ export const MENU: IMenuItem[] = [
     icon: "fas fa-solid fa-book nav-icon",
     path: "/admin/sigaps_company",
   },
-  {
-    name: i18n.t("menusidebar.label.laporan"),
-    icon: "fas fa-solid fa-user-ninja nav-icon",
-    path: "/admin/sigaps_driver",
-  },
+  // {
+  //   name: i18n.t("menusidebar.label.laporan"),
+  //   icon: "fas fa-solid fa-user-ninja nav-icon",
+  //   path: "/admin/sigaps_driver",
+  // },
   {
     name: i18n.t("menusidebar.label.service"),
     icon: "fas fas fa-file nav-icon",

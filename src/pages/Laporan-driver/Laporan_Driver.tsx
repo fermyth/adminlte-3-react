@@ -263,7 +263,7 @@ function LaporanDriver() {
       <div className="info-box">
         {isFiltered && <DriverReportTable data={data} />}
       </div>
-      <div>
+      <div className="pt-4 pb-1">
         <Footer/>
       </div>
     </>
