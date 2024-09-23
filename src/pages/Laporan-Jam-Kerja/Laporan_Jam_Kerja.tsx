@@ -320,7 +320,7 @@ const ContentHeader: React.FC = () => {
                     className="align-middle text-center "
                     style={{ width: "200px" }}
                   >
-                    Nama Iwo
+                    Perusahaan
                   </th>
 
                   <th colSpan={14} className="text-center">
