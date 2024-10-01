@@ -1,59 +1,297 @@
-import React from 'react';
-import './Service.css'; // Import CSS for styling
+import React, { useEffect, useState } from 'react';
+import './Service.css';
 
 function Service() {
+  const [userIdCompany, setUserIdCompany] = useState(null);
+  
+  useEffect(() => {
+    const userData = JSON.parse(localStorage.getItem('userData'));
+    if (userData && userData.id_company) {
+      setUserIdCompany(userData.id_company); 
+    }
+  }, []);
+
   const events = [
     {
-      date: '20 juni 2024',
-      title: 'start kontrak',
-      icon: 'fa fa-birthday-cake',
-      color: 'blue', // Diubah menjadi abu-abu untuk background start kontrak
-      description:
-        'Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel, nam! Nam eveniet ut aliquam ab asperiores, accusamus iure veniam corporis incidunt reprehenderit accusantium id aut architecto harum quidem dolorem in!'
+      id_company: "351",
+      title: 'Start Kontrak',
+      date: '1 September 2024',
+      icon: 'fa fa-file-contract',
+      color: 'blue',
+      description: [
+        {
+          id_company: "351",
+          name: 'Henkel Indonesia, PT.',
+          link: 'https://permatasolusindo-my.sharepoint.com/:f:/g/personal/ivan_prihartono_permatasolusindo_onmicrosoft_com/EnV8dvi6_l5GhAGfivqdLegBj93DXRNYIGDW_zyJ5kZi_Q?e=APeSWb',
+          date: '1 September 2024'
+        },
+        {
+          id_company: "351",
+          name: 'Henkel Footwear Indonesia, PT',
+          link: 'https://permatasolusindo-my.sharepoint.com/:f:/g/personal/ivan_prihartono_permatasolusindo_onmicrosoft_com/El4IRZHCNURCvZpaC6OUMiYB6Zg1ECmN71FvUJRSW9Cnrw?e=DtEF9d',
+          date: '1 September 2024'
+        }
+      ]
     },
     {
-      date: '10 agustus 2024',
+      id_company: "351",
+      title: 'Pelaporan PKWT',
+      date: '',
+      icon: 'fa fa-file-alt',
+      color: 'orange',
+      description: [
+        {
+          id_company: "351",
+          name: 'Henkel Indonesia, PT.',
+          date: 'Di Jadwalkan'
+        },
+        {
+          id_company: "351",
+          name: 'Henkel Footwear Indonesia, PT',
+          date: 'Di Jadwalkan' 
+        }
+      ]
+    },
+    {
+      id_company: 351,
       title: 'MCU',
-      icon: 'fa fa-plus',
-      color: 'orange', // Diubah menjadi abu-abu untuk background MCU
-      description:
-        'Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel, nam! Nam eveniet ut aliquam ab asperiores, accusamus iure veniam corporis incidunt reprehenderit accusantium id aut architecto harum quidem dolorem in!'
+      date: '',
+      icon: 'fa fa-stethoscope',
+      color: 'orange',
+      description: [
+        {
+          id_company: "351",
+          name: 'Henkel Indonesia, PT.',
+          date: 'Di Jadwalkan'
+        },
+        {
+          id_company: "351",
+          name: 'Henkel Footwear Indonesia, PT',
+          date: 'Di Jadwalkan'
+        }
+      ]
     },
     {
-      date: '22 november 2024',
+      id_company: 351,
       title: 'Training Driver',
-      icon: 'fa fa-dumbbell',
+      icon: 'fa fa-car',
       color: 'green',
-      description:
-        'Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel, nam! Nam eveniet ut aliquam ab asperiores, accusamus iure veniam corporis incidunt reprehenderit accusantium id aut architecto harum quidem dolorem in!'
+      description: [
+        {
+          id_company: "351",
+          name: 'Henkel Indonesia, PT.',
+          date: 'Di Jadwalkan'
+        },
+        {
+          id_company: "351",
+          name: 'Henkel Footwear Indonesia, PT',
+          date: 'Di Jadwalkan'
+        }
+      ]
     },
     {
-      date: '19 Juni 2025',
+      id_company: "351",
       title: 'Finish Kontrak',
-      icon: 'fa fa-birthday-cake',
+      date: '31 Agustus 2028',
+      icon: 'fa fa-calendar-check',
       color: 'purple',
-      description:
-        'Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel, nam! Nam eveniet ut aliquam ab asperiores, accusamus iure veniam corporis incidunt reprehenderit accusantium id aut architecto harum quidem dolorem in!'
-    }
+      description: [
+        {
+          id_company: "351",
+          name: 'Henkel Indonesia, PT.',
+          date: 'Di Jadwalkan'
+        },
+        {
+          id_company: "351",
+          name: 'Henkel Footwear Indonesia, PT',
+          date: 'Di Jadwalkan'
+        }
+      ]
+    },
+
+//HTI//
+
+    {
+      id_company: "289",
+      title: 'Start Kontrak',
+      date: '16 Desember 2023',
+      icon: 'fa fa-file-contract',
+      color: 'blue',
+      description: [
+        {
+          id_company: "289",
+          name: 'Honda Trading Indonesiai, PT (Bekasi)',
+          link: 'https://permatasolusindo-my.sharepoint.com/:b:/g/personal/ivan_prihartono_permatasolusindo_onmicrosoft_com/EdHLVzPxI2FGu1hWe8vThhsBW-7-GeMkelFBplbwkNjQgQ?e=7iIeIP',
+          date: '16 Desember 2023'
+        },
+        {
+          id_company: "289",
+          name: 'Honda Trading Indonesiai, PT (Karawang)',
+          link: 'https://permatasolusindo-my.sharepoint.com/:b:/g/personal/ivan_prihartono_permatasolusindo_onmicrosoft_com/EaLtKaJrjW1MjZaUYa7ze0UBgoZoNzmgbFrsDtqJ5mmmlg?e=ZQpBcW',
+          date: '16 Desember 2023'
+        },
+        {
+          id_company: "289",
+          name: 'Honda Trading Indonesiai, PT (Jakarta)',
+          link: 'https://permatasolusindo-my.sharepoint.com/:b:/g/personal/ivan_prihartono_permatasolusindo_onmicrosoft_com/ERbe_NZCuXhFu7ZxiG2XJd0B43YqYomSdGNbbNiTr30QKg?e=cvEEmY',
+          date: '16 Desember 2023'
+        }
+      ]
+    },
+    {
+      id_company: "289",
+      title: 'Pelaporan PKWT',
+      date: '',
+      icon: 'fa fa-file-alt',
+      color: 'orange',
+      description: [
+        {
+          id_company: "289",
+          name: 'Honda Trading Indonesiai, PT (Bekasi)',
+          date: 'Di Jadwalkan'
+        },
+        {
+          id_company: "289",
+          name: 'Honda Trading Indonesiai, PT (Karawang)',
+          date: 'Di Jadwalkan' 
+        },
+        {
+          id_company: "289",
+          name: 'Honda Trading Indonesiai, PT (Jakarta)',
+          link: 'https://permatasolusindo-my.sharepoint.com/:b:/g/personal/ivan_prihartono_permatasolusindo_onmicrosoft_com/EYWYGL5wC6lKh3_-vcrwFbcBb_QEkX6fRumhdciRJHtvlQ?e=XSJnYg',
+          date: '22 Maret 2024'
+        }
+      ]
+    },
+    {
+      id_company: "289",
+      title: 'MCU',
+      date: 'Sudah Di lakukan',
+      icon: 'fa fa-stethoscope',
+      color: 'orange',
+      description: [
+        {
+          id_company: "289",
+          name: 'Honda Trading Indonesiai, PT (Bekasi)',
+          link: 'https://permatasolusindo-my.sharepoint.com/:b:/g/personal/ivan_prihartono_permatasolusindo_onmicrosoft_com/ES1oW3cYkrxLmyfSzdSN-zwBryeqb94Hw33AkiBqzMBl_g?e=awcaaU',
+          date: '28 Maret 2024'
+        },
+        {
+          id_company: "289",
+          name: 'Honda Trading Indonesiai, PT (Karawang)',
+          link: 'https://permatasolusindo-my.sharepoint.com/:b:/g/personal/ivan_prihartono_permatasolusindo_onmicrosoft_com/ES1oW3cYkrxLmyfSzdSN-zwBryeqb94Hw33AkiBqzMBl_g?e=awcaaU',
+          date: '6 Maret 2024'
+        },
+        {
+          id_company: "289",
+          name: 'Honda Trading Indonesiai, PT (Jakarta)',
+          link: 'https://permatasolusindo-my.sharepoint.com/:b:/g/personal/ivan_prihartono_permatasolusindo_onmicrosoft_com/ES1oW3cYkrxLmyfSzdSN-zwBryeqb94Hw33AkiBqzMBl_g?e=awcaaU',
+          date: '6 Maret 2024'
+        },
+      ]
+    },
+    {
+      id_company: "289",
+      title: 'Training Driver',
+      date: '6 Juli 2023',
+      icon: 'fa fa-car',
+      color: 'green',
+      description: [
+        {
+          id_company: "289",
+          name: 'Honda Trading Indonesiai, PT (Bekasi)',
+          link: 'https://permatasolusindo-my.sharepoint.com/:f:/g/personal/ivan_prihartono_permatasolusindo_onmicrosoft_com/EvE5RuHL0mVLgjFYwRWRLucBK1Xl2bBpwtszDRyowDqINQ?e=DD1Nzw',
+          date: '6 Juli 2023'
+        },
+        {
+          id_company: "289",
+          name: 'Honda Trading Indonesiai, PT (Karawang)',
+          link: 'https://permatasolusindo-my.sharepoint.com/:f:/g/personal/ivan_prihartono_permatasolusindo_onmicrosoft_com/EvE5RuHL0mVLgjFYwRWRLucBK1Xl2bBpwtszDRyowDqINQ?e=DD1Nzw',
+          date: '6 Juli 2023'
+        },
+        {
+          id_company: "289",
+          name: 'Honda Trading Indonesiai, PT (Jakarta)',
+          link: 'https://permatasolusindo-my.sharepoint.com/:f:/g/personal/ivan_prihartono_permatasolusindo_onmicrosoft_com/EvE5RuHL0mVLgjFYwRWRLucBK1Xl2bBpwtszDRyowDqINQ?e=DD1Nzw',
+          date: '6 Juli 2023'
+        },
+      ]
+    },
+    {
+      id_company: "289",
+      title: 'Finish Kontrak',
+      date: '15 Desember 2024',
+      icon: 'fa fa-calendar-check',
+      color: 'purple',
+      description: [
+        {
+          id_company: "289",
+          name: 'Honda Trading Indonesiai, PT (Bekasi)',
+          link: 'https://permatasolusindo-my.sharepoint.com/:f:/g/personal/ivan_prihartono_permatasolusindo_onmicrosoft_com/EjvNvWRtys1PpbD30IZhLpQB1ebKWg6tAnv0rqMgKcncMQ?e=CgCrNO',
+          date: '15 Desember 2024'
+        },
+        {
+          id_company: "289",
+          name: 'Honda Trading Indonesiai, PT (Karawang)',
+          link: 'https://permatasolusindo-my.sharepoint.com/:f:/g/personal/ivan_prihartono_permatasolusindo_onmicrosoft_com/EjvNvWRtys1PpbD30IZhLpQB1ebKWg6tAnv0rqMgKcncMQ?e=CgCrNO',
+          date: '15 Desember 2024'
+        },
+        {
+          id_company: "289",
+          name: 'Honda Trading Indonesiai, PT (Jakarta)',
+          link: 'https://permatasolusindo-my.sharepoint.com/:f:/g/personal/ivan_prihartono_permatasolusindo_onmicrosoft_com/EjvNvWRtys1PpbD30IZhLpQB1ebKWg6tAnv0rqMgKcncMQ?e=CgCrNO',
+          date: '15 Desember 2024'
+        },
+      ]
+    },
   ];
+
+  // Filter events berdasarkan id_company
+  const filteredEvents = events.filter(event =>
+    event.description.some(desc => desc.id_company === userIdCompany) // Cek jika id_company cocok
+  );
 
   return (
     <div className="service-container">
       <div className="timeline">
-        {events.map((event, index) => (
-          <div key={index} className={`timeline-event ${event.title === 'start kontrak' || event.title === 'MCU' ? 'grey-background' : ''}`}>
-            <div className="timeline-icon" style={{ backgroundColor: event.color }}>
-              <i className={event.icon} />
-            </div>
-            <div className="timeline-details">
-              <div className="timeline-date">{event.date}</div>
-              <div className="timeline-content">
-                <h4>{event.title}</h4>
-                <p>{event.description}</p>
+        {userIdCompany === "351" || userIdCompany === "289" ? ( // Bandingkan dengan string
+          filteredEvents.length > 0 ? (
+            filteredEvents.map((event, index) => (
+              <div key={index} className="timeline-event">
+                <div className="timeline-icon" style={{ backgroundColor: event.color }}>
+                  <i className={event.icon} />
+                </div>
+                <div className="timeline-details">
+                  <h4 className="timeline-title">{event.title}</h4>
+                  <div className="timeline-content">
+                    <div className="timeline-date">{event.date || 'Tanggal belum ditentukan'}</div>
+                    <ul>
+                      {event.description.map((desc, idx) => (
+                        <li key={idx}>
+                          <strong>{desc.name}</strong> ({desc.date}){' '}
+                          {desc.link && (
+                            <a href={desc.link} target="_blank" rel="noopener noreferrer">
+                              Lihat Detail
+                            </a>
+                          )}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
               </div>
+            ))
+          ) : (
+            <div>
+              <h4>Tidak ada data yang tersedia.</h4>
             </div>
+          )
+        ) : (
+          <div>
+            <h4>Selamat datang!</h4>
+            <p>Anda tidak memiliki akses ke informasi khusus.</p>
           </div>
-        ))}
+        )}
       </div>
     </div>
   );

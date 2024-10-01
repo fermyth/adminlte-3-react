@@ -1,78 +1,92 @@
 .service-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  padding-top: 3rem;
+  padding: 30px;
+  background-color: #f2f4f6;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 .timeline {
-  max-width: 600px;
-  margin: 0 auto;
+  position: relative;
+  margin: 20px 0;
 }
 
 .timeline-event {
   display: flex;
-  align-items: center;
-  margin-bottom: 20px;
-  padding: 10px;
-  background-color: rgba(255, 255, 255, 0.9);
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease;
-}
-
-.grey-background {
-  display: flex;
-  align-items: center;
-  margin-bottom: 20px;
-  padding: 10px;
-  background-color: rgba(218, 215, 215, 0.9);
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease;
-}
-
-.timeline-event:hover {
-  transform: translateY(-5px);
+  align-items: flex-start; 
+  margin-bottom: 30px;
 }
 
 .timeline-icon {
+  width: 60px; 
+  height: 60px;
+  border-radius: 50%; 
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  margin-right: 15px;
-  color: white;
-  font-size: 20px;
+  color: white; 
+  font-size: 1.5rem; 
+  margin-right: 20px;
+  background-color: var(--icon-color); 
+  transition: transform 0.3s; 
+}
+
+.timeline-icon:hover {
+  transform: scale(1.1);
 }
 
 .timeline-details {
-  display: flex;
-  flex-direction: column;
   flex: 1;
+  padding: 20px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s;
 }
 
-.timeline-date {
-  font-size: 14px;
-  color: #666;
+.timeline-details:hover {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.timeline-title {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #2c3e50;
+  font-weight: 600;
 }
 
 .timeline-content {
-  flex: 1;
+  margin-top: 15px;
 }
 
-.timeline-content h4 {
-  margin: 0 0 5px 0;
-  color: #333;
-  font-size: 16px;
+.timeline-date {
+  font-weight: 500;
+  color: #7f8c8d;
 }
 
-.timeline-content p {
-  margin: 0;
-  color: #666;
-  font-size: 14px;
+.timeline-content ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.timeline-content li {
+  padding: 10px 0;
+  border-bottom: 1px solid #ecf0f1;
+}
+
+.timeline-content li:last-child {
+  border-bottom: none;
+}
+
+.timeline-content a {
+  color: #3498db;
+  text-decoration: underline;
+}
+
+.timeline-content a:hover {
+  text-decoration: none;
+  color: #2980b9;
+}
+
+.timeline-content a:visited {
+  color: #8e44ad;
 }
