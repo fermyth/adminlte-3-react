@@ -6,6 +6,7 @@ import { FaArrowLeft, FaCar, FaImage } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { UrlServer } from "@app/libs/Api";
+import {ApiPartner} from "@app/libs/Api";
 
 const FormMobilPartner: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -32,6 +33,7 @@ const FormMobilPartner: React.FC = () => {
   const location = useLocation();
   const { perusahaanID } = useParams();
   const url = UrlServer()
+  const urlPartner = ApiPartner()
 
   useEffect(() => {
     // const queryParams = new URLSearchParams(location.search);
@@ -70,7 +72,7 @@ const FormMobilPartner: React.FC = () => {
 
     try {
       const response = await axios.post(
-        `${url}/mobil`,
+        `${urlPartner}/mobil`,
         formDataToSend,
         {
           headers: {
