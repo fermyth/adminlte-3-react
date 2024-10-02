@@ -144,6 +144,10 @@ const App = () => {
             <Route path="/admin/service_report" element={<Service />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/" element={<Dashboard />} />
+            <Route
+              path="/admin/customer/costumer-detail/detail-mobil/:nopol"
+              element={<DetailCustomerMobil />}
+            />
           </Route>
           <Route path="/partner-dashboard" element={<Sidebar />}>
             <Route path="/partner-dashboard" element={<DashboardPartner />} />

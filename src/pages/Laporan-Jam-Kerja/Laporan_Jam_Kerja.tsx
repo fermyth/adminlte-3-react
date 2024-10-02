@@ -145,7 +145,6 @@ const ContentHeader: React.FC = () => {
       setLoading(false);
     }
   };
-  
 
   const formatTime = (time: string) => {
     if (typeof time !== "string" || !time.trim()) {
@@ -206,16 +205,13 @@ const ContentHeader: React.FC = () => {
 
   const getExitTimeColor = (exitTime: string) => {
     if (!exitTime || exitTime === "" || exitTime === "-") return "#ffffff";
-    
+
     const [hours, minutes] = exitTime.split(":").map(Number);
-    
-    if (hours >= 23) return "#ffcc99"; 
-    
-    return "#ffffff"; 
+
+    if (hours >= 23) return "#ffcc99";
+
+    return "#ffffff";
   };
-  
-  
-  
 
   return (
     <section className="containers" style={{ padding: 20 }}>
@@ -239,7 +235,7 @@ const ContentHeader: React.FC = () => {
               onChange={(e) => setStartDate(e.target.value)}
               placeholder="Pilih Tanggal"
             />
-             <button type="submit" className="btn btn-dark ml-3">
+            <button type="submit" className="btn btn-dark ml-3">
               Filter
             </button>
             <button
@@ -322,6 +318,13 @@ const ContentHeader: React.FC = () => {
                   >
                     Perusahaan
                   </th>
+                  <th
+                    rowSpan={2}
+                    className="align-middle text-center "
+                    style={{ width: "200px" }}
+                  >
+                    Plat Nomor
+                  </th>
 
                   <th colSpan={14} className="text-center">
                     Work Hours
@@ -330,7 +333,7 @@ const ContentHeader: React.FC = () => {
                     Total Hours
                   </th>
                 </tr>
-                <tr >
+                <tr>
                   {[
                     "Monday",
                     "Tuesday",
@@ -340,7 +343,12 @@ const ContentHeader: React.FC = () => {
                     "Saturday",
                     "Sunday",
                   ].map((day, index) => (
-                    <th key={index} colSpan={2} className="text-center" style={{ fontSize: "12px"  }}>
+                    <th
+                      key={index}
+                      colSpan={2}
+                      className="text-center"
+                      style={{ fontSize: "12px" }}
+                    >
                       {day} <br /> {dates[index]}
                     </th>
                   ))}
@@ -349,65 +357,108 @@ const ContentHeader: React.FC = () => {
                 </tr>
               </thead>
               <tbody>
-  {tableData.length > 0 ? (
-    tableData.map((driver: any, index) => (
-      <tr key={index}>
-        <td className="align-middle sticky-column">{driver.name}</td>
-        <td className="align-middle sticky-column">{driver.company_names}</td>
-        {[
-          "monday",
-          "tuesday",
-          "wednesday",
-          "thursday",
-          "friday",
-          "saturday",
-          "sunday",
-        ].map((day, dayIndex) => (
-          <>
-            <td key={`${day}-masuk`} className="text-center">
-              {driver[day][0]} 
-            </td>
-            <td
-              key={`${day}-keluar`}
-              className="text-center"
-              style={{ backgroundColor: getExitTimeColor(driver[day][1]) }}  
-            >
-              {driver[day][1]} 
-            </td>
-          </>
-        ))}
-        <td
-          className="text-center"
-          style={{ backgroundColor: driver.colorCode }}
-        >
-          {driver.totalWorkHours === "00:00" ? "-" : driver.totalWorkHours}
-        </td>
-        <td
-          className="text-center"
-          style={{ backgroundColor: driver.colorCode }}
-        >
-          {driver.totalRestHours === "00:00" ? "-" : driver.totalRestHours}
-        </td>
-      </tr>
-    ))
-  ) : (
-    <tr>
-      <td
-        className="align-middle sticky-column text-center"
-        colSpan={17}
-      >
-        Tidak ada data
-      </td>
-    </tr>
-  )}
-</tbody>
+                {tableData.length > 0 ? (
+                  tableData.map((driver: any, index) => (
+                    <tr key={index}>
+                      <td className="align-middle sticky-column">
+                        {driver.name}
+                      </td>
+                      <td className="align-middle sticky-column">
+                        {driver.company_names}
+                      </td>
+                      <td className="align-middle sticky-column">
+                        {index === 0 ? (
+                          <a href="/admin/customer/costumer-detail/detail-mobil/B2381PFW">
+                            B2381PFW
+                          </a>
+                        ) : index === 1 ? (
+                          <a href="/admin/customer/costumer-detail/detail-mobil/B2695POU">
+                            B2695POU
+                          </a>
+                        ) : index === 2 ? (
+                          <a href="/admin/customer/costumer-detail/detail-mobil/B1920PJO">
+                            B1920PJO
+                          </a>
+                        ) : index === 3 ? (
+                          <a href="/admin/customer/costumer-detail/detail-mobil/B2056POW">
+                            B2056POW
+                          </a>
+                        ) : index === 4 ? (
+                          <a href="/admin/customer/costumer-detail/detail-mobil/B2522POV">
+                            B2522POV
+                          </a>
+                        ) : index === 5 ? (
+                          <a href="/admin/customer/costumer-detail/detail-mobil/B2040POX">
+                            B2040POX
+                          </a>
+                        ) : index === 6 ? (
+                          <a href="/admin/customer/costumer-detail/detail-mobil/B2612POY">
+                            B2612POY
+                          </a>
+                        ) : (
+                          ""
+                        )}
+                      </td>
 
+                      {[
+                        "monday",
+                        "tuesday",
+                        "wednesday",
+                        "thursday",
+                        "friday",
+                        "saturday",
+                        "sunday",
+                      ].map((day, dayIndex) => (
+                        <>
+                          <td key={`${day}-masuk`} className="text-center">
+                            {driver[day][0]}
+                          </td>
+                          <td
+                            key={`${day}-keluar`}
+                            className="text-center"
+                            style={{
+                              backgroundColor: getExitTimeColor(driver[day][1]),
+                            }}
+                          >
+                            {driver[day][1]}
+                          </td>
+                        </>
+                      ))}
+                      <td
+                        className="text-center"
+                        style={{ backgroundColor: driver.colorCode }}
+                      >
+                        {driver.totalWorkHours === "00:00"
+                          ? "-"
+                          : driver.totalWorkHours}
+                      </td>
+                      <td
+                        className="text-center"
+                        style={{ backgroundColor: driver.colorCode }}
+                      >
+                        {driver.totalRestHours === "00:00"
+                          ? "-"
+                          : driver.totalRestHours}
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td
+                      className="align-middle sticky-column text-center"
+                      colSpan={17}
+                    >
+                      Tidak ada data
+                    </td>
+                  </tr>
+                )}
+              </tbody>
             </table>
           )}
         </div>
       </div>
       <div className="pt-4 pb-1 ">
-      <Footer/>
+        <Footer />
       </div>
     </section>
   );
