@@ -82,29 +82,79 @@ const MenuItem = ({ menuItem }: { menuItem: IMenuItem }) => {
           .nav-item i {
             color: ${!menuSidebarCollapsed ? "#009879" : "#009879"};
           }
+
+          /* Styles for nested items */
+          .nav-treeview {
+            padding-left: 20px; /* Indent nested items */
+            margin-top: 5px; /* Spacing between parent and child items */
+          }
+
+          .nav-treeview .nav-item .nav-link {
+            padding-left: 30px; /* Indent nested link for better hierarchy */
+            color: #333; /* Default color for nested items */
+          }
+
+          .nav-treeview .nav-item .nav-link:hover {
+            background-color: ${!menuSidebarCollapsed ? "#e9ecef" : "transparent"};
+            color: #007bff; /* Change color on hover */
+          }
+
+          .nav-treeview .nav-item .active {
+            background-color: #009879; /* Highlight active child item */
+            color: white;
+          }
+
+          /* Styling for the arrow icon */
+          .arrow {
+            margin-left: auto; /* Push the arrow to the right */
+            display: flex;
+            align-items: center; /* Center vertically */
+            transition: transform 0.3s ease; /* Smooth transition */
+            color: ${!menuSidebarCollapsed ? "#009879" : "#333333"}; /* Arrow color */
+          }
+
+          .arrow.open {
+            transform: rotate(90deg); /* Rotate arrow when menu is open */
+          }
+
+          /* Adjusting the main menu link for better alignment */
+          .nav-link {
+            display: flex; /* Flex layout for main link */
+            align-items: center; /* Center items vertically */
+            padding: 10px 15px; /* Better padding for clickable area */
+            text-decoration: none; /* Remove underline from links */
+            color: inherit; /* Inherit color from parent */
+          }
+
+          .nav-link:hover {
+            background-color: ${!menuSidebarCollapsed ? "#e0f7fa" : "transparent"}; /* Light background on hover */
+          }
+
+          /* Main menu text */
+          .nav-link p {
+            margin: 0; /* Remove default margin for better alignment */
+          }
         `}
       </style>
       <a
-        className={`d-flex text-black ml-3${(isMainActive || isOneOfChildrenActive) && !menuSidebarCollapsed ? " active" : ""}`}
+        className={`nav-link${(isMainActive || isOneOfChildrenActive) && !menuSidebarCollapsed ? " active" : ""}`}
         role="link"
         onClick={handleMainMenuAction}
-        style={{ cursor: "pointer" }}
       >
         <i
           className={`${menuItem.icon}`}
-          style={{ marginRight: "20px", marginTop: "15px" }}
+          style={{ marginRight: "10px" }} // Adjust icon spacing
         />
-        <p className="font-weight-bold" style={{ marginTop: "14px" }}>
-          {t(menuItem.name)}
-        </p>
-        {isExpandable ? <i className="right fas fa-angle-left" /> : null}
+        <p className="font-weight-bold">{t(menuItem.name)}</p>
+        {isExpandable && (
+          <i className={`right fas fa-angle-left arrow${isMenuExtended ? ' open' : ''}`} />
+        )}
       </a>
 
       {isExpandable && menuItem.children && (
         <ul className="nav nav-treeview">
           {menuItem.children.map((item) => (
             <li key={item.name} className="nav-item">
-              {/* Ensure item.path is not undefined */}
               <NavLink className="nav-link" to={item.path || "/"}>
                 <i className={`${item.icon}`} />
                 <p>{t(item.name)}</p>

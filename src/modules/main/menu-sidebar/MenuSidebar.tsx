@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { MenuItem } from "@components";
 import { Image } from "@profabric/react-components";
 import styled from "styled-components";
-// import { SidebarSearch } from '@app/components/sidebar-search/SidebarSearch';
 import i18n from "@app/utils/i18n";
 import { useAppSelector } from "@app/store/store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -35,19 +34,22 @@ export const MENU: IMenuItem[] = [
     path: "/admin/driver",
   },
   {
-    name: i18n.t("menusidebar.label.master_menu"),
-    icon: "far fa-caret-square-down nav-icon",
+    
+    name: i18n.t("menusidebar.label.info"),
+    icon: "fas fa-solid fa-id-card nav-icon",
+    path: "/m",
     children: [
       {
-        name: i18n.t("menusidebar.label.driv_cuti"),
-        icon: "fas fa-solid fa-file nav-icon",
-        path: "/admin/DriverCuti",
+        name: i18n.t("menusidebar.label.timesheets"),
+    icon: "fas fa-solid fa-id-card nav-icon",
+    path: "/m",
       },
       {
-        name: i18n.t("menusidebar.label.timesheets_driver"),
-        icon: "fas fa-solid fa-file nav-icon",
-        path: "/admin/DriverTimeSheets",
+        name: i18n.t("menusidebar.label.cuti"),
+        icon: "fas fa-plus nav-icon",
+        path: "/admin/driver/add",
       },
+
     ],
   },
   {
@@ -146,10 +148,6 @@ const MenuSidebar = () => {
             </p>
           </div>
         </div>
-
-        {/* <div className="form-inline">
-          <SidebarSearch />
-        </div> */}
 
         <nav style={{ overflowY: "hidden" }}>
           <ul

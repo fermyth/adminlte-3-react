@@ -82,7 +82,9 @@
       "bla": "Laporan Driver",
       "laporan": "Laporan Harian",
       "service": "Service Report",
-      "mainMenu": "Main Menu",
+      "info": "Info",
+      "cuti" : "Cuti Drivers",
+      "timesheets" : "Timesheets Drivers",
       "subMenu": "Sub Menu"
     }
   },
