@@ -23,6 +23,8 @@ import { firebaseAuth } from "./firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import { useAppDispatch, useAppSelector } from "./store/store";
 import Driver from "./pages/Driver/Driver";
+import DriverCuti from "./pages/DriverCuti/DriverCuti";
+import DriverTimeSheets from "./pages/DriverTimeSheets/DriverTimeSheets";
 import LaporanJamKerja from "@app/pages/Laporan-Jam-Kerja/Laporan_Jam_Kerja";
 import LaporanDriver from "./pages/Laporan-driver/Laporan_Driver";
 import Maps from "./pages/Laporan-driver/Maps";
@@ -55,8 +57,6 @@ import FormUjiEmisi from "./pages/partner/Jadwal/Form_emisi";
 import FormServisRutin from "./pages/partner/Jadwal/Form_servis_rutin";
 import FormServiseKecelakaan from "./pages/partner/Jadwal/Form_servis_kecelakaan";
 import FormStnk from "./pages/partner/Jadwal/Form_stnk";
-
-
 
 const { VITE_NODE_ENV } = import.meta.env;
 
@@ -137,6 +137,8 @@ const App = () => {
             <Route path="/sub-menu-1" element={<SubMenu />} />
             <Route path="/admin/report_awh" element={<LaporanJamKerja />} />
             <Route path="/admin/driver" element={<Driver />} />
+            <Route path="/admin/DriverCuti" element={<DriverCuti />} />
+            <Route path="/admin/DriverTimeSheets" element={<DriverTimeSheets/>}/>
             <Route path="/admin/profil_driver" element={<Profil_Driver />} />
             <Route path="/admin/sigaps_company" element={<LaporanDriver />} />
             <Route path="/admin/maps/:lat/:long" element={<Maps />} />
@@ -152,21 +154,36 @@ const App = () => {
           <Route path="/partner-dashboard" element={<Sidebar />}>
             <Route path="/partner-dashboard" element={<DashboardPartner />} />
             <Route path="customer" element={<Customer />} />
-            <Route path="vehicle" element={< Vehicle />} />
+            <Route path="vehicle" element={<Vehicle />} />
             <Route path="jadwal" element={<Jadwal />} />
-            <Route path="form_jadwal" element={<FormJadwal/>}/>
-            <Route path="update_jadwal" element={<UpdateJadwal/>}/>
+            <Route path="form_jadwal" element={<FormJadwal />} />
+            <Route path="update_jadwal" element={<UpdateJadwal />} />
             <Route path="detail-costumer" element={<DetailCostumer />} />
-            <Route path="form-perusahaan/:idpartner" element={<FormPerusahaanPartner />} />
-            <Route path="jadwal/update_emisi/:id/:type" element={<FormUjiEmisi />} />
-            <Route path="jadwal/update_service_rutin/:id/:type" element={<FormServisRutin />} />
-            <Route path="jadwal/update_service_kecelakaan/:id/:type" element={<FormServiseKecelakaan />} />
+            <Route
+              path="form-perusahaan/:idpartner"
+              element={<FormPerusahaanPartner />}
+            />
+            <Route
+              path="jadwal/update_emisi/:id/:type"
+              element={<FormUjiEmisi />}
+            />
+            <Route
+              path="jadwal/update_service_rutin/:id/:type"
+              element={<FormServisRutin />}
+            />
+            <Route
+              path="jadwal/update_service_kecelakaan/:id/:type"
+              element={<FormServiseKecelakaan />}
+            />
             <Route path="jadwal/update_stnk/:id/:type" element={<FormStnk />} />
             <Route
               path="update-form-perusahaan"
               element={<UpdateFormPerusahaanInternal />}
             />
-            <Route path="add-mobil-partner/:perusahaanID" element={<FormMobilPartner />} />
+            <Route
+              path="add-mobil-partner/:perusahaanID"
+              element={<FormMobilPartner />}
+            />
             <Route path="add-mobil/:perusahaanID" element={<MobilPartner />} />
             <Route
               path="/partner-dashboard/customer/costumer-detail"

@@ -32,8 +32,9 @@ const FormJadwal: React.FC = () => {
     const fetchData = async () => {
       setLoading(true); 
       try {
-        const response = await axios.get(`${url}nopol`);
-        const data = response.data;
+        const response = await axios.get(`${url}/nopoldriver`);
+        console.log('cekres',response)
+        const data = response.data.data.data;
         const formattedOptions = data.map((item: any) => ({
           value: item.id,
           label: item.nopol,
