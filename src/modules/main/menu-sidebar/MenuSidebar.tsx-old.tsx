@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { MenuItem } from "@components";
 import { Image } from "@profabric/react-components";
 import styled from "styled-components";
+// import { SidebarSearch } from '@app/components/sidebar-search/SidebarSearch';
 import i18n from "@app/utils/i18n";
 import { useAppSelector } from "@app/store/store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -34,32 +35,28 @@ export const MENU: IMenuItem[] = [
     path: "/admin/driver",
   },
   {
-    
-    name: i18n.t("menusidebar.label.info"),
-    icon: "fas fa-solid fa-id-card nav-icon",
-    path: "/",
-    children: [
-      {
-        name: i18n.t("menusidebar.label.timesheets"),
-    icon: "fas fa-solid fa-id-card nav-icon",
+    name: i18n.t("menusidebar.label.driv_cuti"),
+    icon: "fas fa-solid fa-file nav-icon",
+    path: "/admin/DriverCuti",
+  },
+  {
+    name: i18n.t("menusidebar.label.timesheets_driver"),
+    icon: "fas fa-solid fa-file nav-icon",
     path: "/admin/DriverTimeSheets",
-      },
-      {
-        name: i18n.t("menusidebar.label.cuti"),
-        icon: "fas fa-plus nav-icon",
-        path: "/admin/DriverCuti",
-      },
-
-    ],
   },
   {
     name: i18n.t("menusidebar.label.bla"),
     icon: "fas fa-solid fa-book nav-icon",
     path: "/admin/sigaps_company",
   },
+  // {
+  //   name: i18n.t("menusidebar.label.laporan"),
+  //   icon: "fas fa-solid fa-user-ninja nav-icon",
+  //   path: "/admin/sigaps_driver",
+  // },
   {
     name: i18n.t("menusidebar.label.service"),
-    icon: "fas fa-file nav-icon",
+    icon: "fas fas fa-file nav-icon",
     path: "/admin/service_report",
   },
 ];
@@ -90,7 +87,7 @@ const MenuSidebar = () => {
       try {
         const userData = await AsyncStorage.getItem("userData");
         if (userData) {
-          const getstorage = JSON.parse(userData);
+          let getstorage = JSON.parse(userData);
           console.log("userData:", getstorage);
           setnamapt(getstorage.nama_perusahaan);
         } else {
@@ -117,9 +114,20 @@ const MenuSidebar = () => {
     };
   }, [currentUser]);
 
+  
   return (
-    <aside className={`main-sidebar elevation-4`} style={{ backgroundColor: "#FFFFFF" }}>
-      <Link to="/" className="brand-link" style={{ backgroundColor: "#009879", padding: "13px 13px" }}>
+    <>
+  
+    <aside
+      className={`main-sidebar elevation-4 `}
+      style={{ backgroundColor: "#FFFFFF  " }}
+    >
+      <Link
+        to="/"
+        className="brand-link "
+        style={{ backgroundColor: "#009879", padding: "13px 13px" }}
+      >
+       
         <StyledBrandImage
           src="https://www.freepik.com/free-vector/light-bulb-rocket-design_1130795.htm#fromView=search&page=1&position=37&uuid=bee3cde6-714d-41df-99b2-d0353ae6cd72"
           alt="AdminLTE Logo"
@@ -127,12 +135,13 @@ const MenuSidebar = () => {
           height={33}
           rounded
         />
-        <span className="brand-text font-weight-bold text-light">SIGAP PORTAL</span>
+        <span className="brand-text font-weight-bold text-light">
+          SIGAP PORTAL
+        </span>
       </Link>
-
       <div className="sidebar">
         <div className="user-panel mt-3 mb-1 d-flex flex-column align-items-center">
-          <div className="image">
+          <div className="image ">
             <StyledUserImage
               src="https://portal.sigapdriver.com/icon_admin.png"
               fallbackSrc="/img/default-profile.png"
@@ -143,24 +152,37 @@ const MenuSidebar = () => {
             />
           </div>
           <div className="info">
-            <p className="d-block text-black font-weight-bold" style={{ fontSize: "20px" }}>
+            <p
+              className="d-block text-black font-weight-bold"
+              style={{ fontSize: "20px" }}
+            >
               {namapt}
             </p>
           </div>
         </div>
 
-        <nav style={{ overflowY: "hidden" }}>
+        {/* <div className="form-inline">
+          <SidebarSearch />
+        </div> */}
+
+        <nav className="" style={{ overflowY: "hidden" }}>
           <ul
-            className={`nav nav-pills nav-sidebar flex-column ${menuItemFlat ? "nav-flat" : ""} ${menuChildIndent ? "nav-child-indent" : ""}`}
+            className={`nav nav-pills nav-sidebar flex-column  ${
+              menuItemFlat ? " nav-flat" : ""
+            }${menuChildIndent ? " nav-child-indent" : ""}`}
             role="menu"
           >
             {MENU.map((menuItem: IMenuItem) => (
-              <MenuItem key={menuItem.name + menuItem.path} menuItem={menuItem} />
+              <MenuItem
+                key={menuItem.name + menuItem.path}
+                menuItem={menuItem}
+              />
             ))}
           </ul>
         </nav>
       </div>
     </aside>
+    </>
   );
 };
 

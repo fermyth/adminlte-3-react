@@ -2,11 +2,9 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Pagination } from "react-bootstrap";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import ApiConfig from "@app/libs/Api";
-import { Link,useNavigate } from "react-router-dom";
+import ApiConfig, { UrlServerRekruitmen } from "@app/libs/Api";
+import { Link, useNavigate } from "react-router-dom";
 import Footer from "../Footer";
-
-
 
 interface DriverApiResponse {
   id: any;
@@ -19,7 +17,7 @@ interface DriverApiResponse {
 }
 
 interface DriverData {
-  id:number;
+  id: number;
   no: number;
   foto: string;
   namaLengkap: string;
@@ -36,7 +34,8 @@ const DriverTimeSheets: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [idCompany, setIdCompany] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [jumlahDriver50TahunKeAtas, setJumlahDriver50TahunKeAtas] = useState(0);
+
+  const url_backend = UrlServerRekruitmen();
 
   useEffect(() => {
     console.log("open the use effect");
@@ -47,7 +46,9 @@ const DriverTimeSheets: React.FC = () => {
     const getDataDriver = async () => {
       setIsLoading(true);
       try {
-        const response = await ApiConfig.get(`drivers/${idCompany}`);
+        const response = await axios.get(
+          `${url_backend}/data_upload_timesheets_employee_company/${idCompany}`
+        );
 
         console.log("response.data.data:", response.data);
 
@@ -55,15 +56,26 @@ const DriverTimeSheets: React.FC = () => {
           const drivers: DriverData[] = response.data.data.map(
             (driver: DriverApiResponse, index: number): DriverData => ({
               no: index + 1,
-              foto:
-                viewPhoto(driver.photo) ||
-                "https://portal.sigapdriver.com/icon_admin.png",
-              namaLengkap: driver.full_name,
-              usia: calculateAge(driver.birthdate),
-              handphone: driver.phone_number,
-              id:driver.id,
-              alamatLengkap: driver.ktp_address || "",
-              company_name: driver.company_name || "",
+              employee_id: driver.employee_id,
+              perusahaan: driver.perusahaan,
+              customer: driver.customer,
+              Driver_Name: driver.Driver_Name || "",
+              cut_off: driver.cut_off || "",
+              no_telp: driver.no_telp,
+              pembayaran_gaji: driver.pembayaran_gaji,
+              keterangan: driver.keterangan,
+              fullname: driver.fullname,
+              company_name: driver.company_name,
+              photo_timesheets1: driver.photo_timesheets1,
+              photo_timesheets2: driver.photo_timesheets2,
+              bulan: driver.bulan,
+              tahun:driver.tahun,
+              start_cutoff: driver.start_cutoff,
+              end_cutoff: driver.end_cutoff,
+              tanggal_gajian: driver.tanggal_gajian,
+              periode_timesheets: driver.periode_timesheets,
+              periode: driver.periode,
+              status: driver.status
             })
           );
           const jumlahDriver50TahunKeAtas = drivers.filter(
@@ -72,7 +84,6 @@ const DriverTimeSheets: React.FC = () => {
 
           setData(drivers);
           console.log("response.data.data222:", drivers);
-          setJumlahDriver50TahunKeAtas(jumlahDriver50TahunKeAtas);
           setIsLoading(false);
         }
       } catch (err) {
@@ -109,39 +120,8 @@ const DriverTimeSheets: React.FC = () => {
     fetchData();
   }, [currentPage]);
 
-  const viewPhoto = (photoAddress: string | null) => {
-    if (photoAddress === null || typeof photoAddress !== "string") {
-      return "https://portal.sigapdriver.com/icon_admin.png";
-    }
 
-    if (photoAddress.indexOf("ttp") < 0) {
-      return "http://operation.sigapps.com/" + photoAddress;
-    } else {
-      return photoAddress;
-    }
-  };
-
-  const calculateAge = (birthdate: string) => {
-    const today = new Date();
-    const dob = new Date(birthdate);
-    let age = today.getFullYear() - dob.getFullYear();
-    const monthDiff = today.getMonth() - dob.getMonth();
-    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
-      age--;
-    }
-    return age;
-  };
- 
-  const getAgeColor = (age: number) => {
-    if (age >= 51 && age <= 55) {
-      return "orange";
-    } else if (age > 55) {
-      return "red";
-    } else {
-      return "black";
-    }
-  };
-
+  
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
   };
@@ -150,13 +130,6 @@ const DriverTimeSheets: React.FC = () => {
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
-
-
-  const detaildriver =(id : any ,nama_lengkap : any ,photo : any,alamat : any ,no_hp : any , company_name : any) =>{
-   // alert(id)
-    localStorage.setItem('getdatadriver', JSON.stringify({id,nama_lengkap,photo,alamat,no_hp}));
-    navigate('/admin/profil_driver');
-  }
 
   return (
     <>
@@ -226,32 +199,10 @@ const DriverTimeSheets: React.FC = () => {
           } 
         `}
       </style>
-      <div className="d-flex mt-3 ml-4 mb-3 ">
-        <div
-          className="info-box d-flex flex-column align-items-center hover py-4"
-          id="driver"
-        >
-          <h1 className="font-weight-bold text-uppercase text-light">
-            {data.length}
-          </h1>
-          <p className="font-weight-bold text-uppercase text-light">
-            Jumlah Driver
-          </p>
-        </div>
-        <div
-          className="info-box d-flex flex-column align-items-center hover py-4 ml-4"
-          id="driver50"
-        >
-          <h1 className="text-light font-weight-bold text-uppercase">
-            {jumlahDriver50TahunKeAtas}
-          </h1>
-          <p className="text-light font-weight-bold text-uppercase">
-            Jumlah Driver 50 Tahun Ke atas
-          </p>
-        </div>
-      </div>
+      
       <div className="p-4">
         <div className="table-responsive">
+          <center><h1>Driver Upload Timesheets</h1></center>
           <table className="table table-bordered">
             <thead>
               <tr>
@@ -267,99 +218,137 @@ const DriverTimeSheets: React.FC = () => {
                   className="text-center align-middle nowrap"
                   style={{ backgroundColor: "#009879", color: "white" }}
                 >
-                  Foto
+                  Employee ID
                 </th>
                 <th
                   scope="col"
                   className="text-center align-middle nowrap"
                   style={{ backgroundColor: "#009879", color: "white" }}
                 >
-                  Nama Lengkap
+                 Nama Driver
                 </th>
                 <th
                   scope="col"
                   className="text-center align-middle nowrap"
                   style={{ backgroundColor: "#009879", color: "white" }}
                 >
-                  Usia
+                  Nama Perusahaan
                 </th>
                 <th
                   scope="col"
                   className="text-center align-middle nowrap"
                   style={{ backgroundColor: "#009879", color: "white" }}
                 >
-                  Nomor Handphone
+                 Customer
                 </th>
                 <th
                   scope="col"
                   className="text-center align-middle nowrap"
                   style={{ backgroundColor: "#009879", color: "white" }}
                 >
-                  Alamat Lengkap
+                  No. Telp
                 </th>
                 <th
                   scope="col"
                   className="text-center align-middle nowrap"
                   style={{ backgroundColor: "#009879", color: "white" }}
                 >
-                  Status Perusahaan
+                  Periode Absen Awal
                 </th>
+                <th
+                  scope="col"
+                  className="text-center align-middle nowrap"
+                  style={{ backgroundColor: "#009879", color: "white" }}
+                >
+                  Periode Absen Akhir
+                </th>
+                <th
+                  scope="col"
+                  className="text-center align-middle nowrap"
+                  style={{ backgroundColor: "#009879", color: "white" }}
+                >
+                 Photo Timesheets 1
+                </th>
+                <th
+                  scope="col"
+                  className="text-center align-middle nowrap"
+                  style={{ backgroundColor: "#009879", color: "white" }}
+                >
+                  Photo Timesheets 2
+                </th>
+                <th
+                  scope="col"
+                  className="text-center align-middle nowrap"
+                  style={{ backgroundColor: "#009879", color: "white" }}
+                >
+                  Status
+                </th>
+               
               </tr>
             </thead>
             <tbody>
               {isLoading ? (
                 <tr>
-                  <td colSpan={6} className="text-center">
+                  <td colSpan={12} className="text-center">
                     Loading...
                   </td>
                 </tr>
               ) : error ? (
                 <tr>
-                  <td colSpan={6} className="text-center">
+                  <td colSpan={12} className="text-center">
                     {error}
                   </td>
                 </tr>
               ) : (
-                currentItems.map((item : any) => (
+                currentItems.map((item: any) => (
                   <tr key={item.no}>
                     <th scope="row" className="text-center align-middle nowrap">
                       {item.no}
                     </th>
                     <td className="text-center align-middle nowrap">
+                      {item.employee_id}
+                    </td>
+                    <td className="text-center align-middle nowrap">
+                      {item.Driver_Name}
+                    </td>
+                    <td className="text-center align-middle nowrap">
+                      {item.perusahaan}
+                    </td>
+                    <td className="text-center align-middle nowrap">
+                      {item.customer}
+                    </td>
+                    <td className="align-middle ">{item.no_telp}</td>
+                    <td className="align-middle ">{item.start_cutoff}</td>
+                    <td className="align-middle ">{item.end_cutoff}</td>
+                    <td className="align-middle "> 
+                      {item.photo_timesheets1 !=null?(
                       <img
-                        src={item.foto}
+                        src={item.photo_timesheets1}
                         alt="Foto"
                         className="img-fluid"
                         style={{ width: "50px", height: "50px" }}
                       />
-                    </td>
-                    <td className="text-center align-middle nowrap">
-                    <span onClick={()=>detaildriver(
-                      item.id,
-                      item.namaLengkap,
-                      item.foto,
-                      item.alamatLengkap,
-                      item.company_name,
-                      item.handphone
-                      
-                      )} style={{ cursor: 'pointer', color: 'blue' }}>
-                      {item.namaLengkap}
-                    </span>
-                    </td>
-                    <td
-                      className="text-center align-middle nowrap"
-                      style={{
-                        fontWeight: "bold",
-                        color: getAgeColor(item.usia),
-                      }}
-                    >
-                      {item.usia}
-                    </td>
-                    <td className="text-center align-middle nowrap">
-                      {item.handphone}
-                    </td>
-                    <td className="align-middle ">{item.alamatLengkap}</td>
-                    <td className="align-middle ">{item.company_name}</td>
+                      ):(
+                        <span>-</span>
+                      )}
+                      </td>
+                    <td className="align-middle ">
+                    {item.photo_timesheets2 !='-' && item.photo_timesheets1 !==null ?(
+                      <img
+                        src={item.photo_timesheets2}
+                        alt="Foto"
+                        className="img-fluid"
+                        style={{ width: "50px", height: "50px" }}
+                      />
+                    ):(
+                      <span>-</span>
+                    )}
+                      </td>
+                    {item.status == 1 ?(
+                      <td className="align-middle"><span className="alert-success">Sudah Upload</span></td>
+                    ):(
+                      <td className="align-middle "><span className="alert-danger">Belum Upload</span></td>
+                    )}
                   </tr>
                 ))
               )}
@@ -390,7 +379,7 @@ const DriverTimeSheets: React.FC = () => {
             </Pagination>
           </div>
         </div>
-        <Footer/>
+        <Footer />
       </div>
     </>
   );
