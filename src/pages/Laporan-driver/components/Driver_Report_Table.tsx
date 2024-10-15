@@ -90,7 +90,7 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({ data }) => {
   const handleLokasiClick = (lat: any, long: any) => {
     if (lat && long) {
       setSelectedLocation({ lat, long });
-      window.open(`maps/${lat}/${long}`, "_blank");
+      window.open(`maps/${lat}/${long}`, '_blank');
       //setShow(true);
     } else {
       alert("Data lokasi tidak tersedia");
@@ -117,24 +117,19 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({ data }) => {
     date: string | null,
     name: string | null
   ) => {
-    setloading(true);
     try {
       const response = await ApiConfig.get(`activity/${userId}/${date}`);
       console.log("vvv", response.data.data);
 
       setactifity(response.data.data);
-     
+      setloading(false);
       setSelectedUserId(userId);
       setnamedriver(name);
     } catch (error) {
       console.error("Error fetching company info:", error);
     }
     ``;
-   
-    setTimeout(() => {
-      setloading(false);
-      setOpen(true);
-    }); 
+    setOpen(true);
   };
 
   const handleClose = () => setOpen(false);
@@ -144,23 +139,18 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({ data }) => {
     date: string | null,
     name: string | null
   ) => {
-    setloadingklaim(true); 
-
     try {
       const response = await ApiConfig.get(`pengeluaran/${userId}/${date}`);
       console.log("cekdancek", response.data.data);
       setklaim(response.data.data);
-      settotalklaim(response.data.total_expenses);
+      setloadingklaim(false);
       setSelectedUserIdklaim(userId);
       setnamedriver(name);
+      settotalklaim(response.data.total_expenses);
     } catch (error) {
       console.error("Error fetching company info:", error);
     }
-
-    setTimeout(() => {
-      setloadingklaim(false);
-      setOpenklim(true);
-    }); 
+    setOpenklim(true);
   };
 
   const handleCloseklaim = () => setOpenklim(false);
@@ -226,19 +216,6 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({ data }) => {
             white-space: normal;
             border: 1px solid red;
           }
-          .spinner {
-           border: 4px solid #f3f3f3; 
-           border-top: 4px solid #009879;
-           border-radius: 50%;
-           width: 40px;
-           height: 40px;
-           animation: spin 2s linear infinite;
-          }
-          @keyframes spin {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
-          }
-            
         `}
       </style>
       <table className="table table-hover table-bordered">
@@ -454,15 +431,9 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({ data }) => {
                                   </thead>
                                   <tbody>
                                     {!loading ? (
-                                      Array.from(
-                                        new Set(
-                                          activity.map((item) => item.city)
-                                        )
-                                      )
-                                        .map((city) => {
-                                          const val = activity.find(
-                                            (item) => item.city === city
-                                          );
+                                      Array.from(new Set(activity.map(item => item.city)))
+                                        .map(city => {
+                                          const val = activity.find(item => item.city === city);
                                           if (val.lat && val.long) {
                                             return (
                                               <tr key={city}>
@@ -485,8 +456,7 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({ data }) => {
                                             );
                                           }
                                           return null;
-                                        })
-                                        .filter(Boolean)
+                                        }).filter(Boolean)
                                     ) : (
                                       <tr>
                                         <td colSpan={3}>Loading...</td>
@@ -495,47 +465,28 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({ data }) => {
                                   </tbody>
                                 </table>
                               </div>
-                              <Modal
-                                show={show}
-                                onHide={handleCloseModal}
-                                centered
-                              >
+                              <Modal show={show} onHide={handleCloseModal} centered>
                                 <Modal.Header closeButton>
                                   <Modal.Title>Lokasi</Modal.Title>
                                 </Modal.Header>
                                 <Modal.Body>
                                   {selectedLocation && (
-                                    <div
-                                      style={{ height: "400px", width: "100%" }}
-                                    >
+                                    <div style={{ height: '400px', width: '100%' }}>
                                       <MapContainer
-                                        center={[
-                                          selectedLocation.lat,
-                                          selectedLocation.long,
-                                        ]}
+                                        center={[selectedLocation.lat, selectedLocation.long]}
                                         zoom={15}
-                                        style={{
-                                          height: "100%",
-                                          width: "100%",
-                                        }}
+                                        style={{ height: '100%', width: '100%' }}
                                       >
                                         {(map) => {
-                                          L.tileLayer(
-                                            "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-                                            {
-                                              attribution: "",
-                                            }
-                                          ).addTo(map);
+                                          L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                                            attribution: '',
+                                          }).addTo(map);
                                           return null;
                                         }}
-                                        <Marker
-                                          position={[
-                                            selectedLocation.lat,
-                                            selectedLocation.long,
-                                          ]}
-                                          icon={icon}
-                                        >
-                                          <Popup>Lokasi yang dipilih</Popup>
+                                        <Marker position={[selectedLocation.lat, selectedLocation.long]} icon={icon}>
+                                          <Popup>
+                                            Lokasi yang dipilih
+                                          </Popup>
                                         </Marker>
                                       </MapContainer>
                                     </div>
@@ -638,26 +589,15 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({ data }) => {
                                             <img
                                               src={`http://backend.sigapdriver.com/storage/${val.expenses_photo}`}
                                               alt="Foto Pengeluaran"
-                                              style={{
-                                                width: "100px",
-                                                height: "auto",
-                                              }}
-                                              onClick={() =>
-                                                handleImageClick(
-                                                  `http://backend.sigapdriver.com/storage/${val.expenses_photo}`
-                                                )
-                                              }
+                                              style={{ width: '100px', height: 'auto' }}
+                                              onClick={() => handleImageClick(`http://backend.sigapdriver.com/storage/${val.expenses_photo}`)}
                                             />
                                           </td>
                                         </tr>
                                       ))
                                     ) : (
                                       <tr>
-                                        <td colSpan={4}>
-                                          <center>
-                                            <div className="spinner"></div>
-                                          </center>
-                                        </td>
+                                        <td colSpan={3}>Loading...</td>
                                       </tr>
                                     )}
                                   </tbody>
@@ -712,26 +652,6 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({ data }) => {
             Tutup
           </Button>
         </Modal.Footer>
-      </Modal>
-      <Modal show={loadingklaim} backdrop="static" keyboard={false} centered>
-        <Modal.Body className="d-flex justify-content-center align-items-center">
-          <div>
-            <center>
-              <h5>Loading...</h5>
-              <div className="spinner"></div>
-            </center>
-          </div>
-        </Modal.Body>
-      </Modal>
-      <Modal show={loading} backdrop="static" keyboard={false} centered>
-        <Modal.Body className="d-flex justify-content-center align-items-center">
-          <div>
-            <center>
-              <h5>Loading...</h5>
-              <div className="spinner"></div>
-            </center>
-          </div>
-        </Modal.Body>
       </Modal>
     </div>
   );
