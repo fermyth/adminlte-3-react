@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Modal, Button } from "react-bootstrap";
 import Typography from "@mui/material/Typography";
@@ -64,9 +64,10 @@ interface DriverData {
 
 interface DriverReportTableProps {
   data: DriverData[];
+  loadingdata:boolean;
 }
 
-const DriverReportTable: React.FC<DriverReportTableProps> = ({ data }) => {
+const DriverReportTable: React.FC<DriverReportTableProps> = ({ data,loadingdata }) => {
   const [showModal, setShowModal] = useState(false);
   const [show, setShow] = useState(false);
   const [modalImageUrl, setModalImageUrl] = useState("");
@@ -79,6 +80,8 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({ data }) => {
   const [activity, setactifity] = useState<any | null>(null);
   const [loading, setloading] = useState(true);
   const [loadingklaim, setloadingklaim] = useState(true);
+  const [showLoadingModal, setShowLoadingModal] = useState(false);
+  const [showLoadingModalactivity, setShowLoadingModalactivity] = useState(false);
   const [namedriver, setnamedriver] = useState<string | null>(null);
   const [dataklaim, setklaim] = useState<any | any>(null);
   const [totalklaim, settotalklaim] = useState<any | any>(null);
@@ -86,6 +89,10 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({ data }) => {
     lat: any;
     long: any;
   } | null>({ lat: 0, long: 0 });
+
+  // useEffect(() => {
+  //     console.log()
+  // }, []);
 
   const handleLokasiClick = (lat: any, long: any) => {
     if (lat && long) {
@@ -117,15 +124,22 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({ data }) => {
     date: string | null,
     name: string | null
   ) => {
+    setloading(true);
+    setShowLoadingModalactivity(true);
+
+    await new Promise(resolve => setTimeout(resolve, 1000));
     try {
       const response = await ApiConfig.get(`activity/${userId}/${date}`);
       console.log("vvv", response.data.data);
 
       setactifity(response.data.data);
+      setShowLoadingModalactivity(false);
       setloading(false);
       setSelectedUserId(userId);
       setnamedriver(name);
     } catch (error) {
+      setloading(false);
+      setShowLoadingModalactivity(false);
       console.error("Error fetching company info:", error);
     }
     ``;
@@ -139,19 +153,30 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({ data }) => {
     date: string | null,
     name: string | null
   ) => {
+    setloadingklaim(true);
+    setShowLoadingModal(true); // Tampilkan modal loading
+
+    // Tambahkan delay 3 detik (3000 ms)
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
     try {
       const response = await ApiConfig.get(`pengeluaran/${userId}/${date}`);
       console.log("cekdancek", response.data.data);
       setklaim(response.data.data);
       setloadingklaim(false);
+      setShowLoadingModal(false); // Sembunyikan modal loading
       setSelectedUserIdklaim(userId);
       setnamedriver(name);
       settotalklaim(response.data.total_expenses);
     } catch (error) {
       console.error("Error fetching company info:", error);
+      setloadingklaim(false);
+      setShowLoadingModal(false); // Pastikan untuk mengubah loading state jika ada error
     }
+
     setOpenklim(true);
   };
+  
 
   const handleCloseklaim = () => setOpenklim(false);
 
@@ -216,6 +241,19 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({ data }) => {
             white-space: normal;
             border: 1px solid red;
           }
+          .spinner {
+           border: 4px solid #f3f3f3; 
+           border-top: 4px solid #009879;
+           border-radius: 50%;
+           width: 40px;
+           height: 40px;
+           animation: spin 2s linear infinite;
+          }
+          @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+          }
+            
         `}
       </style>
       <table className="table table-hover table-bordered">
@@ -597,7 +635,7 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({ data }) => {
                                       ))
                                     ) : (
                                       <tr>
-                                        <td colSpan={3}>Loading...</td>
+                                        <td colSpan={4}><center><div className="spinner"></div></center></td>
                                       </tr>
                                     )}
                                   </tbody>
@@ -652,6 +690,26 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({ data }) => {
             Tutup
           </Button>
         </Modal.Footer>
+      </Modal>
+      <Modal show={showLoadingModal} backdrop="static" keyboard={false} centered>
+        <Modal.Body className="d-flex justify-content-center align-items-center">
+          <div>
+            <center>
+              <h5>Loading...</h5>
+              <div className="spinner"></div>
+            </center>
+          </div>
+        </Modal.Body>
+      </Modal>
+      <Modal show={showLoadingModalactivity} backdrop="static" keyboard={false} centered>
+        <Modal.Body className="d-flex justify-content-center align-items-center">
+          <div>
+            <center>
+              <h5>Loading...</h5>
+              <div className="spinner"></div>
+            </center>
+          </div>
+        </Modal.Body>
       </Modal>
     </div>
   );

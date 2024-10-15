@@ -272,7 +272,7 @@ function LaporanDriver() {
       </center>
 
       <div className="info-box">
-        {isFiltered && <DriverReportTable data={data} />}
+        {isFiltered && <DriverReportTable data={data} loadingdata={isLoading} />}
       </div>
       <div className="pt-4 pb-1">
         <Footer />
