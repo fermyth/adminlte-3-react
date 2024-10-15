@@ -7,9 +7,8 @@ import * as XLSX from "xlsx";
 import ApiConfig, { UrlServer } from "@app/libs/Api";
 import Footer from "../Footer";
 
-
 const eventEmitter = new EventEmitter();
- const apiUrl = UrlServer() + '/laporan_driver';
+const apiUrl = UrlServer() + "/laporan_driver";
 //const apiUrl = 'https://api_portal.sigapdriver.com/api/v1/laporan_driver';
 
 interface Timesheet {
@@ -57,7 +56,7 @@ function LaporanDriver() {
   const [isError, setIsError] = useState<boolean>(false);
   const [isNoData, setIsNoData] = useState<boolean>(false);
 
-  // Set default date to today 
+  // Set default date to today
   useEffect(() => {
     const today = new Date().toISOString().split("T")[0];
     setStartDate(today);
@@ -79,17 +78,16 @@ function LaporanDriver() {
   };
 
   const fetchLaporanDriver = useCallback(
-    
     async (companyId: any) => {
       let url = `${apiUrl}/${startDate}/${endDate}/${companyId}`;
-    
+
       if (type !== "") {
         url += `/${type}`;
       } else {
         url += `/dummy`;
       }
 
-      console.log('cekdatalaporandriver',url)
+      console.log("cekdatalaporandriver", url);
       setIsLoading(true);
       setIsError(false);
       setIsNoData(false);
@@ -180,6 +178,18 @@ function LaporanDriver() {
           background-color: #007f66;
           border-color: #007f66;
         } 
+          .spinner {
+           border: 4px solid #f3f3f3; 
+           border-top: 4px solid #009879;
+           border-radius: 50%;
+           width: 40px;
+           height: 40px;
+           animation: spin 2s linear infinite;
+        }
+         @keyframes spin {
+         0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+        }
         `}
       </style>
       <div className="container mb-5">
@@ -256,15 +266,16 @@ function LaporanDriver() {
         </form>
       </div>
       <center>
-        {isLoading && <p>Sedang memuat...</p>}
+        {isLoading && <div className="spinner"></div>}
         {isNoData && <p>Tidak ada data yang ditemukan.</p>}
-        {isError && data.length === 0 && <p>Sedang memuat...</p>}
+        {isError && data.length === 0 && <div className="spinner"></div>}
       </center>
+
       <div className="info-box">
         {isFiltered && <DriverReportTable data={data} />}
       </div>
       <div className="pt-4 pb-1">
-        <Footer/>
+        <Footer />
       </div>
     </>
   );
