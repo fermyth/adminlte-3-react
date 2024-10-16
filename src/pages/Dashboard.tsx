@@ -133,14 +133,23 @@ const Dashboard = () => {
   const getPortal = async (id_company: string) => {
     try {
       const response = await ApiConfig.get(`mastercompanies/${id_company}`);
-      setCompanyInfo(response.data);
+      console.log("response.dataaaa:", response.data);
+  
+      // Ambil objek pertama dari array
+      if (Array.isArray(response.data) && response.data.length > 0) {
+        setCompanyInfo(response.data[0]);
+      } else {
+        console.log("Data perusahaan tidak ditemukan atau format tidak sesuai.");
+        setCompanyInfo(null); // Atau set ke objek kosong jika ingin
+      }
+  
       setIsLoading(false);
     } catch (error) {
       console.error("Error fetching company info:", error);
       setIsLoading(false);
     }
   };
-
+  
   const getLatestInvoices = async (id_company: string) => {
     try {
       const response = await ApiConfig.get(`invoices/${id_company}`);
@@ -161,10 +170,10 @@ const Dashboard = () => {
     return <div>Loading...</div>;
   }
 
-  const addressLines = companyInfo.company_address
-    .split("<p>")
-    .filter((line) => line)
-    .map((line) => line.replace("</p>", "").replace("\r\n", ""));
+  const addressLines = companyInfo?.company_address
+  .replace(/<\/?p>/g, '') // Menghapus tag <p> dan </p>
+  .split("\r\n") // Memisahkan berdasarkan baris baru
+  .filter((line) => line.trim() !== ""); // Menghapus baris kosong
 
   const labels = invoiceData.map((invoice) => invoice.periode);
   const data = invoiceData.map(
@@ -267,14 +276,20 @@ const Dashboard = () => {
               <div className="d-flex ml-3">
                 <p className="font-weight-bold text-black text-uppercase">Alamat</p>
                 <div>
-                  {addressLines.map((line, index) => (
-                    <p
-                      key={index}
-                      className="ml-4 font-weight-bold text-black text-uppercase"
-                    >
-                      {line}
-                    </p>
-                  ))}
+                {addressLines.length > 0 ? (
+          addressLines.map((line, index) => (
+            <p
+              key={index}
+              className="ml-4 font-weight-bold text-black text-uppercase"
+            >
+              {line}
+            </p>
+          ))
+        ) : (
+          <p className="ml-4 font-weight-bold text-black text-uppercase">
+            Alamat tidak tersedia
+          </p>
+        )}
                 </div>
               </div>
             </div>

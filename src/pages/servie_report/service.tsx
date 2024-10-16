@@ -25,12 +25,12 @@ function Service() {
           link: 'https://permatasolusindo-my.sharepoint.com/:f:/g/personal/ivan_prihartono_permatasolusindo_onmicrosoft_com/EnV8dvi6_l5GhAGfivqdLegBj93DXRNYIGDW_zyJ5kZi_Q?e=APeSWb',
           date: '1 September 2024'
         },
-        {
-          id_company: "351",
-          name: 'Henkel Footwear Indonesia, PT',
-          link: 'https://permatasolusindo-my.sharepoint.com/:f:/g/personal/ivan_prihartono_permatasolusindo_onmicrosoft_com/El4IRZHCNURCvZpaC6OUMiYB6Zg1ECmN71FvUJRSW9Cnrw?e=DtEF9d',
-          date: '1 September 2024'
-        }
+        // {
+        //   id_company: "351",
+        //   name: 'Henkel Footwear Indonesia, PT',
+        //   link: 'https://permatasolusindo-my.sharepoint.com/:f:/g/personal/ivan_prihartono_permatasolusindo_onmicrosoft_com/El4IRZHCNURCvZpaC6OUMiYB6Zg1ECmN71FvUJRSW9Cnrw?e=DtEF9d',
+        //   date: '1 September 2024'
+        // }
       ]
     },
     {
@@ -45,15 +45,15 @@ function Service() {
           name: 'Henkel Indonesia, PT.',
           date: 'Di Jadwalkan'
         },
-        {
-          id_company: "351",
-          name: 'Henkel Footwear Indonesia, PT',
-          date: 'Di Jadwalkan' 
-        }
+        // {
+        //   id_company: "351",
+        //   name: 'Henkel Footwear Indonesia, PT',
+        //   date: 'Di Jadwalkan' 
+        // }
       ]
     },
     {
-      id_company: 351,
+      id_company: "351",
       title: 'MCU',
       date: '',
       icon: 'fa fa-stethoscope',
@@ -64,15 +64,15 @@ function Service() {
           name: 'Henkel Indonesia, PT.',
           date: 'Di Jadwalkan'
         },
-        {
-          id_company: "351",
-          name: 'Henkel Footwear Indonesia, PT',
-          date: 'Di Jadwalkan'
-        }
+        // {
+        //   id_company: "351",
+        //   name: 'Henkel Footwear Indonesia, PT',
+        //   date: 'Di Jadwalkan'
+        // }
       ]
     },
     {
-      id_company: 351,
+      id_company: "351",
       title: 'Training Driver',
       icon: 'fa fa-car',
       color: 'green',
@@ -82,11 +82,11 @@ function Service() {
           name: 'Henkel Indonesia, PT.',
           date: 'Di Jadwalkan'
         },
-        {
-          id_company: "351",
-          name: 'Henkel Footwear Indonesia, PT',
-          date: 'Di Jadwalkan'
-        }
+        // {
+        //   id_company: "351",
+        //   name: 'Henkel Footwear Indonesia, PT',
+        //   date: 'Di Jadwalkan'
+        // }
       ]
     },
     {
@@ -101,8 +101,107 @@ function Service() {
           name: 'Henkel Indonesia, PT.',
           date: 'Di Jadwalkan'
         },
+        // {
+        //   id_company: "351",
+        //   name: 'Henkel Footwear Indonesia, PT',
+        //   date: 'Di Jadwalkan'
+        // }
+      ]
+    },
+
+
+    // Footwer 
+    {
+      id_company: "357",
+      title: 'Start Kontrak',
+      date: '1 September 2024',
+      icon: 'fa fa-file-contract',
+      color: 'blue',
+      description: [
+        // {
+        //   id_company: "357",
+        //   name: 'Henkel Indonesia, PT.',
+        //   link: 'https://permatasolusindo-my.sharepoint.com/:f:/g/personal/ivan_prihartono_permatasolusindo_onmicrosoft_com/EnV8dvi6_l5GhAGfivqdLegBj93DXRNYIGDW_zyJ5kZi_Q?e=APeSWb',
+        //   date: '1 September 2024'
+        // },
         {
-          id_company: "351",
+          id_company: "357",
+          name: 'Henkel Footwear Indonesia, PT',
+          link: 'https://permatasolusindo-my.sharepoint.com/:f:/g/personal/ivan_prihartono_permatasolusindo_onmicrosoft_com/El4IRZHCNURCvZpaC6OUMiYB6Zg1ECmN71FvUJRSW9Cnrw?e=DtEF9d',
+          date: '1 September 2024'
+        }
+      ]
+    },
+    {
+      id_company: "357",
+      title: 'Pelaporan PKWT',
+      date: '',
+      icon: 'fa fa-file-alt',
+      color: 'orange',
+      description: [
+        // {
+        //   id_company: "357",
+        //   name: 'Henkel Indonesia, PT.',
+        //   date: 'Di Jadwalkan'
+        // },
+        {
+          id_company: "357",
+          name: 'Henkel Footwear Indonesia, PT',
+          date: 'Di Jadwalkan' 
+        }
+      ]
+    },
+    {
+      id_company: "357",
+      title: 'MCU',
+      date: '',
+      icon: 'fa fa-stethoscope',
+      color: 'orange',
+      description: [
+        // {
+        //   id_company: "357",
+        //   name: 'Henkel Indonesia, PT.',
+        //   date: 'Di Jadwalkan'
+        // },
+        {
+          id_company: "357",
+          name: 'Henkel Footwear Indonesia, PT',
+          date: 'Di Jadwalkan'
+        }
+      ]
+    },
+    {
+      id_company: "357",
+      title: 'Training Driver',
+      icon: 'fa fa-car',
+      color: 'green',
+      description: [
+        // {
+        //   id_company: "357",
+        //   name: 'Henkel Indonesia, PT.',
+        //   date: 'Di Jadwalkan'
+        // },
+        {
+          id_company: "357",
+          name: 'Henkel Footwear Indonesia, PT',
+          date: 'Di Jadwalkan'
+        }
+      ]
+    },
+    {
+      id_company: "357",
+      title: 'Finish Kontrak',
+      date: '31 Agustus 2028',
+      icon: 'fa fa-calendar-check',
+      color: 'purple',
+      description: [
+        // {
+        //   id_company: "357",
+        //   name: 'Henkel Indonesia, PT.',
+        //   date: 'Di Jadwalkan'
+        // },
+        {
+          id_company: "357",
           name: 'Henkel Footwear Indonesia, PT',
           date: 'Di Jadwalkan'
         }
@@ -246,51 +345,47 @@ function Service() {
     },
   ];
 
+
   // Filter events berdasarkan id_company
   const filteredEvents = events.filter(event =>
-    event.description.some(desc => desc.id_company === userIdCompany) // Cek jika id_company cocok
+    event.id_company === "351" && (userIdCompany === "351" || userIdCompany === "1112") ||
+    event.id_company === "357" && (userIdCompany === "357" || userIdCompany === "1113") ||
+    event.id_company === "289" && userIdCompany === "289"
+
   );
+  console.log("hahahaha", filteredEvents);
 
   return (
     <div className="service-container">
       <div className="timeline">
-        {userIdCompany === "351" || userIdCompany === "289" ? ( // Bandingkan dengan string
-          filteredEvents.length > 0 ? (
-            filteredEvents.map((event, index) => (
-              <div key={index} className="timeline-event">
-                <div className="timeline-icon" style={{ backgroundColor: event.color }}>
-                  <i className={event.icon} />
-                </div>
-                <div className="timeline-details">
-                  <h4 className="timeline-title">{event.title}</h4>
-                  <div className="timeline-content">
-                    <div className="timeline-date">{event.date || 'Tanggal belum ditentukan'}</div>
-                    <ul>
-                      {event.description.map((desc, idx) => (
-                        <li key={idx}>
-                          <strong>{desc.name}</strong> ({desc.date}){' '}
-                          {desc.link && (
-                            <a href={desc.link} target="_blank" rel="noopener noreferrer">
-                              Lihat Detail
-                            </a>
-                          )}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
+        {filteredEvents.length > 0 ? (
+          filteredEvents.map((event, index) => (
+            <div key={index} className="timeline-event">
+              <div className="timeline-icon" style={{ backgroundColor: event.color }}>
+                <i className={event.icon} />
+              </div>
+              <div className="timeline-details">
+                <h4 className="timeline-title">{event.title}</h4>
+                <div className="timeline-content">
+                  <div className="timeline-date">{event.date || 'Tanggal belum ditentukan'}</div>
+                  <ul>
+                    {event.description.map((desc, idx) => (
+                      <li key={idx}>
+                        <strong>{desc.name}</strong> ({desc.date}){' '}
+                        {desc.link && (
+                          <a href={desc.link} target="_blank" rel="noopener noreferrer">
+                            Lihat Detail
+                          </a>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               </div>
-            ))
-          ) : (
-            <div>
-              <h4>Tidak ada data yang tersedia.</h4>
             </div>
-          )
+          ))
         ) : (
-          <div>
-            <h4>Selamat datang!</h4>
-            <p>Anda tidak memiliki akses ke informasi khusus.</p>
-          </div>
+          <div>Tidak ada event yang tersedia.</div>
         )}
       </div>
     </div>
