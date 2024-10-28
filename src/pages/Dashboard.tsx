@@ -239,7 +239,7 @@ const Dashboard = () => {
             }
   
             .info-box p {
-              color: #777;
+              color: #000;
               font-size: 16px;
               margin: 0;
             }
@@ -254,7 +254,7 @@ const Dashboard = () => {
   
             .charts-container {
               display: grid;
-              grid-template-columns: 2fr 1fr 1fr; /* MyChart lebih lebar, PayChart lebih kecil */
+              grid-template-columns: 2fr 1fr; /* MyChart lebih lebar, PayChart lebih kecil */
               gap: 30px;
             }
   
@@ -317,40 +317,43 @@ const Dashboard = () => {
                 </div>
               </div>
             </div>
-            <div className="info-box w-50 mr-2 bg-black d-flex flex-column align-items-center justify-content-center">
-              <p className="font-weight-bold text-light text-uppercase">
+            <div className="info-box w-50 mr-2 bg-gray d-flex flex-column align-items-center justify-content-center">
+              <p className="text-uppercase">
                 {latestInvoice ? latestInvoice.periode : "Loading..."}
               </p>
-              <h1 className="font-weight-bold text-light text-uppercase">
+              <h1 className="text-uppercase">
                 {latestTotalInvoiceValue.toLocaleString()}
               </h1>
               <h1
                 className="text-light"
-                style={{ fontSize: "25px", fontWeight: "bold" }}
+                style={{ fontSize: "25px", fontWeight: "normal" }}
               >
                 Jumlah Invoice Terakhir
               </h1>
             </div>
           </div>
+
+          {/* <div className="row"> */}
   
+          {/* <div className="col-lg-8"> */}
           <div className="charts-container">
             <div className="chart-item">
               <h4 className="font-weight-bold text-center">Nilai Invoice 6 Terakhir</h4>
               <MyChart data={data} labels={labels} />
             </div>
+          {/* </div> */}
+
+          {/* <div className="col-lg-4"> */}
             <div className="chart-item">
-              <h4 className="font-weight-bold text-center">Type Empolyees</h4>
-              <div className="d-flex justify-content-center">
-                <PieChartCategory employees={ employees } />
-              </div>
-            </div>
-            <div className="chart-item">
-              <h4 className="font-weight-bold text-center">Drivers</h4>
+              <h4 className="font-weight-bold text-center">Usia Drivers</h4>
               <div className="d-flex justify-content-center">
                 <PayChart drivers={ drivers } />
               </div>
             </div>
           </div>
+        {/* </div> */}
+
+          {/* </div> */}
   
           <div className="pt-4 pb-1">
             <Footer />

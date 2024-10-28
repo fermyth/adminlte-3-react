@@ -25,20 +25,20 @@ const MyChart: React.FC<ChartProps> = ({ data, labels }) => {
               label: 'Total Invoice Value',
               data: data,
               backgroundColor: [
-                '#36A2EB', '#FF6384', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40'
+                '#A0A0A0', '#A0A0A0', '#A0A0A0', '#A0A0A0', '#A0A0A0', '#A0A0A0'
               ],
               borderColor: [
-                '#36A2EB', '#FF6384', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40'
+                '#A0A0A0', '#A0A0A0', '#A0A0A0', '#A0A0A0', '#A0A0A0', '#A0A0A0'
               ],
               borderWidth: 1,
-              hoverBackgroundColor: '#ffcc00',
+              hoverBackgroundColor: '#ffffff',
               hoverBorderColor: '#333'
             }]
           },
           options: {
             plugins: {
               legend: {
-                display: true,
+                display: false,
                 position: 'top',
                 labels: {
                   color: '#333',

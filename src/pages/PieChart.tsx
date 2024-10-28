@@ -19,21 +19,21 @@ interface DoughnutChartProps {
 }
 
 const PieChart: React.FC<DoughnutChartProps> = ({ drivers }) => {
-  const retiredDrivers = drivers.filter(driver => driver.age >= 45).length;
+  const retiredDrivers = drivers.filter(driver => driver.age >= 51).length;
   const nonRetiredDrivers = drivers.length - retiredDrivers;
 
   const data = {
     datasets: [
       {
         data: [retiredDrivers, nonRetiredDrivers],
-        backgroundColor: ['#ff6384', '#36a2eb'],
-        borderColor: ['#ff6384', '#36a2eb'],
+        backgroundColor: ['#A0A0A0', '#0d6efd'],
+        borderColor: ['#A0A0A0', '#0d6efd'],
         borderWidth: 2,
         cutout: '70%',
         hoverOffset: 4,
       },
     ],
-    labels: ['Pensiun', 'Belum Pensiun'],
+    labels: ['> 50th', '< 50th'],
   };
 
   const options: ChartOptions<'doughnut'> = {
@@ -55,7 +55,7 @@ const PieChart: React.FC<DoughnutChartProps> = ({ drivers }) => {
         titleFont: { weight: 'bold' },
       },
       legend: {
-        display: true,
+        display: false,
         position: 'bottom',
         labels: {
           color: '#333',
