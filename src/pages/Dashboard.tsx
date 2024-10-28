@@ -154,10 +154,33 @@ const Dashboard = () => {
     try {
       const response = await ApiConfig.get(`invoices/${id_company}`);
       console.log("response.data:", response.data);
-
+  
       if (Array.isArray(response.data) && response.data.length > 0) {
-        const latestInvoices = response.data.slice(0, 6);
-        setInvoiceData(latestInvoices);
+        // Kelompokkan data berdasarkan periode (month_timestamp)
+        const aggregatedData: { [key: string]: { totalA: number; totalB: number } } = {};
+        
+        response.data.forEach((invoice) => {
+          const monthKey = invoice.periode; // Ganti dengan properti yang sesuai untuk month_timestamp
+          
+          const valueA = parseFloat(invoice.grand_total_value_inv_A) || 0;
+          const valueB = parseFloat(invoice.grand_total_value_inv_B) || 0;
+  
+          if (!aggregatedData[monthKey]) {
+            aggregatedData[monthKey] = { totalA: 0, totalB: 0 };
+          }
+          
+          aggregatedData[monthKey].totalA += valueA;
+          aggregatedData[monthKey].totalB += valueB;
+        });
+  
+        // Ubah aggregatedData ke dalam format array untuk chart
+        const finalData = Object.keys(aggregatedData).map((month) => ({
+          periode: month,
+          grand_total_value_inv_A: aggregatedData[month].totalA,
+          grand_total_value_inv_B: aggregatedData[month].totalB,
+        }));
+  
+        setInvoiceData(finalData.slice(0, 6)); // Ambil 6 data teratas jika perlu
       } else {
         console.log("Data invoices tidak ditemukan atau format tidak sesuai.");
       }
@@ -165,6 +188,7 @@ const Dashboard = () => {
       console.error("Error fetching latest invoices:", error);
     }
   };
+  
 
   if (isLoading || !idCompany || !companyInfo) {
     return <div>Loading...</div>;

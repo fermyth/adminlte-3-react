@@ -12,7 +12,7 @@ import {
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 interface Employee {
-  type: 'GS' | 'Job Holder';
+  type: 'Temporary' | 'Job Holder';
 }
 
 interface DoughnutChartProps {
@@ -21,7 +21,7 @@ interface DoughnutChartProps {
 
 const PieChartCategory: React.FC<DoughnutChartProps> = ({ employees }) => {
   // Count the number of 'GS' and 'Job Holder'
-  const gsCount = employees.filter(employee => employee.type === 'GS').length;
+  const gsCount = employees.filter(employee => employee.type === 'Temporary').length;
   const jobHolderCount = employees.filter(employee => employee.type === 'Job Holder').length;
 
   const data = {
@@ -35,7 +35,7 @@ const PieChartCategory: React.FC<DoughnutChartProps> = ({ employees }) => {
         hoverOffset: 4, // Adds space between segments when hovered
       },
     ],
-    labels: ['GS', 'Job Holder'], // Labels for the chart
+    labels: ['Temporary', 'Job Holder'], // Labels for the chart
   };
 
   const options: ChartOptions<'doughnut'> = {

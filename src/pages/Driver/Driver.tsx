@@ -152,11 +152,20 @@ const Driver: React.FC = () => {
   const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
 
 
-  const detaildriver =(id : any ,nama_lengkap : any ,photo : any,alamat : any ,no_hp : any , company_name : any) =>{
-   // alert(id)
-    localStorage.setItem('getdatadriver', JSON.stringify({id,nama_lengkap,photo,alamat,no_hp}));
+  const detaildriver = (id : any, nama_lengkap : any, photo : any, alamat : any, handphone : any, company_name : any) => {
+    localStorage.setItem('getdatadriver', JSON.stringify({
+      id,
+      nama_lengkap,
+      photo,
+      alamat,
+      handphone,
+      company_name
+    }));
+    console.log("cekprofildriverkjdgshfkjwhdfjs", localStorage.getItem('getdatadriver'));
+  
     navigate('/admin/profil_driver');
-  }
+  };
+  
 
   return (
     <>
@@ -335,18 +344,25 @@ const Driver: React.FC = () => {
                     </td>
                     <td className="text-center align-middle nowrap">
                     <span
-                    //  onClick={()=>detaildriver(
-                    //   item.id,
-                    //   item.namaLengkap,
-                    //   item.foto,
-                    //   item.alamatLengkap,
-                    //   item.company_name,
-                    //   item.handphone
-                      
-                    //   )} style={{ cursor: 'pointer', color: 'blue' }}
-                      >
-                      {item.namaLengkap}
-                    </span>
+    onClick={() =>
+      idCompany === "33"
+        ? detaildriver(
+            item.id,
+            item.namaLengkap,
+            item.foto,
+            item.alamatLengkap,
+            item.handphone,
+            item.company_name
+          )
+        : null
+    }
+    style={{
+      cursor: idCompany === "33" ? 'pointer' : 'default',
+      color: idCompany === "33" ? 'blue' : 'gray',
+    }}
+  >
+    {item.namaLengkap}
+  </span>
                     </td>
                     <td
                       className="text-center align-middle nowrap"

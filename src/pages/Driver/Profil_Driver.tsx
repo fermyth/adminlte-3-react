@@ -46,8 +46,11 @@ const ProfilDriver: React.FC = () => {
           setphoto(datstorage.photo);
           setnamadriver(datstorage.nama_lengkap);
           setalamat(datstorage.alamat);
-          setno_hp(datstorage.no_hp);
+          setno_hp(datstorage.handphone);
         }
+
+        console.log("cekprofildriver", storagedriver);
+        
       } catch (error) {
         console.error('Error parsing JSON from localStorage:', error);
       }
@@ -80,6 +83,9 @@ const ProfilDriver: React.FC = () => {
         const response = await axios.get(
           `https://backend.sigapdriver.com/api/getAllDriver?company_info=${idCompany}`
         );
+
+        console.log("klahsdhaHDS",response);
+        
 
         if (response && response.data && response.data.data) {
           const drivers: DriverData[] = response.data.data.map(
@@ -300,45 +306,50 @@ const ProfilDriver: React.FC = () => {
           </div>
         </div>
       </div>
-  
-      <div className="experience-section">
-        <h2>Pengalaman</h2>
-        <table className="experience-table">
-          <thead>
-            <tr>
-              <th>Tahun</th>
-              <th>Perusahaan</th>
-              <th>Jabatan</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>2014 - 2015</td>
-              <td>PT Keyence</td>
-              <td>Driver User</td>
-            </tr>
-            <tr>
-              <td>2016 - 2017</td>
-              <td>PT Epson</td>
-              <td>Driver User</td>
-            </tr>
-            {/* Tambahkan baris lain sesuai kebutuhan */}
-          </tbody>
-        </table>
-      </div>
-  
-      <div className="skills-section">
-        <h2>Keahlian</h2>
-        <table className="skills-table">
-          <tbody>
-            <tr>
-              <td>2019 Lulus training lalu lintas</td>
-            </tr>
-            {/* Tambahkan baris lain sesuai kebutuhan */}
-          </tbody>
-        </table>
-      </div>
+
+      {idCompany !== "33" && (
+        <div className="experience-section">
+          <h2>Pengalaman</h2>
+          <table className="experience-table">
+            <thead>
+              <tr>
+                <th>Tahun</th>
+                <th>Perusahaan</th>
+                <th>Jabatan</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>2014 - 2015</td>
+                <td>PT Keyence</td>
+                <td>Driver User</td>
+              </tr>
+              <tr>
+                <td>2016 - 2017</td>
+                <td>PT Epson</td>
+                <td>Driver User</td>
+              </tr>
+              {/* Tambahkan baris lain sesuai kebutuhan */}
+            </tbody>
+          </table>
+        </div>
+      )}
+      
+      {idCompany !== "33" && (
+        <div className="skills-section">
+          <h2>Keahlian</h2>
+          <table className="skills-table">
+            <tbody>
+              <tr>
+                <td>2019 Lulus training lalu lintas</td>
+              </tr>
+              {/* Tambahkan baris lain sesuai kebutuhan */}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
+    
     
   );
 };
