@@ -334,15 +334,17 @@ const Driver: React.FC = () => {
                       />
                     </td>
                     <td className="text-center align-middle nowrap">
-                    <span onClick={()=>detaildriver(
-                      item.id,
-                      item.namaLengkap,
-                      item.foto,
-                      item.alamatLengkap,
-                      item.company_name,
-                      item.handphone
+                    <span
+                    //  onClick={()=>detaildriver(
+                    //   item.id,
+                    //   item.namaLengkap,
+                    //   item.foto,
+                    //   item.alamatLengkap,
+                    //   item.company_name,
+                    //   item.handphone
                       
-                      )} style={{ cursor: 'pointer', color: 'blue' }}>
+                    //   )} style={{ cursor: 'pointer', color: 'blue' }}
+                      >
                       {item.namaLengkap}
                     </span>
                     </td>

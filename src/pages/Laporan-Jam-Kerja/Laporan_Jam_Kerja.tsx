@@ -318,6 +318,7 @@ const ContentHeader: React.FC = () => {
                   >
                     Perusahaan
                   </th>
+                  {idCompany !== "361" && ( 
                   <th
                     rowSpan={2}
                     className="align-middle text-center "
@@ -325,6 +326,7 @@ const ContentHeader: React.FC = () => {
                   >
                     Plat Nomor
                   </th>
+                  )}
 
                   <th colSpan={14} className="text-center">
                     Work Hours
@@ -366,6 +368,7 @@ const ContentHeader: React.FC = () => {
                       <td className="align-middle sticky-column">
                         {driver.company_names}
                       </td>
+                      {idCompany !== "361" && ( 
                       <td className="align-middle sticky-column">
                         {index === 0 ? (
                           <a href="/admin/customer/costumer-detail/detail-mobil/B2381PFW">
@@ -399,6 +402,7 @@ const ContentHeader: React.FC = () => {
                           ""
                         )}
                       </td>
+                                        )}
 
                       {[
                         "monday",
