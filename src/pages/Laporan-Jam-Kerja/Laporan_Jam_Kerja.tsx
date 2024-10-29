@@ -427,7 +427,7 @@ const ContentHeader: React.FC = () => {
                       <td className="align-middle sticky-column">
                         {driver.company_names}
                       </td>
-                      {idCompany !== "361" && idCompany !== "33" && (
+                      {/* {idCompany !== "361" && idCompany !== "33" && (
                             <td className="align-middle sticky-column">
                               {index === 0 ? (
                                 <a href="/admin/customer/costumer-detail/detail-mobil/B2381PFW">
@@ -461,7 +461,7 @@ const ContentHeader: React.FC = () => {
                                 ""
                               )}
                             </td>
-                          )}
+                          )} */}
 
                       {[
                         "monday",
