@@ -70,22 +70,19 @@ const ContentHeader: React.FC = () => {
       formattedDate = today.toISOString().split("T")[0];
       setStartDate(formattedDate);
     }
-    //alert(type);
-    if (type == null) {
-      fetchData();
-      setLoading(false);
-    }
-    calculateDates(formattedDate);
 
-    const handleStorageChange = () => {
-      fetchData();
-    };
+    // fetchData();
+    // calculateDates(formattedDate);
 
-    eventEmitter.on("storageChange", handleStorageChange);
+    // const handleStorageChange = () => {
+    //   fetchData();
+    // };
 
-    return () => {
-      eventEmitter.off("storageChange", handleStorageChange);
-    };
+    // eventEmitter.on("storageChange", handleStorageChange);
+
+    // return () => {
+    //   eventEmitter.off("storageChange", handleStorageChange);
+    // };
   }, [tglselect, startDate, fetchData]);
 
   const fetchDatagreatday = async (
@@ -273,6 +270,7 @@ const ContentHeader: React.FC = () => {
               style={{ width: "200px", marginRight: 20 }}
               onChange={(e) => setType(e.target.value)}
             >
+              <option value="">Pilih</option>
               <option value="no_temporary">Job Holder</option>
               <option value="temporary">Temporary</option>
             </select>
@@ -427,7 +425,9 @@ const ContentHeader: React.FC = () => {
                       <td className="align-middle sticky-column">
                         {driver.company_names}
                       </td>
-                      {idCompany !== "361" && idCompany !== "33" && (
+                      {idCompany !== "361" ||
+                        idCompany !==
+                          "33"(
                             <td className="align-middle sticky-column">
                               {index === 0 ? (
                                 <a href="/admin/customer/costumer-detail/detail-mobil/B2381PFW">
@@ -511,7 +511,7 @@ const ContentHeader: React.FC = () => {
                       className="align-middle sticky-column text-center"
                       colSpan={17}
                     >
-                      Loading...
+                      Tidak ada data
                     </td>
                   </tr>
                 )}

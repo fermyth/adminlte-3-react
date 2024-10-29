@@ -96,7 +96,7 @@ function LaporanDriver() {
       try {
         const response = await axios.get<ApiResponse>(url);
         //console.log("nanananan", response.data.data);
-
+        console.log('cekdatass',response.data.data)
         setData(response.data.data);
         setIsFiltered(true);
         if (response.data.data.length === 0) {
@@ -213,7 +213,6 @@ function LaporanDriver() {
                 style={{ width: "200px" }}
                 onChange={handleTypeChange}
               >
-                <option value="">Pilih</option>
                 <option value="no_temporary">Job Holder</option>
                 <option value="temporary">Temporary</option>
               </select>

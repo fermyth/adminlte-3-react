@@ -259,7 +259,7 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({ data,loadingdata 
       <table className="table table-hover table-bordered">
         <thead>
           <tr className="header-row der">
-            <th>no</th>
+            {/* <th>no</th> */}
             <th
               colSpan={1}
               rowSpan={2}
@@ -351,7 +351,7 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({ data,loadingdata 
           {data.length > 0 ? (
             data.map((item, index) => (
               <tr key={index}>
-                <td>{index + 1}</td>
+                {/* <td>{index + 1}</td> */}
                 <td className="sticky-column">{item.nama}</td>
                 {allDates.map((date) => {
                   const timesheet = item.timesheet[date];
