@@ -96,7 +96,7 @@ function LaporanDriver() {
       try {
         const response = await axios.get<ApiResponse>(url);
         //console.log("nanananan", response.data.data);
-        console.log('cekdatass',response.data.data)
+        console.log('cekdatass',response.data)
         setData(response.data.data);
         setIsFiltered(true);
         if (response.data.data.length === 0) {

@@ -90,9 +90,9 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({ data,loadingdata 
     long: any;
   } | null>({ lat: 0, long: 0 });
 
-  // useEffect(() => {
-  //     console.log()
-  // }, []);
+  useEffect(() => {
+      console.log('datadrivers2',data)
+  }, []);
 
   const handleLokasiClick = (lat: any, long: any) => {
     if (lat && long) {
@@ -268,6 +268,14 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({ data,loadingdata 
             >
               Nama
             </th>
+            <th
+              colSpan={1}
+              rowSpan={2}
+              className=" text-center sticky-column align-middle"
+              style={{ backgroundColor: "#009879", color: "white" }}
+            >
+              Perusahaan
+            </th>
             {allDates.map((date) => (
               <React.Fragment key={date}>
                 <th
@@ -353,6 +361,7 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({ data,loadingdata 
               <tr key={index}>
                 {/* <td>{index + 1}</td> */}
                 <td className="sticky-column">{item.nama}</td>
+                <td className="sticky-column">{item.company_name}</td>
                 {allDates.map((date) => {
                   const timesheet = item.timesheet[date];
                   return timesheet ? (
