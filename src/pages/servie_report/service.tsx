@@ -125,9 +125,9 @@ function Service() {
   const mcuEvents = filteredEvents.filter(
     (event) => event.tittle_mcu === "MCU"
   );
-  const trainingDriverEvents = filteredEvents.filter(
-    (event) => event.tittle_training_driver === "Training Driver"
-  );
+  // const trainingDriverEvents = filteredEvents.filter(
+  //   (event) => event.tittle_training_driver === "Training Driver"
+  // );
   const finishKontrakEvents = filteredEvents.filter(
     (event) => event.tittle_finish_kontrak === "Finish Kontrak"
   );
@@ -161,14 +161,14 @@ function Service() {
               "fa fa-stethoscope",
               "purple"
             )}
-            {renderSection(
+            {/* {renderSection(
               "Training Driver",
               trainingDriverEvents,
               "tanggal_ba_training",
               "link_doc_ba_training",
               "fa fa-car",
               "green"
-            )}
+            )} */}
             {renderSection(
               "Finish Kontrak",
               finishKontrakEvents,
