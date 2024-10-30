@@ -32,6 +32,7 @@ const ContentHeader: React.FC = () => {
   const [tglselect, settglselect] = useState<string | null>(null);
   const [companyName, setCompanyName] = useState<string | null>(null);
   const [type, setType] = useState<string | null>(null);
+  const [datanopol, setdatanopol] = useState<string | null>(null);
 
   const fetchData = useCallback(async () => {
     setLoading(true);
@@ -98,54 +99,60 @@ const ContentHeader: React.FC = () => {
         `/laporan_jam_kerja/${idCompany}/${start}/${typedata}`
       );
       const data = response.data.data;
-      console.log("data", data);
+      setdatanopol(data.plat_nomor);
+      console.log("data", data.plat_nomor);
 
       // Ambil company_name dari respons dan set ke state
       setCompanyName(data.company_name);
 
       const { drivers, jam_masuk, jam_keluar, awh, company_names } = data;
 
-      const formattedData = drivers.map((driver: any, index: number) => ({
-        name: driver,
-        company_names: company_names[index], // Assuming company_names is an array matching drivers
-        monday: [
-          formatTime(jam_masuk[driver][0]),
-          formatTime(jam_keluar[driver][0]),
-        ],
-        tuesday: [
-          formatTime(jam_masuk[driver][1]),
-          formatTime(jam_keluar[driver][1]),
-        ],
-        wednesday: [
-          formatTime(jam_masuk[driver][2]),
-          formatTime(jam_keluar[driver][2]),
-        ],
-        thursday: [
-          formatTime(jam_masuk[driver][3]),
-          formatTime(jam_keluar[driver][3]),
-        ],
-        friday: [
-          formatTime(jam_masuk[driver][4]),
-          formatTime(jam_keluar[driver][4]),
-        ],
-        saturday: [
-          formatTime(jam_masuk[driver][5]),
-          formatTime(jam_keluar[driver][5]),
-        ],
-        sunday: [
-          formatTime(jam_masuk[driver][6]),
-          formatTime(jam_keluar[driver][6]),
-        ],
-        totalWorkHours:
-          awh[driver] && awh[driver].split(" || ")[0] !== "00:00"
-            ? awh[driver].split(" || ")[0]
-            : "-",
-        totalRestHours:
-          awh[driver] && awh[driver].split(" || ")[1] !== "00:00"
-            ? awh[driver].split(" || ")[1]
-            : "-",
-        colorCode: calculateColor(awh[driver]),
-      }));
+      // Asumsi datanop diambil dari respons API dan berisi data plat nomor
+      // Asumsi datanop adalah array yang diambil dari respons API
+      const formattedData = drivers.map((driver: any, index: number) => {
+        return {
+          name: driver,
+          plat_nomor: datanopol[index]?.nopol || "-", // Ambil plat_nomor berdasarkan indeks, dengan pengecekan
+          company_names: company_names[index], // Memastikan company_names adalah array yang cocok dengan drivers
+          monday: [
+            formatTime(jam_masuk[driver][0]),
+            formatTime(jam_keluar[driver][0]),
+          ],
+          tuesday: [
+            formatTime(jam_masuk[driver][1]),
+            formatTime(jam_keluar[driver][1]),
+          ],
+          wednesday: [
+            formatTime(jam_masuk[driver][2]),
+            formatTime(jam_keluar[driver][2]),
+          ],
+          thursday: [
+            formatTime(jam_masuk[driver][3]),
+            formatTime(jam_keluar[driver][3]),
+          ],
+          friday: [
+            formatTime(jam_masuk[driver][4]),
+            formatTime(jam_keluar[driver][4]),
+          ],
+          saturday: [
+            formatTime(jam_masuk[driver][5]),
+            formatTime(jam_keluar[driver][5]),
+          ],
+          sunday: [
+            formatTime(jam_masuk[driver][6]),
+            formatTime(jam_keluar[driver][6]),
+          ],
+          totalWorkHours:
+            awh[driver] && awh[driver].split(" || ")[0] !== "00:00"
+              ? awh[driver].split(" || ")[0]
+              : "-",
+          totalRestHours:
+            awh[driver] && awh[driver].split(" || ")[1] !== "00:00"
+              ? awh[driver].split(" || ")[1]
+              : "-",
+          colorCode: calculateColor(awh[driver]),
+        };
+      });
 
       setTableData(formattedData);
       console.log("formattedData:", formattedData);
@@ -427,42 +434,13 @@ const ContentHeader: React.FC = () => {
                       <td className="align-middle sticky-column">
                         {driver.company_names}
                       </td>
-                      {idCompany !== "33" && (
-                        <td className="align-middle sticky-column">
-                          {index === 0 ? (
-                            <a href="/admin/customer/costumer-detail/detail-mobil/B2381PFW">
-                              B2381PFW
-                            </a>
-                          ) : index === 1 ? (
-                            <a href="/admin/customer/costumer-detail/detail-mobil/B2695POU">
-                              B2695POU
-                            </a>
-                          ) : index === 2 ? (
-                            <a href="/admin/customer/costumer-detail/detail-mobil/B1920PJO">
-                              B1920PJO
-                            </a>
-                          ) : index === 3 ? (
-                            <a href="/admin/customer/costumer-detail/detail-mobil/B2056POW">
-                              B2056POW
-                            </a>
-                          ) : index === 4 ? (
-                            <a href="/admin/customer/costumer-detail/detail-mobil/B2522POV">
-                              B2522POV
-                            </a>
-                          ) : index === 5 ? (
-                            <a href="/admin/customer/costumer-detail/detail-mobil/B2040POX">
-                              B2040POX
-                            </a>
-                          ) : index === 6 ? (
-                            <a href="/admin/customer/costumer-detail/detail-mobil/B2612POY">
-                              B2612POY
-                            </a>
-                          ) : (
-                            ""
-                          )}
-                        </td>
-                      )}
-
+                      <td className="align-middle sticky-column">
+                        <a
+                          href={`/admin/customer/costumer-detail/detail-mobil/${driver.plat_nomor}`}
+                        >
+                          {driver.plat_nomor}
+                        </a>
+                      </td>
                       {[
                         "monday",
                         "tuesday",
