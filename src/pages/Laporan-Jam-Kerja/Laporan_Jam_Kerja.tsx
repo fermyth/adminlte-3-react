@@ -377,7 +377,7 @@ const ContentHeader: React.FC = () => {
                   >
                     Perusahaan
                   </th>
-                  {/* {idCompany !== "361" && (
+                  {idCompany !== "33" && (
                     <th
                       rowSpan={2}
                       className="align-middle text-center "
@@ -385,7 +385,7 @@ const ContentHeader: React.FC = () => {
                     >
                       Plat Nomor
                     </th>
-                  )} */}
+                  )}
 
                   <th colSpan={14} className="text-center">
                     Work Hours
@@ -427,41 +427,41 @@ const ContentHeader: React.FC = () => {
                       <td className="align-middle sticky-column">
                         {driver.company_names}
                       </td>
-                      {/* {idCompany !== "361" && idCompany !== "33" && (
-                            <td className="align-middle sticky-column">
-                              {index === 0 ? (
-                                <a href="/admin/customer/costumer-detail/detail-mobil/B2381PFW">
-                                  B2381PFW
-                                </a>
-                              ) : index === 1 ? (
-                                <a href="/admin/customer/costumer-detail/detail-mobil/B2695POU">
-                                  B2695POU
-                                </a>
-                              ) : index === 2 ? (
-                                <a href="/admin/customer/costumer-detail/detail-mobil/B1920PJO">
-                                  B1920PJO
-                                </a>
-                              ) : index === 3 ? (
-                                <a href="/admin/customer/costumer-detail/detail-mobil/B2056POW">
-                                  B2056POW
-                                </a>
-                              ) : index === 4 ? (
-                                <a href="/admin/customer/costumer-detail/detail-mobil/B2522POV">
-                                  B2522POV
-                                </a>
-                              ) : index === 5 ? (
-                                <a href="/admin/customer/costumer-detail/detail-mobil/B2040POX">
-                                  B2040POX
-                                </a>
-                              ) : index === 6 ? (
-                                <a href="/admin/customer/costumer-detail/detail-mobil/B2612POY">
-                                  B2612POY
-                                </a>
-                              ) : (
-                                ""
-                              )}
-                            </td>
-                          )} */}
+                      {idCompany !== "33" && (
+                        <td className="align-middle sticky-column">
+                          {index === 0 ? (
+                            <a href="/admin/customer/costumer-detail/detail-mobil/B2381PFW">
+                              B2381PFW
+                            </a>
+                          ) : index === 1 ? (
+                            <a href="/admin/customer/costumer-detail/detail-mobil/B2695POU">
+                              B2695POU
+                            </a>
+                          ) : index === 2 ? (
+                            <a href="/admin/customer/costumer-detail/detail-mobil/B1920PJO">
+                              B1920PJO
+                            </a>
+                          ) : index === 3 ? (
+                            <a href="/admin/customer/costumer-detail/detail-mobil/B2056POW">
+                              B2056POW
+                            </a>
+                          ) : index === 4 ? (
+                            <a href="/admin/customer/costumer-detail/detail-mobil/B2522POV">
+                              B2522POV
+                            </a>
+                          ) : index === 5 ? (
+                            <a href="/admin/customer/costumer-detail/detail-mobil/B2040POX">
+                              B2040POX
+                            </a>
+                          ) : index === 6 ? (
+                            <a href="/admin/customer/costumer-detail/detail-mobil/B2612POY">
+                              B2612POY
+                            </a>
+                          ) : (
+                            ""
+                          )}
+                        </td>
+                      )}
 
                       {[
                         "monday",
