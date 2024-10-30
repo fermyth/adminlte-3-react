@@ -100,20 +100,17 @@ const ContentHeader: React.FC = () => {
       );
       const data = response.data.data;
       setdatanopol(data.plat_nomor);
-      console.log("data", data.plat_nomor);
+      console.log("data", data);
 
-      // Ambil company_name dari respons dan set ke state
       setCompanyName(data.company_name);
 
-      const { drivers, jam_masuk, jam_keluar, awh, company_names } = data;
+      const { drivers, jam_masuk, jam_keluar, awh, company_names, plat_nomor } = data;
 
-      // Asumsi datanop diambil dari respons API dan berisi data plat nomor
-      // Asumsi datanop adalah array yang diambil dari respons API
       const formattedData = drivers.map((driver: any, index: number) => {
         return {
           name: driver,
-          plat_nomor: datanopol[index]?.nopol || "-", // Ambil plat_nomor berdasarkan indeks, dengan pengecekan
-          company_names: company_names[index], // Memastikan company_names adalah array yang cocok dengan drivers
+          plat_nomor: plat_nomor[index]?.nopol || "-",
+          company_names: company_names[index], 
           monday: [
             formatTime(jam_masuk[driver][0]),
             formatTime(jam_keluar[driver][0]),
@@ -155,7 +152,7 @@ const ContentHeader: React.FC = () => {
       });
 
       setTableData(formattedData);
-      console.log("formattedData:", formattedData);
+      console.log("formattedData:", plat_nomor[0]['nopol']);
     } catch (error) {
       console.log("Error fetching data from API:", error);
     } finally {
