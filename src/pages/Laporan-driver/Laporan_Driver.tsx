@@ -80,28 +80,34 @@ function LaporanDriver() {
   const fetchLaporanDriver = useCallback(
     async (companyId: any) => {
       let url = `${apiUrl}/${startDate}/${endDate}/${companyId}`;
-
+  
       if (type !== "") {
         url += `/${type}`;
       } else {
         url += `/dummy`;
       }
-      console.log("cekdatalaporandriver", url);
-
+  
       console.log("cekdatalaporandriver", url);
       setIsLoading(true);
       setIsError(false);
       setIsNoData(false);
-
+  
       try {
         const response = await axios.get<ApiResponse>(url);
-        //console.log("nanananan", response.data.data);
-        console.log('cekdatass',response.data)
+        console.log('cekdatass', response.data);
+        
         setData(response.data.data);
         setIsFiltered(true);
+  
         if (response.data.data.length === 0) {
           setIsNoData(true);
         }
+  
+        // Tambahkan console.log untuk menghitung jumlah data "temporary"
+        if (type === "temporary") {
+          console.log(`Total data temporary: ${response.data.data.length}`);
+        }
+  
       } catch (error) {
         console.error("Error fetching data:", error);
         setIsError(true);
@@ -111,6 +117,7 @@ function LaporanDriver() {
     },
     [startDate, endDate, type]
   );
+  
 
   const fetchData = useCallback(async () => {
     setIsLoading(true);
