@@ -431,6 +431,7 @@ const ContentHeader: React.FC = () => {
                       <td className="align-middle sticky-column">
                         {driver.company_names}
                       </td>
+                      {idCompany !== "33" && (
                       <td className="align-middle sticky-column">
                         <a
                           href={`/admin/customer/costumer-detail/detail-mobil/${driver.plat_nomor}`}
@@ -438,6 +439,7 @@ const ContentHeader: React.FC = () => {
                           {driver.plat_nomor}
                         </a>
                       </td>
+                       )}
                       {[
                         "monday",
                         "tuesday",
