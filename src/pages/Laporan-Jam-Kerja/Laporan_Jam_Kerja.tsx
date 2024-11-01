@@ -3,6 +3,7 @@ import React, { useEffect, useState, useCallback } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { EventEmitter } from "events";
 import * as XLSX from "xlsx";
+import { saveAs } from 'file-saver';
 import ApiConfig from "@app/libs/Api";
 import Footer from "../Footer";
 
@@ -219,12 +220,42 @@ const ContentHeader: React.FC = () => {
     }
   };
 
-  const handleDownloadExcel = () => {
-    const worksheet = XLSX.utils.json_to_sheet(tableData);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Laporan Jam Kerja");
-    XLSX.writeFile(workbook, "Laporan_Jam_Kerja.xlsx");
-  };
+
+  function handleDownloadExcel() {
+    const table = document.getElementById('table-to-export');
+    const workbook = XLSX.utils.table_to_book(table, { raw: true });
+    const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+
+    // Set column widths
+    worksheet["!cols"] = [
+        { wpx: 150 },  
+        { wpx: 150 },  
+        { wpx: 100 },  
+        ...Array(14).fill({ wpx: 75 }), 
+        { wpx: 100 }, 
+        { wpx: 100 }  
+    ];
+
+    const borderStyle = {
+        top: { style: "thin", color: { rgb: "000000" } },
+        bottom: { style: "thin", color: { rgb: "000000" } },
+        left: { style: "thin", color: { rgb: "000000" } },
+        right: { style: "thin", color: { rgb: "000000" } }
+    };
+
+    // Apply border to each cell
+    for (let cell in worksheet) {
+        if (cell[0] === '!') continue;  // Skip special properties
+        if (!worksheet[cell].s) worksheet[cell].s = {};
+        worksheet[cell].s.border = borderStyle;
+    }
+
+    const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    const data = new Blob([excelBuffer], { type: 'application/octet-stream' });
+    saveAs(data, 'Laporan_Jam_Kerja.xlsx');
+}
+
+
 
   const calculateColor = (awh: string | undefined) => {
     if (!awh) return "#ffffff";
@@ -311,7 +342,7 @@ const ContentHeader: React.FC = () => {
           </div>
         </div>
       </div>
-      <div className="table-responsive" style={{ overflowX: "auto" }}>
+      <div className="table-responsive" style={{ overflowX: "auto" }} >
         <style>
           {`
             .btn-success.custom-btn {
@@ -364,7 +395,7 @@ const ContentHeader: React.FC = () => {
           {loading ? (
             <div className="text-center my-4">Memuat data...</div>
           ) : (
-            <table className="table table-bordered" style={{ width: "100%" }}>
+            <table className="table table-bordered" style={{ width: "100%" }} id="table-to-export" >
               <thead>
                 <tr>
                   <th
@@ -392,7 +423,7 @@ const ContentHeader: React.FC = () => {
                   )}
 
                   <th colSpan={14} className="text-center">
-                    Work Hours
+                    <center>Work Hours</center>
                   </th>
                   <th colSpan={2} className="text-center sticky">
                     Total Hours
@@ -439,7 +470,7 @@ const ContentHeader: React.FC = () => {
                           {driver.plat_nomor}
                         </a>
                       </td>
-                       )}
+                      )}
                       {[
                         "monday",
                         "tuesday",
