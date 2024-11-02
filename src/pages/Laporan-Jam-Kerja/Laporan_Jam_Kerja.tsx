@@ -2,10 +2,11 @@ import axios from "axios";
 import React, { useEffect, useState, useCallback } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { EventEmitter } from "events";
-import * as XLSX from "xlsx";
+import ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
 import ApiConfig from "@app/libs/Api";
 import Footer from "../Footer";
+import { sign } from "crypto";
 
 const eventEmitter = new EventEmitter();
 
@@ -220,41 +221,129 @@ const ContentHeader: React.FC = () => {
     }
   };
 
+  async function handleDownloadExcel() {
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet('Laporan Jam Kerja');
 
-  function handleDownloadExcel() {
-    const table = document.getElementById('table-to-export');
-    const workbook = XLSX.utils.table_to_book(table, { raw: true });
-    const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+    // Menambahkan judul di atas tabel
+    const titleRow = worksheet.addRow(['Data Laporan Jam Kerja Mingguan']);
+    titleRow.font = { bold: true, size: 16 };
+    titleRow.alignment = { horizontal: 'center', vertical: 'middle' };
+    worksheet.mergeCells('A1:R1'); // Menggabungkan sel untuk pusat judul di atas tabel
 
-    // Set column widths
-    worksheet["!cols"] = [
-        { wpx: 150 },  
-        { wpx: 150 },  
-        { wpx: 100 },  
-        ...Array(14).fill({ wpx: 75 }), 
-        { wpx: 100 }, 
-        { wpx: 100 }  
+    // Menambahkan rentang tanggal
+    const dateRangeRow = worksheet.addRow([`Tanggal: ${dates[0]} - ${dates[dates.length - 1]}`]);
+    dateRangeRow.alignment = { horizontal: 'center', vertical: 'middle' };
+    worksheet.mergeCells('A2:R2');// Menggabungkan sel untuk pusat rentang tanggal di bawah judul
+     
+    // Membuat header dengan struktur vertikal untuk Jam Masuk dan Jam Keluar
+    const headerRow1 = [
+        'Nama Driver',
+        'Nama Perusahaan',
+        ...dates.flatMap(() => ['Jam Masuk', 'Jam Keluar']),
+        'Total Jam Kerja',
+        'Total Jam Istirahat',
+    ];
+    const headerRow2 = [
+        '',
+        '',
+        ...dates.flatMap(date => [date, date]),
+        '',
+        '',
     ];
 
-    const borderStyle = {
-        top: { style: "thin", color: { rgb: "000000" } },
-        bottom: { style: "thin", color: { rgb: "000000" } },
-        left: { style: "thin", color: { rgb: "000000" } },
-        right: { style: "thin", color: { rgb: "000000" } }
-    };
+    worksheet.addRow([]); // Menambahkan baris kosong untuk pemisah antara judul dan tabel
+    worksheet.addRow(headerRow1);
+    const header = worksheet.addRow(headerRow2);
 
-    // Apply border to each cell
-    for (let cell in worksheet) {
-        if (cell[0] === '!') continue;  // Skip special properties
-        if (!worksheet[cell].s) worksheet[cell].s = {};
-        worksheet[cell].s.border = borderStyle;
-    }
+    // Menggabungkan sel header untuk "Nama Driver" dan "Nama Perusahaan"
+    worksheet.mergeCells('A4:A5'); // Nama Driver
+    worksheet.mergeCells('B4:B5'); // Nama Perusahaan
+    worksheet.mergeCells('Q4:Q5'); // Total Jam Kerja
+    worksheet.mergeCells('R4:R5'); // Total Jam Istirahat
 
-    const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-    const data = new Blob([excelBuffer], { type: 'application/octet-stream' });
-    saveAs(data, 'Laporan_Jam_Kerja.xlsx');
+    // Styling header untuk baris pertama, termasuk pengaturan rata tengah untuk Nama Driver dan Nama Perusahaan
+    worksheet.getRow(4).eachCell((cell, colNumber) => {
+        cell.font = { bold: true, color: { argb: 'FFFFFF' } };
+        cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '4F81BD' } };
+        cell.border = {
+            top: { style: 'thin', color: { argb: '000000' } },
+            bottom: { style: 'thin', color: { argb: '000000' } },
+            left: { style: 'thin', color: { argb: '000000' } },
+            right: { style: 'thin', color: { argb: '000000' } },
+        };
+
+        if (colNumber === 1 || colNumber === 2) {
+            cell.alignment = { horizontal: 'center', vertical: 'middle' };
+        } else {
+            cell.alignment = { horizontal: 'center' };
+        }
+    });
+
+    worksheet.getRow(5).eachCell((cell) => {
+        cell.font = { bold: true, color: { argb: 'FFFFFF' } };
+        cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '4F81BD' } };
+        cell.alignment = { horizontal: 'center' };
+        cell.border = {
+            top: { style: 'thin', color: { argb: '000000' } },
+            bottom: { style: 'thin', color: { argb: '000000' } },
+            left: { style: 'thin', color: { argb: '000000' } },
+            right: { style: 'thin', color: { argb: '000000' } },
+        };
+    });
+
+    // Menambahkan data dari `tableData`
+    tableData.forEach((row, index) => {
+        const dataRow = [
+            row.name,
+            row.company_names,
+            row.monday[0], row.monday[1],
+            row.tuesday[0], row.tuesday[1],
+            row.wednesday[0], row.wednesday[1],
+            row.thursday[0], row.thursday[1],
+            row.friday[0], row.friday[1],
+            row.saturday[0], row.saturday[1],
+            row.sunday[0], row.sunday[1],
+            row.totalWorkHours,
+            row.totalRestHours,
+        ];
+
+        const newRow = worksheet.addRow(dataRow);
+        const fillColor = index % 2 === 0 ? 'FFFFFF' : 'F2F2F2';
+
+        newRow.eachCell((cell, colNumber) => {
+            cell.fill = {
+                type: 'pattern',
+                pattern: 'solid',
+                fgColor: { argb: fillColor }
+            };
+            cell.border = {
+                top: { style: 'thin', color: { argb: '000000' } },
+                bottom: { style: 'thin', color: { argb: '000000' } },
+                left: { style: 'thin', color: { argb: '000000' } },
+                right: { style: 'thin', color: { argb: '000000' } },
+            };
+
+            if (colNumber === 1) {
+                cell.alignment = { horizontal: 'left' };
+            } else {
+                cell.alignment = { horizontal: 'center' };
+            }
+        });
+    });
+
+    // Mengatur lebar kolom
+    worksheet.getColumn(1).width = 20; // Nama Driver
+    worksheet.getColumn(2).width = 30; // Nama Perusahaan
+    worksheet.columns.slice(2, -2).forEach(column => column.width = 15); // Kolom Jam Masuk dan Jam Keluar
+    worksheet.getColumn(17).width = 20; // Total Jam Kerja
+    worksheet.getColumn(18).width = 20; // Total Jam Istirahat
+
+    // Menyimpan file
+    const buffer = await workbook.xlsx.writeBuffer();
+    const blob = new Blob([buffer], { type: 'application/octet-stream' });
+    saveAs(blob, 'Laporan_Jam_Kerja.xlsx');
 }
-
 
 
   const calculateColor = (awh: string | undefined) => {
