@@ -3,7 +3,7 @@ import CustomerList from "./components/Costumer";
 import { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useLocation } from "react-router-dom";
-import { ApiPartner } from "@app/libs/Api";
+import { ApiPartner } from "@app/libs/Api1";
 
 const DashboardPartner = () => {
   const [companies, setCompanies] = useState<any>([]);

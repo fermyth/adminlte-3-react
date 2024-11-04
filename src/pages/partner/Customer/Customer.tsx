@@ -12,7 +12,7 @@ import paginationFactory from "react-bootstrap-table2-paginator";
 import ToolkitProvider, {
   Search,
 } from "react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit";
-import { ApiPartner,UrlServer } from "@app/libs/Api";
+import { ApiPartner,UrlServer } from "@app/libs/Api1";
 
 interface Company {
   id: number;

@@ -6,7 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import Select from "react-select";
-import { UrlServer } from "@app/libs/Api";
+import { UrlServer } from "@app/libs/Api1";
 
 // Fungsi untuk menghapus tag HTML dari string
 const removeHTMLTags = (str: string | null | undefined): string => {

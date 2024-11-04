@@ -5,8 +5,8 @@ import { useNavigate, useLocation, useParams } from "react-router-dom";
 import { FaArrowLeft, FaCar, FaImage } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { UrlServer } from "@app/libs/Api";
-import {ApiPartner} from "@app/libs/Api";
+import { UrlServer } from "@app/libs/Api1";
+import {ApiPartner} from "@app/libs/Api1";
 
 const FormMobilPartner: React.FC = () => {
   const [formData, setFormData] = useState({

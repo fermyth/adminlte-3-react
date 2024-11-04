@@ -2,10 +2,13 @@ import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { EventEmitter } from "events";
-import DriverReportTable from "./components/Driver_Report_Table";
-import * as XLSX from "xlsx";
-import ApiConfig, { UrlServer } from "@app/libs/Api";
+import DriverReportTable from "./components/Driver_Report_Table1";
+
+import ApiConfig, { UrlServer } from "@app/libs/Api1";
 import Footer from "../Footer";
+import ExcelJS from 'exceljs';
+import { documentId } from "firebase/firestore";
+import { saveAs } from 'file-saver';
 
 const eventEmitter = new EventEmitter();
 const apiUrl = UrlServer() + "/laporan_driver";
@@ -34,6 +37,7 @@ interface Timesheet {
 }
 
 interface DriverData {
+  company_name: any;
   nama: string | null;
   name_users: string;
   user_id: number | null;
@@ -166,12 +170,142 @@ function LaporanDriver() {
     }
   };
 
-  const handleDownloadExcel = () => {
-    const worksheet = XLSX.utils.json_to_sheet(data);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Laporan");
-    XLSX.writeFile(workbook, "Laporan_Driver.xlsx");
-  };
+  
+  const handleDownloadExcel = async () => {
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet("Laporan Driver");
+
+    // Header utama
+    worksheet.getCell('A1').value = 'No';
+    worksheet.getCell('B1').value = 'Nama';
+    worksheet.getCell('C1').value = 'Perusahaan';
+
+    // Mengumpulkan tanggal unik dari data untuk header dinamis
+    const tanggalSet = new Set();
+    data.forEach(item => {
+        Object.keys(item.timesheet).forEach(date => {
+            tanggalSet.add(date);
+        });
+    });
+    const uniqueDates = Array.from(tanggalSet);
+ 
+    // Membuat header dinamis berdasarkan jumlah tanggal
+    let colIndex = 5; // Memulai setelah kolom d
+    uniqueDates.forEach(date => {
+      
+        // Menambahkan header utama dengan keterangan
+        worksheet.mergeCells(1, colIndex, 1, colIndex + 1); // Merging cells for "Check In"
+        worksheet.getCell(1, colIndex).value = 'Check In';
+        
+        worksheet.mergeCells(1, colIndex + 2, 1, colIndex + 3); // Merging cells for "Check Out"
+        worksheet.getCell(1, colIndex + 2).value = 'Check Out';
+
+        worksheet.mergeCells(1, colIndex + 4, 1, colIndex + 5); // Merging cells for "Luar Kota"
+        worksheet.getCell(1, colIndex + 4).value = 'Luar Kota';
+
+        // Menambahkan subheader
+        worksheet.getCell(2, colIndex).value = 'Jam Masuk';
+        worksheet.getCell(2, colIndex + 1).value = 'KM Masuk';
+        worksheet.getCell(2, colIndex + 2).value = 'Jam Keluar';
+        worksheet.getCell(2, colIndex + 3).value = 'KM Keluar';
+        worksheet.getCell(2, colIndex + 4).value = 'Pulang Pergi';
+        worksheet.getCell(2, colIndex + 5).value = 'Menginap';
+
+        colIndex += 7; // Pindah ke set kolom berikutnya
+    });
+
+    // Menambahkan gaya untuk header
+    [1, 2].forEach(rowNumber => {
+        worksheet.getRow(rowNumber).eachCell((cell) => {
+            cell.fill = {
+                type: 'pattern',
+                pattern: 'solid',
+                fgColor: { argb: '00A67E' }
+            };
+            cell.font = {
+                name: 'Calibri',
+                size: 11,
+                color: { argb: 'FFFFFF' },
+                bold: true
+            };
+            cell.alignment = {
+                vertical: 'middle',
+                horizontal: 'center',
+                wrapText: true
+            };
+            cell.border = {
+                top: { style: 'thin', color: { argb: 'FFFFFF' } },
+                left: { style: 'thin', color: { argb: 'FFFFFF' } },
+                bottom: { style: 'thin', color: { argb: 'FFFFFF' } },
+                right: { style: 'thin', color: { argb: 'FFFFFF' } }
+            };
+        });
+    });
+
+    // Menambahkan data rows
+    data.forEach((item, index) => {
+        const rowData = [
+            index + 1,
+            item.nama,       // Nama driver
+            item.company_name  // Nama perusahaan
+        ];
+
+        // Menambahkan data dinamis berdasarkan tanggal
+        uniqueDates.forEach(date => {
+            const timesheet = item.timesheet[date] || {};
+            rowData.push(
+                date,
+                timesheet.jam_masuk || '',
+                timesheet.km_in || '',
+                timesheet.jam_keluar || '',
+                timesheet.km_out || '',
+                timesheet.lk_pp || '',
+                timesheet.lk_inap || ''
+            );
+        });
+
+        // Menambahkan baris data ke worksheet
+        const row = worksheet.addRow(rowData);
+
+        // Style data rows
+        row.eachCell((cell) => {
+            cell.alignment = { vertical: 'middle', horizontal: 'center' };
+            cell.border = {
+                top: { style: 'thin', color: { argb: '000000' } },
+                left: { style: 'thin', color: { argb: '000000' } },
+                bottom: { style: 'thin', color: { argb: '000000' } },
+                right: { style: 'thin', color: { argb: '000000' } }
+            };
+        });
+
+        // Alternating row colors
+        if (index % 2 === 1) {
+            row.eachCell((cell) => {
+                cell.fill = {
+                    type: 'pattern',
+                    pattern: 'solid',
+                    fgColor: { argb: 'F2F2F2' }
+                };
+            });
+        }
+    });
+
+    // Set column widths
+    worksheet.columns.forEach((column) => {
+        column.width = 15; // Sesuaikan lebar kolom di sini
+    });
+
+    // Generate Excel file
+    try {
+        const buffer = await workbook.xlsx.writeBuffer();
+        const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+        saveAs(blob, 'Laporan_Driver.xlsx');
+    } catch (error) {
+        console.error("Error generating Excel file:", error);
+        alert("Terjadi kesalahan saat mengunduh file Excel. Silakan coba lagi.");
+    }
+};
+
 
   return (
     <>
@@ -287,5 +421,4 @@ function LaporanDriver() {
     </>
   );
 }
-
 export default LaporanDriver;
