@@ -374,8 +374,8 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({
                       <td className="text-center">
                         <a
                           href="#"
-                          onClick={() =>
-                            handleLokasiClick(item.lat_masuk, item.long_masuk)
+                          onClick={() => 
+                            handleLokasiClick(timesheet.lat_km_in, timesheet.long_km_in)
                           }
                         >
                           {timesheet.km_in}
@@ -385,7 +385,7 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({
                         <a
                           href="#"
                           onClick={() =>
-                            handleLokasiClick(item.lat_keluar, item.long_keluar)
+                            handleLokasiClick(timesheet.lat_km_out, timesheet.long_km_out)
                           }
                         >
                           {timesheet.km_out}
