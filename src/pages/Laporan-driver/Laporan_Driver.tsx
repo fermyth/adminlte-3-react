@@ -171,155 +171,141 @@ function LaporanDriver() {
   const handleDownloadExcel = async () => {
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet("Laporan Aktivitas Driver");
-  
+
     // Merged header for title
     worksheet.mergeCells("A1:J1");
     worksheet.getCell("A1").value = "Laporan Aktivitas Driver";
     worksheet.getCell("A1").font = { bold: true, size: 14 };
     worksheet.getCell("A1").alignment = {
-      vertical: "middle",
-      horizontal: "center",
-    };
-  
-    // Main headers
-    worksheet.getCell("A2").value = "No";
-    worksheet.getCell("B2").value = "Nama Driver";
-    worksheet.getCell("C2").value = "Perusahaan";
-    worksheet.getCell("D2").value = "Tanggal";
-  
-    // Merged cells for "Check in" and "Check Out" sections
-    worksheet.mergeCells("E2:F2");
-    worksheet.getCell("E2").value = "Check in";
-    worksheet.getCell("E2").alignment = {
-      vertical: "middle",
-      horizontal: "center",
-    };
-  
-    worksheet.mergeCells("G2:H2");
-    worksheet.getCell("G2").value = "Check Out";
-    worksheet.getCell("G2").alignment = {
-      vertical: "middle",
-      horizontal: "center",
-    };
-  
-    worksheet.mergeCells("I2:J2");
-    worksheet.getCell("I2").value = "Luar Kota";
-    worksheet.getCell("I2").alignment = {
-      vertical: "middle",
-      horizontal: "center",
-    };
-  
-    // Sub-headers for check-in, check-out, and luar kota
-    worksheet.getCell("E3").value = "Jam Masuk";
-    worksheet.getCell("F3").value = "KM Masuk";
-    worksheet.getCell("G3").value = "Jam Keluar";
-    worksheet.getCell("H3").value = "KM Keluar";
-    worksheet.getCell("I3").value = "Pulang Pergi";
-    worksheet.getCell("J3").value = "Menginap";
-  
-    // Style headers with gray background and bold text
-    const headerCells = [
-      "A2",
-      "B2",
-      "C2",
-      "D2",
-      "E2",
-      "G2",
-      "I2",
-      "E3",
-      "F3",
-      "G3",
-      "H3",
-      "I3",
-      "J3",
-    ];
-    headerCells.forEach((cell) => {
-      worksheet.getCell(cell).fill = {
-        type: "pattern",
-        pattern: "solid",
-        fgColor: { argb: "D9D9D9" },
-      };
-      worksheet.getCell(cell).font = { bold: true };
-      worksheet.getCell(cell).alignment = {
         vertical: "middle",
         horizontal: "center",
-      };
-      worksheet.getCell(cell).border = {
-        top: { style: "thin" },
-        left: { style: "thin" },
-        bottom: { style: "thin" },
-        right: { style: "thin" },
-      };
+    };
+
+    // Main headers
+    const headers = [
+        "No", 
+        "Nama Driver", 
+        "Perusahaan", 
+        "Nama User", 
+        "Tanggal", 
+        "Check in", 
+        "Check out", 
+        "Luar Kota"
+    ];
+    
+    headers.forEach((header, index) => {
+        const cell = worksheet.getCell(`${String.fromCharCode(65 + index)}2`);
+        cell.value = header;
+        cell.alignment = { vertical: "middle", horizontal: "center" };
     });
-  
-    // Fill in data rows
-    let rowIndex = 4; // Start after header rows
-    data.forEach((item, index) => {
-      const baseRow = [
-        index + 1, // No
-        item.nama, // Nama Driver
-        item.company_name, // Perusahaan
-      ];
-  
-      Object.keys(item.timesheet).forEach((date) => {
-        const timesheet = item.timesheet[date] || {};
-  
-        // Skip row if "Jam Masuk" is "-"
-        if (timesheet.jam_masuk === "-") return;
-  
-        const rowData = [
-          ...baseRow,
-          date,
-          timesheet.jam_masuk || "",
-          timesheet.km_in || "",
-          timesheet.jam_keluar || "",
-          timesheet.km_out || "",
-          timesheet.lk_pp || "",
-          timesheet.lk_inap || "",
-        ];
-  
-        // Add a new row with the data
-        const row = worksheet.addRow(rowData);
-  
-        // Apply alignment and borders to each cell in the row
-        row.eachCell((cell) => {
-          cell.alignment = { vertical: "middle", horizontal: "center" };
-          cell.border = {
+
+    // Sub-headers for check-in and check-out sections
+    const subHeaders = [
+        "Jam Masuk", 
+        "KM Masuk", 
+        "Jam Keluar", 
+        "KM Keluar", 
+        "Pulang Pergi", 
+        "Menginap"
+    ];
+    
+    subHeaders.forEach((subHeader, index) => {
+        worksheet.getCell(`F3`).value = subHeaders[0]; // Jam Masuk
+        worksheet.getCell(`G3`).value = subHeaders[1]; // KM Masuk
+        worksheet.getCell(`H3`).value = subHeaders[2]; // Jam Keluar
+        worksheet.getCell(`I3`).value = subHeaders[3]; // KM Keluar
+        worksheet.getCell(`J3`).value = subHeaders[4]; // Pulang Pergi
+        worksheet.getCell(`K3`).value = subHeaders[5]; // Menginap
+    });
+
+    // Style headers
+    const headerCells = [
+        "A2", "B2", "C2", "D2", "E2", 
+        "F2", "G2", "H2", "I2", 
+        "J2", "K2", "F3", "G3", 
+        "H3", "I3", "J3", "K3"
+    ];
+    
+    headerCells.forEach((cell) => {
+        const worksheetCell = worksheet.getCell(cell);
+        worksheetCell.fill = {
+            type: "pattern",
+            pattern: "solid",
+            fgColor: { argb: "D9D9D9" },
+        };
+        worksheetCell.font = { bold: true };
+        worksheetCell.alignment = {
+            vertical: "middle",
+            horizontal: "center",
+        };
+        worksheetCell.border = {
             top: { style: "thin" },
             left: { style: "thin" },
             bottom: { style: "thin" },
             right: { style: "thin" },
-          };
-        });
-  
-        rowIndex += 1; // Move to the next row
-      });
+        };
     });
-  
-    // Set column widths to match the layout in the screenshot
-    worksheet.getColumn(1).width = 5; // No
-    worksheet.getColumn(2).width = 20; // Nama Driver
-    worksheet.getColumn(3).width = 20; // Perusahaan
-    worksheet.getColumn(4).width = 15; // Tanggal
-    worksheet.getColumn(5).width = 10; // Jam Masuk
-    worksheet.getColumn(6).width = 10; // KM Masuk
-    worksheet.getColumn(7).width = 10; // Jam Keluar
-    worksheet.getColumn(8).width = 10; // KM Keluar
-    worksheet.getColumn(9).width = 20; // Pulang Pergi
-    worksheet.getColumn(10).width = 20; // Menginap
-  
+
+    // Fill in data rows
+    let rowIndex = 5; // Start after header rows
+    data.forEach((item, index) => {
+        Object.keys(item.timesheet).forEach((date) => {
+            const timesheet = item.timesheet[date] || {};
+
+            // Skip row if "Jam Masuk" is "-"
+            if (timesheet.jam_masuk === "-") return;
+
+            const rowData = [
+                index + 1, // No
+                item.nama, // Nama Driver
+                item.company_name || "", // Perusahaan
+                timesheet.name_users || "", // Nama User
+                date,
+                timesheet.jam_masuk || "",
+                timesheet.km_in || "",
+                timesheet.jam_keluar || "",
+                timesheet.km_out || "",
+                timesheet.lk_pp || "",
+                timesheet.lk_inap || "",
+            ];
+
+            // Add a new row with the data
+            const row = worksheet.addRow(rowData);
+
+            // Apply alignment and borders to each cell in the row
+            row.eachCell((cell) => {
+                cell.alignment = { vertical: "middle", horizontal: "center" };
+                cell.border = {
+                    top: { style: "thin" },
+                    left: { style: "thin" },
+                    bottom: { style: "thin" },
+                    right: { style: "thin" },
+                };
+            });
+
+            rowIndex += 1; // Move to the next row
+        });
+    });
+
+    // Set column widths
+    const columnWidths = [5, 20, 20, 20, 15, 10, 10, 10, 10, 20, 20];
+    columnWidths.forEach((width, index) => {
+        worksheet.getColumn(index + 1).width = width;
+    });
+
     // Generate Excel file
     try {
-      const buffer = await workbook.xlsx.writeBuffer();
-      const blob = new Blob([buffer], {
-        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-      });
-      saveAs(blob, "Laporan_Aktivitas_Driver.xlsx");
+        const buffer = await workbook.xlsx.writeBuffer();
+        const blob = new Blob([buffer], {
+            type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        });
+        saveAs(blob, "Laporan_Aktivitas_Driver.xlsx");
     } catch (error) {
-      console.error("Error generating Excel file:", error);
-      alert("Terjadi kesalahan saat mengunduh file Excel. Silakan coba lagi.");
+        console.error("Error generating Excel file:", error);
+        alert("Terjadi kesalahan saat mengunduh file Excel. Silakan coba lagi.");
     }
-  };
+};
+
   
 
   return (
