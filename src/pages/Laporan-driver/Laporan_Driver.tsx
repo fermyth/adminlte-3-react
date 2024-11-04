@@ -171,7 +171,7 @@ function LaporanDriver() {
   const handleDownloadExcel = async () => {
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet("Laporan Aktivitas Driver");
-
+  
     // Merged header for title
     worksheet.mergeCells("A1:J1");
     worksheet.getCell("A1").value = "Laporan Aktivitas Driver";
@@ -180,13 +180,13 @@ function LaporanDriver() {
       vertical: "middle",
       horizontal: "center",
     };
-
+  
     // Main headers
     worksheet.getCell("A2").value = "No";
     worksheet.getCell("B2").value = "Nama Driver";
     worksheet.getCell("C2").value = "Perusahaan";
     worksheet.getCell("D2").value = "Tanggal";
-
+  
     // Merged cells for "Check in" and "Check Out" sections
     worksheet.mergeCells("E2:F2");
     worksheet.getCell("E2").value = "Check in";
@@ -194,21 +194,21 @@ function LaporanDriver() {
       vertical: "middle",
       horizontal: "center",
     };
-
+  
     worksheet.mergeCells("G2:H2");
     worksheet.getCell("G2").value = "Check Out";
     worksheet.getCell("G2").alignment = {
       vertical: "middle",
       horizontal: "center",
     };
-
+  
     worksheet.mergeCells("I2:J2");
     worksheet.getCell("I2").value = "Luar Kota";
     worksheet.getCell("I2").alignment = {
       vertical: "middle",
       horizontal: "center",
     };
-
+  
     // Sub-headers for check-in, check-out, and luar kota
     worksheet.getCell("E3").value = "Jam Masuk";
     worksheet.getCell("F3").value = "KM Masuk";
@@ -216,7 +216,7 @@ function LaporanDriver() {
     worksheet.getCell("H3").value = "KM Keluar";
     worksheet.getCell("I3").value = "Pulang Pergi";
     worksheet.getCell("J3").value = "Menginap";
-
+  
     // Style headers with gray background and bold text
     const headerCells = [
       "A2",
@@ -251,18 +251,22 @@ function LaporanDriver() {
         right: { style: "thin" },
       };
     });
-
-    let rowIndex = 4; 
+  
+    // Fill in data rows
+    let rowIndex = 4; // Start after header rows
     data.forEach((item, index) => {
       const baseRow = [
-        index + 1, 
-        item.nama,
-        item.company_name,
+        index + 1, // No
+        item.nama, // Nama Driver
+        item.company_name, // Perusahaan
       ];
-
+  
       Object.keys(item.timesheet).forEach((date) => {
         const timesheet = item.timesheet[date] || {};
-
+  
+        // Skip row if "Jam Masuk" is "-"
+        if (timesheet.jam_masuk === "-") return;
+  
         const rowData = [
           ...baseRow,
           date,
@@ -273,9 +277,11 @@ function LaporanDriver() {
           timesheet.lk_pp || "",
           timesheet.lk_inap || "",
         ];
-
+  
+        // Add a new row with the data
         const row = worksheet.addRow(rowData);
-
+  
+        // Apply alignment and borders to each cell in the row
         row.eachCell((cell) => {
           cell.alignment = { vertical: "middle", horizontal: "center" };
           cell.border = {
@@ -285,22 +291,23 @@ function LaporanDriver() {
             right: { style: "thin" },
           };
         });
-
-        rowIndex += 1; 
+  
+        rowIndex += 1; // Move to the next row
       });
     });
-
-    worksheet.getColumn(1).width = 5; 
-    worksheet.getColumn(2).width = 20; 
-    worksheet.getColumn(3).width = 20; 
-    worksheet.getColumn(4).width = 15; 
-    worksheet.getColumn(5).width = 10;
-    worksheet.getColumn(6).width = 10;
-    worksheet.getColumn(7).width = 10;
-    worksheet.getColumn(8).width = 10;
-    worksheet.getColumn(9).width = 20;
-    worksheet.getColumn(10).width = 20;
-
+  
+    // Set column widths to match the layout in the screenshot
+    worksheet.getColumn(1).width = 5; // No
+    worksheet.getColumn(2).width = 20; // Nama Driver
+    worksheet.getColumn(3).width = 20; // Perusahaan
+    worksheet.getColumn(4).width = 15; // Tanggal
+    worksheet.getColumn(5).width = 10; // Jam Masuk
+    worksheet.getColumn(6).width = 10; // KM Masuk
+    worksheet.getColumn(7).width = 10; // Jam Keluar
+    worksheet.getColumn(8).width = 10; // KM Keluar
+    worksheet.getColumn(9).width = 20; // Pulang Pergi
+    worksheet.getColumn(10).width = 20; // Menginap
+  
     // Generate Excel file
     try {
       const buffer = await workbook.xlsx.writeBuffer();
@@ -313,6 +320,7 @@ function LaporanDriver() {
       alert("Terjadi kesalahan saat mengunduh file Excel. Silakan coba lagi.");
     }
   };
+  
 
   return (
     <>
