@@ -6,7 +6,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import { FaEdit, FaTrashAlt, FaPlus } from "react-icons/fa";
-import { UrlServer } from "@app/libs/Api1";
+import { UrlServer } from "@app/libs/Api";
 
 interface Car {
   id: string;

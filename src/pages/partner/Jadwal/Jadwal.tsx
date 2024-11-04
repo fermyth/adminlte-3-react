@@ -10,7 +10,7 @@ import ToolkitProvider, {
 } from "react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useLocation } from "react-router-dom";
-import { UrlServer,ApiPartner } from "@app/libs/Api1";
+import { UrlServer,ApiPartner } from "@app/libs/Api";
 
 interface Perusahaan {
   id: number;

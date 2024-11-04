@@ -2,13 +2,13 @@ import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { EventEmitter } from "events";
-import DriverReportTable from "./components/Driver_Report_Table1";
+import DriverReportTable from "./components/Driver_Report_Table";
 
-import ApiConfig, { UrlServer } from "@app/libs/Api1";
+import ApiConfig, { UrlServer } from "@app/libs/Api";
 import Footer from "../Footer";
-import ExcelJS from 'exceljs';
+import ExcelJS from "exceljs";
 import { documentId } from "firebase/firestore";
-import { saveAs } from 'file-saver';
+import { saveAs } from "file-saver";
 
 const eventEmitter = new EventEmitter();
 const apiUrl = UrlServer() + "/laporan_driver";
@@ -84,34 +84,33 @@ function LaporanDriver() {
   const fetchLaporanDriver = useCallback(
     async (companyId: any) => {
       let url = `${apiUrl}/${startDate}/${endDate}/${companyId}`;
-  
+
       if (type !== "") {
         url += `/${type}`;
       } else {
         url += `/dummy`;
       }
-  
+
       console.log("cekdatalaporandriver", url);
       setIsLoading(true);
       setIsError(false);
       setIsNoData(false);
-  
+
       try {
         const response = await axios.get<ApiResponse>(url);
-        console.log('cekdatass', response.data);
-        
+        console.log("cekdatass", response.data);
+
         setData(response.data.data);
         setIsFiltered(true);
-  
+
         if (response.data.data.length === 0) {
           setIsNoData(true);
         }
-  
+
         // Tambahkan console.log untuk menghitung jumlah data "temporary"
         if (type === "temporary") {
           console.log(`Total data temporary: ${response.data.data.length}`);
         }
-  
       } catch (error) {
         console.error("Error fetching data:", error);
         setIsError(true);
@@ -121,7 +120,6 @@ function LaporanDriver() {
     },
     [startDate, endDate, type]
   );
-  
 
   const fetchData = useCallback(async () => {
     setIsLoading(true);
@@ -170,74 +168,66 @@ function LaporanDriver() {
     }
   };
 
-  
   const handleDownloadExcel = async () => {
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet("Laporan Driver");
 
     // Header utama
-    worksheet.getCell('A1').value = 'No';
-    worksheet.getCell('B1').value = 'Nama';
-    worksheet.getCell('C1').value = 'Perusahaan';
+    worksheet.getCell("A1").value = "No";
+    worksheet.getCell("B1").value = "Nama";
+    worksheet.getCell("C1").value = "Perusahaan";
 
     // Mengumpulkan tanggal unik dari data untuk header dinamis
     const tanggalSet = new Set();
-    data.forEach(item => {
-        Object.keys(item.timesheet).forEach(date => {
+    data.forEach((item) => {
+        Object.keys(item.timesheet).forEach((date) => {
             tanggalSet.add(date);
         });
     });
-    const uniqueDates = Array.from(tanggalSet);
- 
+    const uniqueDates = Array.from(tanggalSet).sort(); // Urutkan tanggal jika diperlukan
+
     // Membuat header dinamis berdasarkan jumlah tanggal
-    let colIndex = 5; // Memulai setelah kolom d
-    uniqueDates.forEach(date => {
-      
-        // Menambahkan header utama dengan keterangan
-        worksheet.mergeCells(1, colIndex, 1, colIndex + 1); // Merging cells for "Check In"
-        worksheet.getCell(1, colIndex).value = 'Check In';
-        
-        worksheet.mergeCells(1, colIndex + 2, 1, colIndex + 3); // Merging cells for "Check Out"
-        worksheet.getCell(1, colIndex + 2).value = 'Check Out';
+    let colIndex = 4; // Mulai dari kolom D
+    uniqueDates.forEach((date) => {
+        // Header tanggal utama
+        worksheet.mergeCells(1, colIndex, 1, colIndex + 5);
+        worksheet.getCell(1, colIndex).value = `Tanggal ${date}`;
 
-        worksheet.mergeCells(1, colIndex + 4, 1, colIndex + 5); // Merging cells for "Luar Kota"
-        worksheet.getCell(1, colIndex + 4).value = 'Luar Kota';
+        // Subheader untuk setiap tanggal
+        worksheet.getCell(2, colIndex).value = "Jam Masuk";
+        worksheet.getCell(2, colIndex + 1).value = "KM Masuk";
+        worksheet.getCell(2, colIndex + 2).value = "Jam Keluar";
+        worksheet.getCell(2, colIndex + 3).value = "KM Keluar";
+        worksheet.getCell(2, colIndex + 4).value = "Pulang Pergi";
+        worksheet.getCell(2, colIndex + 5).value = "Menginap";
 
-        // Menambahkan subheader
-        worksheet.getCell(2, colIndex).value = 'Jam Masuk';
-        worksheet.getCell(2, colIndex + 1).value = 'KM Masuk';
-        worksheet.getCell(2, colIndex + 2).value = 'Jam Keluar';
-        worksheet.getCell(2, colIndex + 3).value = 'KM Keluar';
-        worksheet.getCell(2, colIndex + 4).value = 'Pulang Pergi';
-        worksheet.getCell(2, colIndex + 5).value = 'Menginap';
-
-        colIndex += 7; // Pindah ke set kolom berikutnya
+        colIndex += 6; // Pindah ke set kolom berikutnya
     });
 
     // Menambahkan gaya untuk header
-    [1, 2].forEach(rowNumber => {
+    [1, 2].forEach((rowNumber) => {
         worksheet.getRow(rowNumber).eachCell((cell) => {
             cell.fill = {
-                type: 'pattern',
-                pattern: 'solid',
-                fgColor: { argb: '00A67E' }
+                type: "pattern",
+                pattern: "solid",
+                fgColor: { argb: "00A67E" },
             };
             cell.font = {
-                name: 'Calibri',
+                name: "Calibri",
                 size: 11,
-                color: { argb: 'FFFFFF' },
-                bold: true
+                color: { argb: "FFFFFF" },
+                bold: true,
             };
             cell.alignment = {
-                vertical: 'middle',
-                horizontal: 'center',
-                wrapText: true
+                vertical: "middle",
+                horizontal: "center",
+                wrapText: true,
             };
             cell.border = {
-                top: { style: 'thin', color: { argb: 'FFFFFF' } },
-                left: { style: 'thin', color: { argb: 'FFFFFF' } },
-                bottom: { style: 'thin', color: { argb: 'FFFFFF' } },
-                right: { style: 'thin', color: { argb: 'FFFFFF' } }
+                top: { style: "thin", color: { argb: "FFFFFF" } },
+                left: { style: "thin", color: { argb: "FFFFFF" } },
+                bottom: { style: "thin", color: { argb: "FFFFFF" } },
+                right: { style: "thin", color: { argb: "FFFFFF" } },
             };
         });
     });
@@ -246,21 +236,20 @@ function LaporanDriver() {
     data.forEach((item, index) => {
         const rowData = [
             index + 1,
-            item.nama,       // Nama driver
-            item.company_name  // Nama perusahaan
+            item.nama, // Nama driver
+            item.company_name, // Nama perusahaan
         ];
 
         // Menambahkan data dinamis berdasarkan tanggal
-        uniqueDates.forEach(date => {
+        uniqueDates.forEach((date) => {
             const timesheet = item.timesheet[date] || {};
             rowData.push(
-                date,
-                timesheet.jam_masuk || '',
-                timesheet.km_in || '',
-                timesheet.jam_keluar || '',
-                timesheet.km_out || '',
-                timesheet.lk_pp || '',
-                timesheet.lk_inap || ''
+                timesheet.jam_masuk || "",
+                timesheet.km_in || "",
+                timesheet.jam_keluar || "",
+                timesheet.km_out || "",
+                timesheet.lk_pp || "",
+                timesheet.lk_inap || ""
             );
         });
 
@@ -269,12 +258,12 @@ function LaporanDriver() {
 
         // Style data rows
         row.eachCell((cell) => {
-            cell.alignment = { vertical: 'middle', horizontal: 'center' };
+            cell.alignment = { vertical: "middle", horizontal: "center" };
             cell.border = {
-                top: { style: 'thin', color: { argb: '000000' } },
-                left: { style: 'thin', color: { argb: '000000' } },
-                bottom: { style: 'thin', color: { argb: '000000' } },
-                right: { style: 'thin', color: { argb: '000000' } }
+                top: { style: "thin", color: { argb: "000000" } },
+                left: { style: "thin", color: { argb: "000000" } },
+                bottom: { style: "thin", color: { argb: "000000" } },
+                right: { style: "thin", color: { argb: "000000" } },
             };
         });
 
@@ -282,9 +271,9 @@ function LaporanDriver() {
         if (index % 2 === 1) {
             row.eachCell((cell) => {
                 cell.fill = {
-                    type: 'pattern',
-                    pattern: 'solid',
-                    fgColor: { argb: 'F2F2F2' }
+                    type: "pattern",
+                    pattern: "solid",
+                    fgColor: { argb: "F2F2F2" },
                 };
             });
         }
@@ -298,8 +287,10 @@ function LaporanDriver() {
     // Generate Excel file
     try {
         const buffer = await workbook.xlsx.writeBuffer();
-        const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-        saveAs(blob, 'Laporan_Driver.xlsx');
+        const blob = new Blob([buffer], {
+            type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        });
+        saveAs(blob, "Laporan_Driver.xlsx");
     } catch (error) {
         console.error("Error generating Excel file:", error);
         alert("Terjadi kesalahan saat mengunduh file Excel. Silakan coba lagi.");
@@ -413,7 +404,9 @@ function LaporanDriver() {
       </center>
 
       <div className="info-box">
-        {isFiltered && <DriverReportTable data={data} loadingdata={isLoading} />}
+        {isFiltered && (
+          <DriverReportTable data={data} loadingdata={isLoading} />
+        )}
       </div>
       <div className="pt-4 pb-1">
         <Footer />

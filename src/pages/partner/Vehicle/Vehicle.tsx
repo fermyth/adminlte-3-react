@@ -1,4 +1,4 @@
-import { UrlServer,ApiPartner } from "@app/libs/Api1";
+import { UrlServer,ApiPartner } from "@app/libs/Api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
 import BootstrapTable from "react-bootstrap-table-next";

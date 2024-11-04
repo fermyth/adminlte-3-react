@@ -6,7 +6,7 @@ import { FaArrowLeft, FaTools } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Select from "react-select";
-import { UrlServer } from "@app/libs/Api1";
+import { UrlServer } from "@app/libs/Api";
 
 interface ServiceRecord {
   id: string;

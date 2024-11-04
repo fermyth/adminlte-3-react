@@ -4,7 +4,7 @@ import { Link, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { toast } from "react-toastify";
-import { UrlServer,ApiPartner } from "@app/libs/Api1";
+import { UrlServer,ApiPartner } from "@app/libs/Api";
 
 interface Company {
   id: number;
