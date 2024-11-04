@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Modal, Button } from "react-bootstrap";
 import Typography from "@mui/material/Typography";
@@ -64,10 +64,13 @@ interface DriverData {
 
 interface DriverReportTableProps {
   data: DriverData[];
-  loadingdata:boolean;
+  loadingdata: boolean;
 }
 
-const DriverReportTable: React.FC<DriverReportTableProps> = ({ data,loadingdata }) => {
+const DriverReportTable: React.FC<DriverReportTableProps> = ({
+  data,
+  loadingdata,
+}) => {
   const [showModal, setShowModal] = useState(false);
   const [show, setShow] = useState(false);
   const [modalImageUrl, setModalImageUrl] = useState("");
@@ -81,7 +84,8 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({ data,loadingdata 
   const [loading, setloading] = useState(true);
   const [loadingklaim, setloadingklaim] = useState(true);
   const [showLoadingModal, setShowLoadingModal] = useState(false);
-  const [showLoadingModalactivity, setShowLoadingModalactivity] = useState(false);
+  const [showLoadingModalactivity, setShowLoadingModalactivity] =
+    useState(false);
   const [namedriver, setnamedriver] = useState<string | null>(null);
   const [dataklaim, setklaim] = useState<any | any>(null);
   const [totalklaim, settotalklaim] = useState<any | any>(null);
@@ -91,13 +95,13 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({ data,loadingdata 
   } | null>({ lat: 0, long: 0 });
 
   useEffect(() => {
-      console.log('datadrivers2',data)
+    console.log("datadrivers2", data);
   }, []);
 
   const handleLokasiClick = (lat: any, long: any) => {
     if (lat && long) {
       setSelectedLocation({ lat, long });
-      window.open(`maps/${lat}/${long}`, '_blank');
+      window.open(`maps/${lat}/${long}`, "_blank");
       //setShow(true);
     } else {
       alert("Data lokasi tidak tersedia");
@@ -127,7 +131,7 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({ data,loadingdata 
     setloading(true);
     setShowLoadingModalactivity(true);
 
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
     try {
       const response = await ApiConfig.get(`activity/${userId}/${date}`);
       console.log("vvv", response.data.data);
@@ -157,7 +161,7 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({ data,loadingdata 
     setShowLoadingModal(true); // Tampilkan modal loading
 
     // Tambahkan delay 3 detik (3000 ms)
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
 
     try {
       const response = await ApiConfig.get(`pengeluaran/${userId}/${date}`);
@@ -176,7 +180,6 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({ data,loadingdata 
 
     setOpenklim(true);
   };
-  
 
   const handleCloseklaim = () => setOpenklim(false);
 
@@ -368,8 +371,26 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({ data,loadingdata 
                     <React.Fragment key={date}>
                       <td className="text-center">{timesheet.jam_masuk}</td>
                       <td className="text-center">{timesheet.jam_keluar}</td>
-                      <td className="text-center">{timesheet.km_in}</td>
-                      <td className="text-center">{timesheet.km_out}</td>
+                      <td className="text-center">
+                        <a
+                          href="#"
+                          onClick={() =>
+                            handleLokasiClick(item.lat_masuk, item.long_masuk)
+                          }
+                        >
+                          {timesheet.km_in}
+                        </a>
+                      </td>
+                      <td className="text-center">
+                        <a
+                          href="#"
+                          onClick={() =>
+                            handleLokasiClick(item.lat_keluar, item.long_keluar)
+                          }
+                        >
+                          {timesheet.km_out}
+                        </a>
+                      </td>
                       <td className="text-center lk-pp-column">
                         {timesheet.lk_pp &&
                         timesheet.lk_pp.split(",").includes("null")
@@ -480,9 +501,15 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({ data,loadingdata 
                                   </thead>
                                   <tbody>
                                     {!loading ? (
-                                      Array.from(new Set(activity.map(item => item.city)))
-                                        .map(city => {
-                                          const val = activity.find(item => item.city === city);
+                                      Array.from(
+                                        new Set(
+                                          activity.map((item) => item.city)
+                                        )
+                                      )
+                                        .map((city) => {
+                                          const val = activity.find(
+                                            (item) => item.city === city
+                                          );
                                           if (val.lat && val.long) {
                                             return (
                                               <tr key={city}>
@@ -505,7 +532,8 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({ data,loadingdata 
                                             );
                                           }
                                           return null;
-                                        }).filter(Boolean)
+                                        })
+                                        .filter(Boolean)
                                     ) : (
                                       <tr>
                                         <td colSpan={3}>Loading...</td>
@@ -514,28 +542,47 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({ data,loadingdata 
                                   </tbody>
                                 </table>
                               </div>
-                              <Modal show={show} onHide={handleCloseModal} centered>
+                              <Modal
+                                show={show}
+                                onHide={handleCloseModal}
+                                centered
+                              >
                                 <Modal.Header closeButton>
                                   <Modal.Title>Lokasi</Modal.Title>
                                 </Modal.Header>
                                 <Modal.Body>
                                   {selectedLocation && (
-                                    <div style={{ height: '400px', width: '100%' }}>
+                                    <div
+                                      style={{ height: "400px", width: "100%" }}
+                                    >
                                       <MapContainer
-                                        center={[selectedLocation.lat, selectedLocation.long]}
+                                        center={[
+                                          selectedLocation.lat,
+                                          selectedLocation.long,
+                                        ]}
                                         zoom={15}
-                                        style={{ height: '100%', width: '100%' }}
+                                        style={{
+                                          height: "100%",
+                                          width: "100%",
+                                        }}
                                       >
                                         {(map) => {
-                                          L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                                            attribution: '',
-                                          }).addTo(map);
+                                          L.tileLayer(
+                                            "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                                            {
+                                              attribution: "",
+                                            }
+                                          ).addTo(map);
                                           return null;
                                         }}
-                                        <Marker position={[selectedLocation.lat, selectedLocation.long]} icon={icon}>
-                                          <Popup>
-                                            Lokasi yang dipilih
-                                          </Popup>
+                                        <Marker
+                                          position={[
+                                            selectedLocation.lat,
+                                            selectedLocation.long,
+                                          ]}
+                                          icon={icon}
+                                        >
+                                          <Popup>Lokasi yang dipilih</Popup>
                                         </Marker>
                                       </MapContainer>
                                     </div>
@@ -638,15 +685,26 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({ data,loadingdata 
                                             <img
                                               src={`http://backend.sigapdriver.com/storage/${val.expenses_photo}`}
                                               alt="Foto Pengeluaran"
-                                              style={{ width: '100px', height: 'auto' }}
-                                              onClick={() => handleImageClick(`http://backend.sigapdriver.com/storage/${val.expenses_photo}`)}
+                                              style={{
+                                                width: "100px",
+                                                height: "auto",
+                                              }}
+                                              onClick={() =>
+                                                handleImageClick(
+                                                  `http://backend.sigapdriver.com/storage/${val.expenses_photo}`
+                                                )
+                                              }
                                             />
                                           </td>
                                         </tr>
                                       ))
                                     ) : (
                                       <tr>
-                                        <td colSpan={4}><center><div className="spinner"></div></center></td>
+                                        <td colSpan={4}>
+                                          <center>
+                                            <div className="spinner"></div>
+                                          </center>
+                                        </td>
                                       </tr>
                                     )}
                                   </tbody>
@@ -702,7 +760,12 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({ data,loadingdata 
           </Button>
         </Modal.Footer>
       </Modal>
-      <Modal show={showLoadingModal} backdrop="static" keyboard={false} centered>
+      <Modal
+        show={showLoadingModal}
+        backdrop="static"
+        keyboard={false}
+        centered
+      >
         <Modal.Body className="d-flex justify-content-center align-items-center">
           <div>
             <center>
@@ -712,7 +775,12 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({ data,loadingdata 
           </div>
         </Modal.Body>
       </Modal>
-      <Modal show={showLoadingModalactivity} backdrop="static" keyboard={false} centered>
+      <Modal
+        show={showLoadingModalactivity}
+        backdrop="static"
+        keyboard={false}
+        centered
+      >
         <Modal.Body className="d-flex justify-content-center align-items-center">
           <div>
             <center>
