@@ -347,6 +347,49 @@ const ContentHeader: React.FC = () => {
         } else {
           cell.alignment = { horizontal: "center" };
         }
+
+        if (colNumber % 2 === 0) {
+          const exitTime = cell.value;
+          if (exitTime) {
+            const [hours, minutes] = exitTime.split(":").map(Number);
+            if (hours > 23 || (hours === 23 && minutes > 0)) {
+              cell.fill = {
+                type: "pattern",
+                pattern: "solid",
+                fgColor: { argb: "FF8566" },
+              };
+            }
+          }
+        }
+        if (colNumber === 17) {
+          const totalWorkHours = cell.value;
+          if (totalWorkHours) {
+            const [totalHours, totalMinutes] = totalWorkHours
+              .split(":")
+              .map(Number);
+            const totalInHours = totalHours + totalMinutes / 60;
+
+            if (totalInHours > 60) {
+              cell.fill = {
+                type: "pattern",
+                pattern: "solid",
+                fgColor: { argb: "FF8566" },
+              };
+            } else if (totalInHours > 58) {
+              cell.fill = {
+                type: "pattern",
+                pattern: "solid",
+                fgColor: { argb: "FFFF00" },
+              };
+            } else if (totalInHours > 40 && totalInHours < 49) {
+              cell.fill = {
+                type: "pattern",
+                pattern: "solid",
+                fgColor: { argb: "FFFFB3" },
+              };
+            }
+          }
+        }
       });
     });
 
@@ -491,6 +534,48 @@ const ContentHeader: React.FC = () => {
           cell.alignment = { horizontal: "left" };
         } else {
           cell.alignment = { horizontal: "center" };
+        }
+        if (colNumber % 2 === 0) {
+          const exitTime = cell.value;
+          if (exitTime) {
+            const [hours, minutes] = exitTime.split(":").map(Number);
+            if (hours > 23 || (hours === 23 && minutes > 0)) {
+              cell.fill = {
+                type: "pattern",
+                pattern: "solid",
+                fgColor: { argb: "FF8566" },
+              };
+            }
+          }
+        }
+        if (colNumber === 17) {
+          const totalWorkHours = cell.value;
+          if (totalWorkHours) {
+            const [totalHours, totalMinutes] = totalWorkHours
+              .split(":")
+              .map(Number);
+            const totalInHours = totalHours + totalMinutes / 60;
+
+            if (totalInHours > 60) {
+              cell.fill = {
+                type: "pattern",
+                pattern: "solid",
+                fgColor: { argb: "FF8566" },
+              };
+            } else if (totalInHours > 58) {
+              cell.fill = {
+                type: "pattern",
+                pattern: "solid",
+                fgColor: { argb: "FFFF00" },
+              };
+            } else if (totalInHours > 40 && totalInHours < 49) {
+              cell.fill = {
+                type: "pattern",
+                pattern: "solid",
+                fgColor: { argb: "FFFFB3" },
+              };
+            }
+          }
         }
       });
     });
