@@ -251,23 +251,29 @@ function LaporanDriver() {
     data.forEach((item, index) => {
         Object.keys(item.timesheet).forEach((date) => {
             const timesheet = item.timesheet[date] || {};
-
+            const formatTime = (time) => {
+              if (!time || time === "-") return time; // Handle empty or "-" values
+              const [hours, minutes, seconds] = time.split(":");
+              return `${hours.padStart(2, "0")}:${minutes.padStart(2, "0")}:${seconds.padStart(2, "0")}`;
+          };
             // Skip row if "Jam Masuk" is "-"
             if (timesheet.jam_masuk === "-") return;
 
             const rowData = [
-                index + 1, // No
-                item.nama, // Nama Driver
-                item.company_name || "", // Perusahaan
-                timesheet.name_users || "", // Nama User
-                date,
-                timesheet.jam_masuk || "",
-                timesheet.km_in || "",
-                timesheet.jam_keluar || "",
-                timesheet.km_out || "",
-                timesheet.lk_pp || "",
-                timesheet.lk_inap || "",
+              index + 1,                                   // No
+            item.nama && item.nama !== "null" ? item.nama : "",       // Nama Driver
+            item.company_name && item.company_name !== "null" ? item.company_name : "", // Perusahaan
+            timesheet.name_users && timesheet.name_users !== "null" ? timesheet.name_users : "", // Nama User
+            date && date !== undefined ? date : "",                       // Tanggal
+            formatTime(timesheet.jam_masuk) || "",                                   // Jam Masuk
+            timesheet.km_in && timesheet.km_in !== "null" ? timesheet.km_in : "", // KM Masuk
+            formatTime(timesheet.jam_keluar) || "",                                 // Jam Keluar
+            timesheet.km_out && timesheet.km_out !== "null" ? timesheet.km_out : "", // KM Keluar
+            timesheet.lk_pp  && timesheet.lk_pp !== "null" ? timesheet.lk_pp : "", // Pulang Pergi
+            timesheet.lk_inap  && timesheet.lk_inap !== "null" ? timesheet.lk_inap : "" // Menginap
             ];
+
+            console.log('Row Data:', rowData);
 
             // Add a new row with the data
             const row = worksheet.addRow(rowData);
