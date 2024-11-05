@@ -173,10 +173,10 @@ function LaporanDriver() {
     const worksheet = workbook.addWorksheet("Laporan Aktivitas Driver");
 
     // Merged header for title
-    worksheet.mergeCells("A1:J1");
-    worksheet.getCell("A1").value = "Laporan Aktivitas Driver";
-    worksheet.getCell("A1").font = { bold: true, size: 14 };
-    worksheet.getCell("A1").alignment = {
+    worksheet.mergeCells("A2:K2");
+    worksheet.getCell("A2").value = "Laporan Aktivitas Driver";
+    worksheet.getCell("A2").font = { bold: true, size: 14 };
+    worksheet.getCell("A2").alignment = {
         vertical: "middle",
         horizontal: "center",
     };
@@ -188,18 +188,32 @@ function LaporanDriver() {
         "Perusahaan", 
         "Nama User", 
         "Tanggal", 
-        "Check in", 
-        "Check out", 
-        "Luar Kota"
+        "Check In", 
+        "", // Placeholder for merged cell
+        "Check Out", 
+        "", // Placeholder for merged cell
+        "Luar Kota", 
+        ""
     ];
-    
+
     headers.forEach((header, index) => {
-        const cell = worksheet.getCell(`${String.fromCharCode(65 + index)}2`);
+        const cell = worksheet.getCell(`${String.fromCharCode(65 + index)}3`);
         cell.value = header;
         cell.alignment = { vertical: "middle", horizontal: "center" };
+        cell.font = { bold: true };
     });
 
-    // Sub-headers for check-in and check-out sections
+    // Merging cells for "Check In", "Check Out", and "Luar Kota"
+    worksheet.mergeCells("F3:G3");
+    worksheet.getCell("F3").value = "Check In";
+
+    worksheet.mergeCells("H3:I3");
+    worksheet.getCell("H3").value = "Check Out";
+
+    worksheet.mergeCells("J3:K3");
+    worksheet.getCell("J3").value = "Luar Kota";
+
+    // Sub-headers for check-in, check-out, and luar kota sections
     const subHeaders = [
         "Jam Masuk", 
         "KM Masuk", 
@@ -208,24 +222,23 @@ function LaporanDriver() {
         "Pulang Pergi", 
         "Menginap"
     ];
-    
+
     subHeaders.forEach((subHeader, index) => {
-        worksheet.getCell(`F3`).value = subHeaders[0]; // Jam Masuk
-        worksheet.getCell(`G3`).value = subHeaders[1]; // KM Masuk
-        worksheet.getCell(`H3`).value = subHeaders[2]; // Jam Keluar
-        worksheet.getCell(`I3`).value = subHeaders[3]; // KM Keluar
-        worksheet.getCell(`J3`).value = subHeaders[4]; // Pulang Pergi
-        worksheet.getCell(`K3`).value = subHeaders[5]; // Menginap
+        worksheet.getCell(`${String.fromCharCode(70 + index)}4`).value = subHeader;
+        worksheet.getCell(`${String.fromCharCode(70 + index)}4`).alignment = {
+            vertical: "middle",
+            horizontal: "center"
+        };
+        worksheet.getCell(`${String.fromCharCode(70 + index)}4`).font = { bold: true };
     });
 
-    // Style headers
+    // Styling headers
     const headerCells = [
-        "A2", "B2", "C2", "D2", "E2", 
-        "F2", "G2", "H2", "I2", 
-        "J2", "K2", "F3", "G3", 
-        "H3", "I3", "J3", "K3"
+        "A3", "B3", "C3", "D3", "E3", 
+        "F3", "G3", "H3", "I3", "J3", "K3",
+        "F4", "G4", "H4", "I4", "J4", "K4"
     ];
-    
+
     headerCells.forEach((cell) => {
         const worksheetCell = worksheet.getCell(cell);
         worksheetCell.fill = {
@@ -248,57 +261,54 @@ function LaporanDriver() {
 
     // Fill in data rows
     let rowIndex = 5; // Start after header rows
-    data.forEach((item, index) => {
-        Object.keys(item.timesheet).forEach((date) => {
-            const timesheet = item.timesheet[date] || {};
-            const formatTime = (time) => {
-              if (!time || time === "-") return ""; // Mengembalikan string kosong jika time kosong atau "-"
-          
-              const [hours, minutes, seconds] = time.split(":");
-          
-              // Memastikan setiap komponen waktu terdefinisi dan mengisi nilai default "00" jika tidak terdefinisi
-              const formattedHours = hours ? hours.padStart(2, "0") : "00";
-              const formattedMinutes = minutes ? minutes.padStart(2, "0") : "00";
-              const formattedSeconds = seconds ? seconds.padStart(2, "0") : "00";
-          
-              return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
-          };
-            // Skip row if "Jam Masuk" is "-"
-            if (timesheet.jam_masuk === "-") return;
-
-            const rowData = [
-              index + 1,                                   // No
-            item.nama !== null && item.nama !== undefined ? item.nama : "",       // Nama Driver
-            item.company_name !== null && item.company_name !== undefined ? item.company_name : "", // Perusahaan
-            timesheet.name_users && timesheet.name_users !== "null" ? timesheet.name_users : "", // Nama User
-            date !== null && date !== undefined ? date : "",                       // Tanggal
-            formatTime(timesheet.jam_masuk) || "",                                   // Jam Masuk
-            timesheet.km_in !== null && timesheet.km_in !== undefined ? timesheet.km_in : "", // KM Masuk
-            formatTime(timesheet.jam_keluar) || "",                                 // Jam Keluar
-            timesheet.km_out !== null && timesheet.km_out !== undefined ? timesheet.km_out : "", // KM Keluar
-            timesheet.lk_pp  && timesheet.lk_pp !== "null" ? timesheet.lk_pp : "", // Pulang Pergi
-            timesheet.lk_inap !== null && timesheet.lk_inap !== undefined ? timesheet.lk_inap : "" // Menginap
-            ];
-
-            console.log('Row Data:', rowData);
-
-            // Add a new row with the data
-            const row = worksheet.addRow(rowData);
-
-            // Apply alignment and borders to each cell in the row
-            row.eachCell((cell) => {
-                cell.alignment = { vertical: "middle", horizontal: "center" };
-                cell.border = {
-                    top: { style: "thin" },
-                    left: { style: "thin" },
-                    bottom: { style: "thin" },
-                    right: { style: "thin" },
+    if (Array.isArray(data)) {
+        data.forEach((item, index) => {
+            Object.keys(item.timesheet).forEach((date) => {
+                const timesheet = item.timesheet[date] || {};
+                const formatTime = (time) => {
+                    if (!time || time === "-") return ""; // Return empty string if time is null or "-"
+                    const [hours, minutes, seconds] = time.split(":");
+                    const formattedHours = hours ? hours.padStart(2, "0") : "00";
+                    const formattedMinutes = minutes ? minutes.padStart(2, "0") : "00";
+                    const formattedSeconds = seconds ? seconds.padStart(2, "0") : "00";
+                    return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
                 };
-            });
 
-            rowIndex += 1; // Move to the next row
+                // Skip row if "Jam Masuk" is "-"
+                if (timesheet.jam_masuk === "-") return;
+
+                const rowData = [
+                    index + 1, // No
+                    item.nama || "", // Nama Driver
+                    item.company_name || "", // Perusahaan
+                    timesheet.name_users || "", // Nama User
+                    date || "", // Tanggal
+                    formatTime(timesheet.jam_masuk), // Jam Masuk
+                    timesheet.km_in || "", // KM Masuk
+                    formatTime(timesheet.jam_keluar), // Jam Keluar
+                    timesheet.km_out || "", // KM Keluar
+                    timesheet.lk_pp || "", // Pulang Pergi
+                    timesheet.lk_inap || "" // Menginap
+                ];
+
+                // Add a new row with the data
+                const row = worksheet.addRow(rowData);
+
+                // Apply alignment and borders to each cell in the row
+                row.eachCell((cell) => {
+                    cell.alignment = { vertical: "middle", horizontal: "center" };
+                    cell.border = {
+                        top: { style: "thin" },
+                        left: { style: "thin" },
+                        bottom: { style: "thin" },
+                        right: { style: "thin" },
+                    };
+                });
+
+                rowIndex += 1; // Move to the next row
+            });
         });
-    });
+    }
 
     // Set column widths
     const columnWidths = [5, 20, 20, 20, 15, 10, 10, 10, 10, 20, 20];
@@ -318,6 +328,7 @@ function LaporanDriver() {
         alert("Terjadi kesalahan saat mengunduh file Excel. Silakan coba lagi.");
     }
 };
+
 
   
 
