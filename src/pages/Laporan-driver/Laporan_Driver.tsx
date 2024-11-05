@@ -384,99 +384,99 @@ function LaporanDriver() {
     }
   };
 
-const handleDownloadKalim = async () => {
-  
-  const workbook = new ExcelJS.Workbook();
-  
-  const worksheet = workbook.addWorksheet('Laporan');
+  const handleDownloadKalim = async () => {
+    const formatThousand = (value) => {
+      if (value === null || value === undefined) return "";
+      return new Intl.NumberFormat("id-ID").format(value);
+  };
 
-  
-  worksheet.mergeCells('A1:H1');
- 
-  worksheet.getCell('A1').value = 'Laporan uang operasional driver';
-  
-  worksheet.getCell('A1').alignment = { vertical: 'middle', horizontal: 'center' };
-  
-  worksheet.getCell('A1').font = { bold: true, size: 14 };
-
- 
-  const headers = [
-      'No', 'Nama Driver', 'Perusahaan', 'Tanggal', 'Kategory', 'Nilai', 'Keterangan'
-  ];
-  
- 
-  headers.forEach((header, index) => {
-        const cell = worksheet.getCell(`${String.fromCharCode(65 + index)}3`);
-        cell.value = header;
-        cell.alignment = { vertical: "middle", horizontal: "center" };
-        cell.font = { bold: true, color: { argb: 'FFFFFF' } }; 
-        cell.fill = {
-            type: 'pattern',
-            pattern: 'solid',
-            fgColor: { argb: '4F81BD' }, 
-        };
-        cell.border = {
-            top: { style: 'medium', color: { argb: '808080' } },
-            left: { style: 'medium', color: { argb: '808080' } },
-            bottom: { style: 'medium', color: { argb: '808080' } },
-            right: { style: 'medium', color: { argb: '808080' } },
-        };
-    });
-  // Data contoh yang akan diisi pada tabel
-  dataexpanse.forEach((item, rowIndex) => {
-    if (!item) {
-      console.warn("Item is undefined or null", item);
-      return; // Lewati jika item tidak valid
-    }
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet('Laporan');
     
-    const rowData = [
-      rowIndex + 1,              
-      item.nama_driver,                 
-       
-      item.company_name || "",   
-      item.date_timestamp,
-      
-      item.expenses_type,       
-      item.expenses_value,  
-      item.expenses_notes,   
+    worksheet.mergeCells('A1:H1');
+    worksheet.getCell('A1').value = 'Laporan uang operasional driver';
+    worksheet.getCell('A1').alignment = { vertical: 'middle', horizontal: 'center' };
+    worksheet.getCell('A1').font = { bold: true, size: 14 };
+  
+    const headers = [
+      'No', 'Nama Driver', 'Perusahaan', 'Tanggal', 'Kategory', 'Nilai', 'Keterangan'
     ];
   
-    // Mengisi data dan memberikan style pada setiap baris data
-    rowData.forEach((value, colIndex) => {
-      const cell = worksheet.getCell(`${String.fromCharCode(65 + colIndex)}${rowIndex + 4}`);
-      cell.value = value;
-      cell.alignment = { vertical: 'middle', horizontal: 'center' };
+    headers.forEach((header, index) => {
+      const cell = worksheet.getCell(`${String.fromCharCode(65 + index)}3`);
+      cell.value = header;
+      cell.alignment = { vertical: "middle", horizontal: "center" };
+      cell.font = { bold: true, color: { argb: 'FFFFFF' } };
+      cell.fill = {
+        type: 'pattern',
+        pattern: 'solid',
+        fgColor: { argb: '4F81BD' },
+      };
       cell.border = {
-        top: { style: 'thin' },
-        left: { style: 'thin' },
-        bottom: { style: 'thin' },
-        right: { style: 'thin' },
+        top: { style: 'medium', color: { argb: '808080' } },
+        left: { style: 'medium', color: { argb: '808080' } },
+        bottom: { style: 'medium', color: { argb: '808080' } },
+        right: { style: 'medium', color: { argb: '808080' } },
       };
     });
-  });
   
-
-  // Mengatur lebar kolom agar isi tabel terlihat rapi
-  worksheet.getColumn(1).width = 5;  
-  worksheet.getColumn(2).width = 30; 
-  worksheet.getColumn(3).width = 30;  
-  worksheet.getColumn(4).width = 10; 
-  worksheet.getColumn(5).width = 15;  
-  worksheet.getColumn(6).width = 10;  
-  worksheet.getColumn(7).width = 25;  
-
-  // Menyimpan workbook ke file Excel
-  try {
+    // Data contoh yang akan diisi pada tabel
+    dataexpanse.forEach((item, rowIndex) => {
+      if (!item) {
+        console.warn("Item is undefined or null", item);
+        return; // Lewati jika item tidak valid
+      }
+  
+      const rowData = [
+        rowIndex + 1, // No
+        item.nama_driver, // Nama Driver
+        item.company_name || "", // Perusahaan
+        item.date_timestamp, // Tanggal
+        item.expenses_type, // Kategory
+        formatThousand(item.expenses_value), // Nilai
+        item.expenses_notes && item.expenses_notes !== "null" ? item.expenses_notes : "", // Keterangan
+        
+      ];
+  
+      // Mengisi data dan memberikan style pada setiap baris data
+      rowData.forEach((value, colIndex) => {
+        const cell = worksheet.getCell(`${String.fromCharCode(65 + colIndex)}${rowIndex + 4}`);
+        cell.value = value;
+  
+        // Atur perataan nilai ke kiri (kecuali header yang sudah diatur di atas)
+        cell.alignment = { vertical: 'middle', horizontal: 'left' }; // Mengubah ke left-aligned
+  
+        cell.border = {
+          top: { style: 'thin' },
+          left: { style: 'thin' },
+          bottom: { style: 'thin' },
+          right: { style: 'thin' },
+        };
+      });
+    });
+  
+    // Mengatur lebar kolom agar isi tabel terlihat rapi
+    worksheet.getColumn(1).width = 5;  
+    worksheet.getColumn(2).width = 30; 
+    worksheet.getColumn(3).width = 30;  
+    worksheet.getColumn(4).width = 10; 
+    worksheet.getColumn(5).width = 15;  
+    worksheet.getColumn(6).width = 10;  
+    worksheet.getColumn(7).width = 25;  
+  
+    // Menyimpan workbook ke file Excel
+    try {
       const buffer = await workbook.xlsx.writeBuffer();
       const blob = new Blob([buffer], {
-          type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       });
       saveAs(blob, "Laporan_Klaim_Driver.xlsx");
-  } catch (error) {
+    } catch (error) {
       console.error("Error generating Excel file:", error);
       alert("Terjadi kesalahan saat mengunduh file Excel. Silakan coba lagi.");
-  }
-};
+    }
+  };
+  
 
   
 
