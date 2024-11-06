@@ -68,7 +68,7 @@ function LaporanDriver() {
   const [isError, setIsError] = useState<boolean>(false);
   const [isNoData, setIsNoData] = useState<boolean>(false);
 
-  // Set default date to today
+  
   useEffect(() => {
     const today = new Date().toISOString().split("T")[0];
     setStartDate(today);
@@ -353,7 +353,7 @@ function LaporanDriver() {
               bottom: { style: "thin" },
               right: { style: "thin" },
             };
- 
+
             // Apply Rupiah format to "KM Masuk" (column G) and "KM Keluar" (column I)
             if (colNumber === 7 || colNumber === 9) {
               cell.numFmt = "Rp #,##0";
