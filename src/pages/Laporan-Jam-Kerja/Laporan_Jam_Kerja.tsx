@@ -155,7 +155,8 @@ const ContentHeader: React.FC = () => {
       });
 
       setTableData(formattedData);
-      console.log("formattedData:", plat_nomor[0]["nopol"]);
+      
+      console.log("formattedData:", formattedData);
     } catch (error) {
       console.log("Error fetching data from API:", error);
     } finally {
@@ -535,20 +536,17 @@ const ContentHeader: React.FC = () => {
         } else {
           cell.alignment = { horizontal: "center" };
         }
-        if (colNumber % 2 === 0) {
-          const exitTime = cell.value;
-          if (exitTime) {
-            const [hours, minutes] = exitTime.split(":").map(Number);
-            if (hours > 23 || (hours === 23 && minutes > 0)) {
-              cell.fill = {
-                type: "pattern",
-                pattern: "solid",
-                fgColor: { argb: "FF8566" },
-              };
-            }
+        if ((colNumber - 3) % 2 === 0 && cell.value) { // Kolom Jam Keluar
+          const [hour, minute] = cell.value.split(":").map(Number);
+          if (hour >= 23) {
+            cell.fill = {
+              type: "pattern",
+              pattern: "solid",
+              fgColor: { argb: "FF8566" }, 
+            };
           }
         }
-        if (colNumber === 17) {
+        if (colNumber === 18) {
           const totalWorkHours = cell.value;
           if (totalWorkHours) {
             const [totalHours, totalMinutes] = totalWorkHours

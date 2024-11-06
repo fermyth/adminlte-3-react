@@ -353,7 +353,7 @@ function LaporanDriver() {
               bottom: { style: "thin" },
               right: { style: "thin" },
             };
-
+ 
             // Apply Rupiah format to "KM Masuk" (column G) and "KM Keluar" (column I)
             if (colNumber === 7 || colNumber === 9) {
               cell.numFmt = "Rp #,##0";
