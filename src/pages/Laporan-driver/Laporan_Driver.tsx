@@ -181,21 +181,42 @@ function LaporanDriver() {
   const handleDownloadExcel = async () => {
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet("Laporan Aktivitas Driver");
-
-    const formatThousand = (value) => {
+  
+    const formatThousand = (value: any) => {
       if (value === null || value === undefined) return "";
       return new Intl.NumberFormat("id-ID").format(value);
-  };
-
+    };
+  
+    // Format tanggal
+    const formattedStartDate = new Date(startDate).toLocaleDateString("id-ID", {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    });
+    const formattedEndDate = new Date(endDate).toLocaleDateString("id-ID", {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    });
+  
     // Merged header for title
     worksheet.mergeCells("A2:K2");
-    worksheet.getCell("A2").value = "Laporan Aktivitas Driver";
+    worksheet.getCell("A2").value = `Laporan Aktivitas Driver`;
     worksheet.getCell("A2").font = { bold: true, size: 14 };
     worksheet.getCell("A2").alignment = {
       vertical: "middle",
       horizontal: "center",
     };
-
+  
+    // Merged header for date range
+    worksheet.mergeCells("A3:K3");
+    worksheet.getCell("A3").value = `Periode: ${formattedStartDate} - ${formattedEndDate}`;
+    worksheet.getCell("A3").font = { bold: true, size: 12 };
+    worksheet.getCell("A3").alignment = {
+      vertical: "middle",
+      horizontal: "center",
+    };
+  
     // Main headers
     const headers = [
       "No",
@@ -210,24 +231,24 @@ function LaporanDriver() {
       "Luar Kota",
       "",
     ];
-
+  
     headers.forEach((header, index) => {
-      const cell = worksheet.getCell(`${String.fromCharCode(65 + index)}3`);
+      const cell = worksheet.getCell(`${String.fromCharCode(65 + index)}4`);
       cell.value = header;
       cell.alignment = { vertical: "middle", horizontal: "center" };
       cell.font = { bold: true };
     });
-
+  
     // Merging cells for "Check In", "Check Out", and "Luar Kota"
-    worksheet.mergeCells("F3:G3");
-    worksheet.getCell("F3").value = "Check In";
-
-    worksheet.mergeCells("H3:I3");
-    worksheet.getCell("H3").value = "Check Out";
-
-    worksheet.mergeCells("J3:K3");
-    worksheet.getCell("J3").value = "Luar Kota";
-
+    worksheet.mergeCells("F4:G4");
+    worksheet.getCell("F4").value = "Check In";
+  
+    worksheet.mergeCells("H4:I4");
+    worksheet.getCell("H4").value = "Check Out";
+  
+    worksheet.mergeCells("J4:K4");
+    worksheet.getCell("J4").value = "Luar Kota";
+  
     // Sub-headers for check-in, check-out, and luar kota sections
     const subHeaders = [
       "Jam Masuk",
@@ -237,40 +258,40 @@ function LaporanDriver() {
       "Pulang Pergi",
       "Menginap",
     ];
-
+  
     subHeaders.forEach((subHeader, index) => {
-      worksheet.getCell(`${String.fromCharCode(70 + index)}4`).value =
+      worksheet.getCell(`${String.fromCharCode(70 + index)}5`).value =
         subHeader;
-      worksheet.getCell(`${String.fromCharCode(70 + index)}4`).alignment = {
+      worksheet.getCell(`${String.fromCharCode(70 + index)}5`).alignment = {
         vertical: "middle",
         horizontal: "center",
       };
-      worksheet.getCell(`${String.fromCharCode(70 + index)}4`).font = {
+      worksheet.getCell(`${String.fromCharCode(70 + index)}5`).font = {
         bold: true,
       };
     });
-
+  
     // Styling headers
     const headerCells = [
-      "A3",
-      "B3",
-      "C3",
-      "D3",
-      "E3",
-      "F3",
-      "G3",
-      "H3",
-      "I3",
-      "J3",
-      "K3",
+      "A4",
+      "B4",
+      "C4",
+      "D4",
+      "E4",
       "F4",
       "G4",
       "H4",
       "I4",
       "J4",
       "K4",
+      "F5",
+      "G5",
+      "H5",
+      "I5",
+      "J5",
+      "K5",
     ];
-
+  
     headerCells.forEach((cell) => {
       const worksheetCell = worksheet.getCell(cell);
       worksheetCell.fill = {
@@ -290,14 +311,14 @@ function LaporanDriver() {
         right: { style: "thin" },
       };
     });
-
+  
     // Fill in data rows
-    let rowIndex = 5; // Start after header rows
+    let rowIndex = 6; // Start after header rows
     if (Array.isArray(data)) {
       data.forEach((item, index) => {
         Object.keys(item.timesheet).forEach((date) => {
           const timesheet = item.timesheet[date] || {};
-          const formatTime = (time) => {
+          const formatTime = (time: any) => {
             if (!time || time === "-") return ""; // Return empty string if time is null or "-"
             const [hours, minutes, seconds] = time.split(":");
             const formattedHours = hours ? hours.padStart(2, "0") : "00";
@@ -305,10 +326,10 @@ function LaporanDriver() {
             const formattedSeconds = seconds ? seconds.padStart(2, "0") : "00";
             return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
           };
-
+  
           // Skip row if "Jam Masuk" is "-"
           if (timesheet.jam_masuk === "-") return;
-
+  
           const rowData = [
             index + 1, // No
             item.nama !== null && item.nama !== undefined ? item.nama : "", // Nama Driver
@@ -334,10 +355,10 @@ function LaporanDriver() {
               ? timesheet.lk_inap
               : "", // Menginap
           ];
-
+  
           // Add a new row with the data
           const row = worksheet.addRow(rowData);
-
+  
           // Apply alignment and borders to each cell in the row
           row.eachCell((cell, colNumber) => {
             cell.alignment = {
@@ -353,24 +374,24 @@ function LaporanDriver() {
               bottom: { style: "thin" },
               right: { style: "thin" },
             };
-
+  
             // Apply Rupiah format to "KM Masuk" (column G) and "KM Keluar" (column I)
             if (colNumber === 7 || colNumber === 9) {
               cell.numFmt = "Rp #,##0";
             }
           });
-
+  
           rowIndex += 1; // Move to the next row
         });
       });
     }
-
+  
     // Set column widths
     const columnWidths = [5, 20, 20, 20, 15, 10, 10, 10, 10, 20, 20];
     columnWidths.forEach((width, index) => {
       worksheet.getColumn(index + 1).width = width;
     });
-
+  
     // Generate Excel file
     try {
       const buffer = await workbook.xlsx.writeBuffer();
@@ -385,19 +406,39 @@ function LaporanDriver() {
   };
 
   const handleDownloadKalim = async () => {
-    const formatThousand = (value) => {
+    const formatThousand = (value: any) => {
       if (value === null || value === undefined) return "";
       return new Intl.NumberFormat("id-ID").format(value);
-  };
-
+    };
+  
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet('Laporan');
     
+    // Menambahkan judul utama
     worksheet.mergeCells('A1:H1');
     worksheet.getCell('A1').value = 'Laporan uang operasional driver';
     worksheet.getCell('A1').alignment = { vertical: 'middle', horizontal: 'center' };
     worksheet.getCell('A1').font = { bold: true, size: 14 };
+    
+    // Format tanggal yang konsisten: "DD/MM/YYYY"
+    const formattedStartDate = new Date(startDate).toLocaleDateString("id-ID", {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    });
+    const formattedEndDate = new Date(endDate).toLocaleDateString("id-ID", {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    });
   
+    // Menambahkan judul periode dengan format tanggal yang sama
+    worksheet.mergeCells('A2:H2');
+    worksheet.getCell("A2").value = `Periode: ${formattedStartDate} - ${formattedEndDate}` // Periode dengan format tanggal yang sama
+    worksheet.getCell('A2').alignment = { vertical: 'middle', horizontal: 'center' };
+    worksheet.getCell("A2").font = { bold: true, size: 12 };
+  
+    // Menambahkan header tabel
     const headers = [
       'No', 'Nama Driver', 'Perusahaan', 'Tanggal', 'Kategory', 'Nilai', 'Keterangan'
     ];
@@ -435,7 +476,6 @@ function LaporanDriver() {
         item.expenses_type, // Kategory
         formatThousand(item.expenses_value), // Nilai
         item.expenses_notes && item.expenses_notes !== "null" ? item.expenses_notes : "", // Keterangan
-        
       ];
   
       // Mengisi data dan memberikan style pada setiap baris data
@@ -443,8 +483,11 @@ function LaporanDriver() {
         const cell = worksheet.getCell(`${String.fromCharCode(65 + colIndex)}${rowIndex + 4}`);
         cell.value = value;
   
-        // Atur perataan nilai ke kiri (kecuali header yang sudah diatur di atas)
-        cell.alignment = { vertical: 'middle', horizontal: 'left' }; // Mengubah ke left-aligned
+        // Atur alignment berdasarkan kolom: center untuk kolom "No", left untuk kolom lainnya
+        cell.alignment = {
+          vertical: 'middle',
+          horizontal: colIndex === 0 ? 'center' : 'left', // Kolom pertama (No) center, lainnya left
+        };
   
         cell.border = {
           top: { style: 'thin' },
@@ -459,8 +502,8 @@ function LaporanDriver() {
     worksheet.getColumn(1).width = 5;  
     worksheet.getColumn(2).width = 30; 
     worksheet.getColumn(3).width = 30;  
-    worksheet.getColumn(4).width = 10; 
-    worksheet.getColumn(5).width = 15;  
+    worksheet.getColumn(4).width = 12; 
+    worksheet.getColumn(5).width = 12;  
     worksheet.getColumn(6).width = 10;  
     worksheet.getColumn(7).width = 25;  
   
@@ -476,6 +519,7 @@ function LaporanDriver() {
       alert("Terjadi kesalahan saat mengunduh file Excel. Silakan coba lagi.");
     }
   };
+  
   
 
   
