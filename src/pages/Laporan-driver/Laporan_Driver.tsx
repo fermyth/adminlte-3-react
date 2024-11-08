@@ -248,7 +248,7 @@ function LaporanDriver() {
   
     worksheet.mergeCells("J4:K4");
     worksheet.getCell("J4").value = "Luar Kota";
-  
+
     // Sub-headers for check-in, check-out, and luar kota sections
     const subHeaders = [
       "Jam Masuk",
@@ -367,6 +367,7 @@ function LaporanDriver() {
                 colNumber === 2 || colNumber === 3 || colNumber === 4
                   ? "left"
                   : "center",
+                wrapText: colNumber === 2 || colNumber === 3 || colNumber === 4 || colNumber === 10 || colNumber === 11,
             };
             cell.border = {
               top: { style: "thin" },
@@ -380,6 +381,7 @@ function LaporanDriver() {
               cell.numFmt = "Rp #,##0";
             }
           });
+          
   
           rowIndex += 1; // Move to the next row
         });
@@ -387,7 +389,7 @@ function LaporanDriver() {
     }
   
     // Set column widths
-    const columnWidths = [5, 20, 20, 20, 15, 10, 10, 10, 10, 20, 20];
+    const columnWidths = [5, 20, 20, 20, 12, 10, 10, 10, 10, 15, 15];
     columnWidths.forEach((width, index) => {
       worksheet.getColumn(index + 1).width = width;
     });
@@ -487,6 +489,7 @@ function LaporanDriver() {
         cell.alignment = {
           vertical: 'middle',
           horizontal: colIndex === 0 ? 'center' : 'left', // Kolom pertama (No) center, lainnya left
+          wrapText: colIndex === 1 || colIndex === 2 || colIndex === 6,
         };
   
         cell.border = {
@@ -500,12 +503,12 @@ function LaporanDriver() {
   
     // Mengatur lebar kolom agar isi tabel terlihat rapi
     worksheet.getColumn(1).width = 5;  
-    worksheet.getColumn(2).width = 30; 
-    worksheet.getColumn(3).width = 30;  
+    worksheet.getColumn(2).width = 20; 
+    worksheet.getColumn(3).width = 20;  
     worksheet.getColumn(4).width = 12; 
     worksheet.getColumn(5).width = 12;  
     worksheet.getColumn(6).width = 10;  
-    worksheet.getColumn(7).width = 25;  
+    worksheet.getColumn(7).width = 10;  
   
     // Menyimpan workbook ke file Excel
     try {
