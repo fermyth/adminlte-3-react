@@ -12,8 +12,8 @@ import { saveAs } from "file-saver";
 import { date } from "yup";
 
 const eventEmitter = new EventEmitter();
-const apiUrl = UrlServer() + "/laporan_driver";
-//const apiUrl = 'https://api_portal.sigapdriver.com/api/v1/laporan_driver';
+//const apiUrl = "http://localhost:5188/api/v1/laporan_driver";
+const apiUrl = "https://api_portal_staging.sigapdriver.com/api/v1/laporan_driver";
 
 interface Timesheet {
   jam_masuk: string;
@@ -42,12 +42,13 @@ interface DriverData {
   nama: string | null;
   nama_driver:string | null;
   name_users: string;
-  user_id: number  // Pastikan properti ini ada
-  id_driver?: number; // Tambahkan properti ini jika perlu
+  user_id: number 
+  id_driver?: number; 
   expenses_type: string;
   expenses_value:number;
   expenses_notes:string;
   date_timestamp:string;
+  expenses_poto:string;
   timesheet: { [key: string]: Timesheet };
 }
 
@@ -91,10 +92,10 @@ function LaporanDriver() {
 
   const fetchLaporanDriver = useCallback(
     async (companyId: any) => {
-      let url = `${apiUrl}/${startDate}/${endDate}/${companyId}`;
+      let url =`${apiUrl}/${startDate}/${endDate}/${companyId}`;
 
       if (type !== "") {
-        url += `/${type}`;
+        url +=` /${type}`;
       } else {
         url += `/dummy`;
       }
@@ -107,15 +108,17 @@ function LaporanDriver() {
       try {
         const response = await axios.get<ApiResponse>(url);
 
-        console.log("cekdatass", response.data.dataexpanse );
-
-        setData(response.data.data);
-        setDataexpanse(response.data.dataexpanse)
+        // console.log("cekdatass", response.data.dataexpanse );
+        console.log("datas", response.data.data );
+        console.log("datas2", response.data.dataexpanse );
+        setData(response.data.data || []);
+        setDataexpanse(response.data.dataexpanse || []);
         setIsFiltered(true);
 
-        if (response.data.data.length === 0) {
+        if (response.data.data && response.data.data.length === 0) {
           setIsNoData(true);
         }
+        
 
         // Tambahkan console.log untuk menghitung jumlah data "temporary"
         if (type === "temporary") {
@@ -442,7 +445,7 @@ function LaporanDriver() {
   
     // Menambahkan header tabel
     const headers = [
-      'No', 'Nama Driver', 'Perusahaan', 'Tanggal', 'Kategory', 'Nilai', 'Keterangan'
+      'No', 'Nama Driver', 'Perusahaan', 'Tanggal', 'Kategory', 'Nilai', 'Keterangan', 'Foto'
     ];
   
     headers.forEach((header, index) => {
@@ -466,38 +469,57 @@ function LaporanDriver() {
     // Data contoh yang akan diisi pada tabel
     dataexpanse.forEach((item, rowIndex) => {
       if (!item) {
-        console.warn("Item is undefined or null", item);
-        return; // Lewati jika item tidak valid
+        console.warn('Item kosong ditemukan');
+        return;
       }
-  
+      //console.log("aaaaa",Object.keys(item))
+
+      const photoUrl = item.expenses_poto 
+        ? `http://backend.sigapdriver.com/storage/${item.expenses_poto}` 
+        : null;
+
       const rowData = [
-        rowIndex + 1, // No
-        item.nama_driver, // Nama Driver
+        rowIndex + 1,
+        item.nama_driver || "",
         item.company_name || "", // Perusahaan
         item.date_timestamp, // Tanggal
         item.expenses_type, // Kategory
         formatThousand(item.expenses_value), // Nilai
         item.expenses_notes && item.expenses_notes !== "null" ? item.expenses_notes : "", // Keterangan
+        photoUrl ? { text: 'Lihat Foto', hyperlink: photoUrl, font: { color: { argb: '0000FF' }, italic: true },  } : 'Tidak Ada Foto'
       ];
-  
       // Mengisi data dan memberikan style pada setiap baris data
       rowData.forEach((value, colIndex) => {
         const cell = worksheet.getCell(`${String.fromCharCode(65 + colIndex)}${rowIndex + 4}`);
-        cell.value = value;
-  
-        // Atur alignment berdasarkan kolom: center untuk kolom "No", left untuk kolom lainnya
-        cell.alignment = {
-          vertical: 'middle',
-          horizontal: colIndex === 0 ? 'center' : 'left', // Kolom pertama (No) center, lainnya left
-          wrapText: colIndex === 1 || colIndex === 2 || colIndex === 6,
-        };
-  
-        cell.border = {
-          top: { style: 'thin' },
-          left: { style: 'thin' },
-          bottom: { style: 'thin' },
-          right: { style: 'thin' },
-        };
+        
+        if (typeof value === 'object' && value.hyperlink) {
+          // Pastikan hyperlink diterapkan dengan benar
+          cell.value = { text: value.text, hyperlink: value.hyperlink };
+          cell.font = { color: { argb: '0000FF' }, italic: true }; // Gaya font biru dan miring
+          cell.alignment = { horizontal: 'center' };
+          // Menambahkan garis bawah melalui border
+          cell.border = {
+            top: { style: 'thin' },
+            left: { style: 'thin' },
+            bottom: { style: 'thin' },
+            right: { style: 'thin' },
+          };
+        } else {
+          cell.value = value;
+          // Normal text styling
+          cell.font = { color: { argb: '000000' }, italic: false };
+          cell.alignment = {
+            vertical: 'middle',
+            horizontal: colIndex === 0 ? 'center' : 'left', // Kolom pertama (No) center, lainnya left
+            wrapText: colIndex === 1 || colIndex === 2 || colIndex === 6 || colIndex === 7,
+          };
+          cell.border = {
+            top: { style: 'thin' },
+            left: { style: 'thin' },
+            bottom: { style: 'thin' },
+            right: { style: 'thin' },
+          };
+        }
       });
     });
   
@@ -507,8 +529,9 @@ function LaporanDriver() {
     worksheet.getColumn(3).width = 20;  
     worksheet.getColumn(4).width = 12; 
     worksheet.getColumn(5).width = 12;  
-    worksheet.getColumn(6).width = 10;  
-    worksheet.getColumn(7).width = 10;  
+    worksheet.getColumn(6).width = 8;  
+    worksheet.getColumn(7).width = 12;  
+    worksheet.getColumn(8).width = 10;
   
     // Menyimpan workbook ke file Excel
     try {
@@ -516,11 +539,12 @@ function LaporanDriver() {
       const blob = new Blob([buffer], {
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       });
-      saveAs(blob, "Laporan_Klaim_Driver.xlsx");
+      saveAs(blob, `Laporan_Klaim_${formattedStartDate}_to_${formattedEndDate}.xlsx`);
     } catch (error) {
       console.error("Error generating Excel file:", error);
       alert("Terjadi kesalahan saat mengunduh file Excel. Silakan coba lagi.");
     }
+    
   };
   
   
