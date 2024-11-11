@@ -10,7 +10,6 @@ import ExcelJS from "exceljs";
 import { documentId } from "firebase/firestore";
 import { saveAs } from "file-saver";
 import { date } from "yup";
-import moment from 'moment-timezone';
 
 const eventEmitter = new EventEmitter();
 const apiUrl = UrlServer() + "/laporan_driver";
@@ -41,14 +40,14 @@ interface Timesheet {
 interface DriverData {
   company_name: any;
   nama: string | null;
-  nama_driver: string | null;
+  nama_driver:string | null;
   name_users: string;
-  user_id: number; // Pastikan properti ini ada
+  user_id: number  // Pastikan properti ini ada
   id_driver?: number; // Tambahkan properti ini jika perlu
   expenses_type: string;
-  expenses_value: number;
-  expenses_notes: string;
-  date_timestamp: string;
+  expenses_value:number;
+  expenses_notes:string;
+  date_timestamp:string;
   timesheet: { [key: string]: Timesheet };
 }
 
@@ -69,12 +68,11 @@ function LaporanDriver() {
   const [isError, setIsError] = useState<boolean>(false);
   const [isNoData, setIsNoData] = useState<boolean>(false);
 
+  
   useEffect(() => {
-    const today = new Date();
-    today.setDate(today.getDate() + 1); // Menambahkan 1 hari ke tanggal hari ini
-    const nextDay = today.toISOString().split("T")[0];
-    setStartDate(nextDay);
-    setEndDate(nextDay);
+    const today = new Date().toISOString().split("T")[0];
+    setStartDate(today);
+    setEndDate(today);
   }, []);
 
   const handleTypeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -109,10 +107,10 @@ function LaporanDriver() {
       try {
         const response = await axios.get<ApiResponse>(url);
 
-        console.log("cekdatass", response.data.dataexpanse);
+        console.log("cekdatass", response.data.dataexpanse );
 
         setData(response.data.data);
-        setDataexpanse(response.data.dataexpanse);
+        setDataexpanse(response.data.dataexpanse)
         setIsFiltered(true);
 
         if (response.data.data.length === 0) {
@@ -183,24 +181,24 @@ function LaporanDriver() {
   const handleDownloadExcel = async () => {
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet("Laporan Aktivitas Driver");
-
+  
     const formatThousand = (value: any) => {
       if (value === null || value === undefined) return "";
       return new Intl.NumberFormat("id-ID").format(value);
     };
-
+  
     // Format tanggal
     const formattedStartDate = new Date(startDate).toLocaleDateString("id-ID", {
-      day: "numeric",
-      month: "long",
-      year: "numeric",
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
     });
     const formattedEndDate = new Date(endDate).toLocaleDateString("id-ID", {
-      day: "numeric",
-      month: "long",
-      year: "numeric",
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
     });
-
+  
     // Merged header for title
     worksheet.mergeCells("A2:K2");
     worksheet.getCell("A2").value = `Laporan Aktivitas Driver`;
@@ -209,18 +207,16 @@ function LaporanDriver() {
       vertical: "middle",
       horizontal: "center",
     };
-
+  
     // Merged header for date range
     worksheet.mergeCells("A3:K3");
-    worksheet.getCell(
-      "A3"
-    ).value = `Periode: ${formattedStartDate} - ${formattedEndDate}`;
+    worksheet.getCell("A3").value = `Periode: ${formattedStartDate} - ${formattedEndDate}`;
     worksheet.getCell("A3").font = { bold: true, size: 12 };
     worksheet.getCell("A3").alignment = {
       vertical: "middle",
       horizontal: "center",
     };
-
+  
     // Main headers
     const headers = [
       "No",
@@ -235,21 +231,21 @@ function LaporanDriver() {
       "Luar Kota",
       "",
     ];
-
+  
     headers.forEach((header, index) => {
       const cell = worksheet.getCell(`${String.fromCharCode(65 + index)}4`);
       cell.value = header;
       cell.alignment = { vertical: "middle", horizontal: "center" };
       cell.font = { bold: true };
     });
-
+  
     // Merging cells for "Check In", "Check Out", and "Luar Kota"
     worksheet.mergeCells("F4:G4");
     worksheet.getCell("F4").value = "Check In";
-
+  
     worksheet.mergeCells("H4:I4");
     worksheet.getCell("H4").value = "Check Out";
-
+  
     worksheet.mergeCells("J4:K4");
     worksheet.getCell("J4").value = "Luar Kota";
 
@@ -262,7 +258,7 @@ function LaporanDriver() {
       "Pulang Pergi",
       "Menginap",
     ];
-
+  
     subHeaders.forEach((subHeader, index) => {
       worksheet.getCell(`${String.fromCharCode(70 + index)}5`).value =
         subHeader;
@@ -274,7 +270,7 @@ function LaporanDriver() {
         bold: true,
       };
     });
-
+  
     // Styling headers
     const headerCells = [
       "A4",
@@ -295,7 +291,7 @@ function LaporanDriver() {
       "J5",
       "K5",
     ];
-
+  
     headerCells.forEach((cell) => {
       const worksheetCell = worksheet.getCell(cell);
       worksheetCell.fill = {
@@ -315,7 +311,7 @@ function LaporanDriver() {
         right: { style: "thin" },
       };
     });
-
+  
     // Fill in data rows
     let rowIndex = 6; // Start after header rows
     if (Array.isArray(data)) {
@@ -330,10 +326,10 @@ function LaporanDriver() {
             const formattedSeconds = seconds ? seconds.padStart(2, "0") : "00";
             return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
           };
-
+  
           // Skip row if "Jam Masuk" is "-"
           if (timesheet.jam_masuk === "-") return;
-
+  
           const rowData = [
             index + 1, // No
             item.nama !== null && item.nama !== undefined ? item.nama : "", // Nama Driver
@@ -359,10 +355,10 @@ function LaporanDriver() {
               ? timesheet.lk_inap
               : "", // Menginap
           ];
-
+  
           // Add a new row with the data
           const row = worksheet.addRow(rowData);
-
+  
           // Apply alignment and borders to each cell in the row
           row.eachCell((cell, colNumber) => {
             cell.alignment = {
@@ -371,12 +367,7 @@ function LaporanDriver() {
                 colNumber === 2 || colNumber === 3 || colNumber === 4
                   ? "left"
                   : "center",
-              wrapText:
-                colNumber === 2 ||
-                colNumber === 3 ||
-                colNumber === 4 ||
-                colNumber === 10 ||
-                colNumber === 11,
+                wrapText: colNumber === 2 || colNumber === 3 || colNumber === 4 || colNumber === 10 || colNumber === 11,
             };
             cell.border = {
               top: { style: "thin" },
@@ -384,24 +375,25 @@ function LaporanDriver() {
               bottom: { style: "thin" },
               right: { style: "thin" },
             };
-
+  
             // Apply Rupiah format to "KM Masuk" (column G) and "KM Keluar" (column I)
             if (colNumber === 7 || colNumber === 9) {
               cell.numFmt = "Rp #,##0";
             }
           });
-
+          
+  
           rowIndex += 1; // Move to the next row
         });
       });
     }
-
+  
     // Set column widths
     const columnWidths = [5, 20, 20, 20, 12, 10, 10, 10, 10, 15, 15];
     columnWidths.forEach((width, index) => {
       worksheet.getColumn(index + 1).width = width;
     });
-
+  
     // Generate Excel file
     try {
       const buffer = await workbook.xlsx.writeBuffer();
@@ -420,78 +412,64 @@ function LaporanDriver() {
       if (value === null || value === undefined) return "";
       return new Intl.NumberFormat("id-ID").format(value);
     };
-
+  
     const workbook = new ExcelJS.Workbook();
-    const worksheet = workbook.addWorksheet("Laporan");
-
+    const worksheet = workbook.addWorksheet('Laporan');
+    
     // Menambahkan judul utama
-    worksheet.mergeCells("A1:H1");
-    worksheet.getCell("A1").value = "Laporan uang operasional driver";
-    worksheet.getCell("A1").alignment = {
-      vertical: "middle",
-      horizontal: "center",
-    };
-    worksheet.getCell("A1").font = { bold: true, size: 14 };
-
-
-
-  const formattedStartDate = moment
-  .tz(startDate, "Asia/Jakarta")
-  .subtract(1, 'day')
-  .format("YYYY-MM-DD");
-
-  const formattedEndDate = moment
-  .tz(startDate, "Asia/Jakarta")
-  .subtract(1, 'day')
-  .format("YYYY-MM-DD");
-
+    worksheet.mergeCells('A1:H1');
+    worksheet.getCell('A1').value = 'Laporan uang operasional driver';
+    worksheet.getCell('A1').alignment = { vertical: 'middle', horizontal: 'center' };
+    worksheet.getCell('A1').font = { bold: true, size: 14 };
+    
+    // Format tanggal yang konsisten: "DD/MM/YYYY"
+    const formattedStartDate = new Date(startDate).toLocaleDateString("id-ID", {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    });
+    const formattedEndDate = new Date(endDate).toLocaleDateString("id-ID", {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    });
+  
     // Menambahkan judul periode dengan format tanggal yang sama
-    worksheet.mergeCells("A2:H2");
-    worksheet.getCell(
-      "A2"
-    ).value = `Periode: ${formattedStartDate} - ${formattedEndDate}`; // Periode dengan format tanggal yang sama
-    worksheet.getCell("A2").alignment = {
-      vertical: "middle",
-      horizontal: "center",
-    };
+    worksheet.mergeCells('A2:H2');
+    worksheet.getCell("A2").value = `Periode: ${formattedStartDate} - ${formattedEndDate}` // Periode dengan format tanggal yang sama
+    worksheet.getCell('A2').alignment = { vertical: 'middle', horizontal: 'center' };
     worksheet.getCell("A2").font = { bold: true, size: 12 };
-
+  
     // Menambahkan header tabel
     const headers = [
-      "No",
-      "Nama Driver",
-      "Perusahaan",
-      "Tanggal",
-      "Kategory",
-      "Nilai",
-      "Keterangan",
+      'No', 'Nama Driver', 'Perusahaan', 'Tanggal', 'Kategory', 'Nilai', 'Keterangan'
     ];
-
+  
     headers.forEach((header, index) => {
       const cell = worksheet.getCell(`${String.fromCharCode(65 + index)}3`);
       cell.value = header;
       cell.alignment = { vertical: "middle", horizontal: "center" };
-      cell.font = { bold: true, color: { argb: "FFFFFF" } };
+      cell.font = { bold: true, color: { argb: 'FFFFFF' } };
       cell.fill = {
-        type: "pattern",
-        pattern: "solid",
-        fgColor: { argb: "4F81BD" },
+        type: 'pattern',
+        pattern: 'solid',
+        fgColor: { argb: '4F81BD' },
       };
       cell.border = {
-        top: { style: "medium", color: { argb: "808080" } },
-        left: { style: "medium", color: { argb: "808080" } },
-        bottom: { style: "medium", color: { argb: "808080" } },
-        right: { style: "medium", color: { argb: "808080" } },
+        top: { style: 'medium', color: { argb: '808080' } },
+        left: { style: 'medium', color: { argb: '808080' } },
+        bottom: { style: 'medium', color: { argb: '808080' } },
+        right: { style: 'medium', color: { argb: '808080' } },
       };
     });
-
+  
     // Data contoh yang akan diisi pada tabel
     dataexpanse.forEach((item, rowIndex) => {
       if (!item) {
         console.warn("Item is undefined or null", item);
         return; // Lewati jika item tidak valid
       }
-
+  
       const rowData = [
         rowIndex + 1, // No
         item.nama_driver, // Nama Driver
@@ -499,43 +477,39 @@ function LaporanDriver() {
         item.date_timestamp, // Tanggal
         item.expenses_type, // Kategory
         formatThousand(item.expenses_value), // Nilai
-        item.expenses_notes && item.expenses_notes !== "null"
-          ? item.expenses_notes
-          : "", // Keterangan
+        item.expenses_notes && item.expenses_notes !== "null" ? item.expenses_notes : "", // Keterangan
       ];
-
+  
       // Mengisi data dan memberikan style pada setiap baris data
       rowData.forEach((value, colIndex) => {
-        const cell = worksheet.getCell(
-          `${String.fromCharCode(65 + colIndex)}${rowIndex + 4}`
-        );
+        const cell = worksheet.getCell(`${String.fromCharCode(65 + colIndex)}${rowIndex + 4}`);
         cell.value = value;
-
+  
         // Atur alignment berdasarkan kolom: center untuk kolom "No", left untuk kolom lainnya
         cell.alignment = {
-          vertical: "middle",
-          horizontal: colIndex === 0 ? "center" : "left", // Kolom pertama (No) center, lainnya left
+          vertical: 'middle',
+          horizontal: colIndex === 0 ? 'center' : 'left', // Kolom pertama (No) center, lainnya left
           wrapText: colIndex === 1 || colIndex === 2 || colIndex === 6,
         };
-
+  
         cell.border = {
-          top: { style: "thin" },
-          left: { style: "thin" },
-          bottom: { style: "thin" },
-          right: { style: "thin" },
+          top: { style: 'thin' },
+          left: { style: 'thin' },
+          bottom: { style: 'thin' },
+          right: { style: 'thin' },
         };
       });
     });
-
+  
     // Mengatur lebar kolom agar isi tabel terlihat rapi
-    worksheet.getColumn(1).width = 5;
-    worksheet.getColumn(2).width = 20;
-    worksheet.getColumn(3).width = 20;
-    worksheet.getColumn(4).width = 12;
-    worksheet.getColumn(5).width = 12;
-    worksheet.getColumn(6).width = 10;
-    worksheet.getColumn(7).width = 10;
-
+    worksheet.getColumn(1).width = 5;  
+    worksheet.getColumn(2).width = 20; 
+    worksheet.getColumn(3).width = 20;  
+    worksheet.getColumn(4).width = 12; 
+    worksheet.getColumn(5).width = 12;  
+    worksheet.getColumn(6).width = 10;  
+    worksheet.getColumn(7).width = 10;  
+  
     // Menyimpan workbook ke file Excel
     try {
       const buffer = await workbook.xlsx.writeBuffer();
@@ -548,16 +522,10 @@ function LaporanDriver() {
       alert("Terjadi kesalahan saat mengunduh file Excel. Silakan coba lagi.");
     }
   };
+  
+  
 
-  const displayStartDate = moment
-  .tz(startDate, "Asia/Jakarta")
-  .subtract(1, 'day')
-  .format("YYYY-MM-DD");
-
-  const displayEndDate = moment
-  .tz(startDate, "Asia/Jakarta")
-  .subtract(1, 'day')
-  .format("YYYY-MM-DD");
+  
 
   return (
     <>
@@ -620,7 +588,7 @@ function LaporanDriver() {
                   className="form-control"
                   id="startDate"
                   style={{ width: "200px" }}
-                  value={displayStartDate}
+                  value={startDate}
                   onChange={handleStartDateChange}
                 />
               </div>
@@ -635,7 +603,7 @@ function LaporanDriver() {
                   className="form-control"
                   id="endDate"
                   style={{ width: "200px" }}
-                  value={displayEndDate}
+                  value={endDate}
                   onChange={handleEndDateChange}
                 />
               </div>
