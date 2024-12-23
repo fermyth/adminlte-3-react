@@ -816,7 +816,7 @@ const ContentHeader: React.FC = () => {
                                 key={driver.plat_nomor}
                               >
                                 <a
-                                  href={`/admin/customer/costumer-detail/detail-mobil/${driver.plat_nomor}`}
+                                  href={`/admin/customer/costumer-detail/detail-mobil/${val.nopol}`}
                                 >
                                   {val.nopol}
                                 </a>
