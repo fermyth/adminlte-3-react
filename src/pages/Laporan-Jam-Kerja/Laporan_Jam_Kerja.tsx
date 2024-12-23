@@ -102,12 +102,14 @@ const ContentHeader: React.FC = () => {
       );
       const data = response.data.data;
       setdatanopol(data.plat_nomor);
-      console.log("data", data);
+      console.log("datacekdataemp", data);
 
       setCompanyName(data.company_name);
 
       const { drivers, jam_masuk, jam_keluar, awh, company_names, plat_nomor } =
         data;
+
+      console.log("datacekdataempplat_nomor", drivers, plat_nomor);
 
       const formattedData = drivers.map((driver: any, index: number) => {
         return {
@@ -155,7 +157,7 @@ const ContentHeader: React.FC = () => {
       });
 
       setTableData(formattedData);
-      
+
       console.log("formattedData:", formattedData);
     } catch (error) {
       console.log("Error fetching data from API:", error);
@@ -536,13 +538,14 @@ const ContentHeader: React.FC = () => {
         } else {
           cell.alignment = { horizontal: "center" };
         }
-        if ((colNumber - 3) % 2 === 0 && cell.value) { // Kolom Jam Keluar
+        if ((colNumber - 3) % 2 === 0 && cell.value) {
+          // Kolom Jam Keluar
           const [hour, minute] = cell.value.split(":").map(Number);
           if (hour >= 23) {
             cell.fill = {
               type: "pattern",
               pattern: "solid",
-              fgColor: { argb: "FF8566" }, 
+              fgColor: { argb: "FF8566" },
             };
           }
         }
@@ -804,15 +807,25 @@ const ContentHeader: React.FC = () => {
                       <td className="align-middle sticky-column">
                         {driver.company_names}
                       </td>
-                      {idCompany !== "33" && (
-                        <td className="align-middle sticky-column">
-                          <a
-                            href={`/admin/customer/costumer-detail/detail-mobil/${driver.plat_nomor}`}
-                          >
-                            {driver.plat_nomor}
-                          </a>
-                        </td>
-                      )}
+                      {idCompany !== "33" &&
+                        datanopol?.map((val: any) => {
+                          if (val.full_name === driver.name) {
+                            return (
+                              <td
+                                className="align-middle sticky-column"
+                                key={driver.plat_nomor}
+                              >
+                                <a
+                                  href={`/admin/customer/costumer-detail/detail-mobil/${driver.plat_nomor}`}
+                                >
+                                  {val.nopol}
+                                </a>
+                              </td>
+                            );
+                          }
+                          return null; // Mengembalikan null jika kondisi tidak terpenuhi
+                        })}
+
                       {[
                         "monday",
                         "tuesday",
