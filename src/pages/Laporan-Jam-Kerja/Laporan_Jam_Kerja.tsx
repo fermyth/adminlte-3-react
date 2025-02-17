@@ -602,9 +602,11 @@ const ContentHeader: React.FC = () => {
     if (hours >= 60) {
       return "#ff8566";
     } else if (hours >= 58 && hours <= 60) {
-      return "yellow";
+      return "#fc90a9"; // merah
+    } else if (hours >= 50 && hours <= 58) {
+      return "#ffffb3"; // kuning
     } else if (hours >= 40 && hours <= 49) {
-      return "#ffffb3";
+      return "#ffffb3"; // kuning
     } else {
       return "#ffffff";
     }

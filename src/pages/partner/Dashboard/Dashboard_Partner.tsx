@@ -48,7 +48,7 @@ const DashboardPartner = () => {
             `${url}/perusahaan/${idCompany}`
           );
           const data = await response.json();
-          console.log("asasas", data);
+          console.log("asasassss", idCompany);
 
           setCompanies(data);
         } catch (error) {
