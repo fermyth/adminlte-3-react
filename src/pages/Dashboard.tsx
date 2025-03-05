@@ -195,9 +195,14 @@ const Dashboard = () => {
   }
 
   const addressLines = companyInfo?.company_address
-  .replace(/<\/?p>/g, '') // Menghapus tag <p> dan </p>
-  .split("\r\n") // Memisahkan berdasarkan baris baru
-  .filter((line) => line.trim() !== ""); // Menghapus baris kosong
+  .replace(/<\/?[^>]+(>|$)/g, '') // Menghapus semua tag HTML
+  .replace(/\s{2,}/g, ' ') // Menghapus spasi berlebih
+  .split(/\r\n|\n|\r/) // Memisahkan berdasarkan baris baru
+  .map(line => line.trim()) // Menghapus spasi di awal dan akhir setiap baris
+  .filter(line => line !== ""); // Menghapus baris kosong
+
+console.log(addressLines);
+
 
   const labels = invoiceData.map((invoice) => invoice.periode);
   const data = invoiceData.map(
