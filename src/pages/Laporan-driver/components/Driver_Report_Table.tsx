@@ -167,7 +167,7 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({
 
     try {
       const response = await ApiConfig.get(`pengeluaran/${userId}/${date}`);
-      console.log("cekdancek", response.data.data);
+      console.log("cekdancekdataklaim", response.data.data);
       setklaim(response.data.data);
       setloadingklaim(false);
       setShowLoadingModal(false); // Sembunyikan modal loading
@@ -692,7 +692,7 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({
                                                 height: "auto",
                                               }}
                                               onClick={() =>
-                                                handleImageClick(
+                                                handleImageClick( 
                                                   `${val.expenses_photo_cloud}`
                                                 )
                                               }
