@@ -12,7 +12,7 @@ import { saveAs } from "file-saver";
 import { date } from "yup";
 
 const eventEmitter = new EventEmitter();
-//const apiUrl = "http://localhost:5188/api/v1/laporan_driver";
+//const apiUrl = "http://localhost:5181/api/v1/laporan_driver";
 const apiUrl = "https://api_portal_staging.sigapdriver.com/api/v1/laporan_driver";
 
 interface Timesheet {
@@ -27,6 +27,8 @@ interface Timesheet {
   name_users: string;
   km_in_images: string | null;
   km_out_images: string | null;
+  km_in_images_cloud: string | null;
+  km_out_images_cloud: string | null;
   lat_km_in: string | null;
   long_km_in: string | null;
   lat_km_out: string | null;
@@ -48,7 +50,7 @@ interface DriverData {
   expenses_value:number;
   expenses_notes:string;
   date_timestamp:string;
-  expenses_poto:string;
+  expenses_poto_cloud:string;
   timesheet: { [key: string]: Timesheet };
 }
 
@@ -109,7 +111,7 @@ function LaporanDriver() {
         const response = await axios.get<ApiResponse>(url);
 
         // console.log("cekdatass", response.data.dataexpanse );
-        console.log("datas", response.data.data );
+        console.log("datas", response );
         console.log("datas2", response.data.dataexpanse );
         setData(response.data.data || []);
         setDataexpanse(response.data.dataexpanse || []);
@@ -474,8 +476,8 @@ function LaporanDriver() {
       }
       //console.log("aaaaa",Object.keys(item))
 
-      const photoUrl = item.expenses_poto 
-        ? `http://backend.sigapdriver.com/storage/${item.expenses_poto}` 
+      const photoUrl = item.expenses_poto_cloud 
+        ? `${item.expenses_poto_cloud}` 
         : null;
 
       const rowData = [

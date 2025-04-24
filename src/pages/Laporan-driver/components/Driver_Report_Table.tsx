@@ -45,6 +45,8 @@ interface Timesheet {
   name_users: string;
   km_in_images: string | null;
   km_out_images: string | null;
+  km_in_images_cloud: string | null;
+  km_out_images_cloud: string | null;
   lat_km_in: string | null;
   long_km_in: string | null;
   lat_km_out: string | null;
@@ -402,16 +404,16 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({
                         {timesheet.lk_inap}
                       </td>
                       <td className="text-center">
-                        {timesheet.km_in_images &&
-                        timesheet.km_in_images !== "-" ? (
+                        {timesheet.km_in_images_cloud &&
+                        timesheet.km_in_images_cloud !== "-" ? (
                           <img
-                            src={`https://backend.sigapdriver.com/storage/${timesheet.km_in_images}`}
+                            src={`${timesheet.km_in_images_cloud}`}
                             alt="Km In"
                             className="img-fluid"
                             style={{ width: "50px", height: "50px" }}
                             onClick={() =>
                               openModal(
-                                `https://backend.sigapdriver.com/storage/${timesheet.km_in_images}`
+                                `${timesheet.km_in_images_cloud}`
                               )
                             }
                           />
@@ -420,16 +422,16 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({
                         )}
                       </td>
                       <td className="text-center">
-                        {timesheet.km_out_images &&
-                        timesheet.km_out_images !== "-" ? (
+                        {timesheet.km_out_images_cloud &&
+                        timesheet.km_out_images_cloud !== "-" ? (
                           <img
-                            src={`https://backend.sigapdriver.com/storage/${timesheet.km_out_images}`}
+                            src={`${timesheet.km_out_images_cloud}`}
                             alt="Km Out"
                             className="img-fluid"
                             style={{ width: "50px", height: "50px" }}
                             onClick={() =>
                               openModal(
-                                `https://backend.sigapdriver.com/storage/${timesheet.km_out_images}`
+                                `${timesheet.km_out_images_cloud}`
                               )
                             }
                           />
@@ -683,7 +685,7 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({
                                           <td>{val.expenses_notes}</td>
                                           <td>
                                             <img
-                                              src={`http://backend.sigapdriver.com/storage/${val.expenses_photo}`}
+                                              src={`${val.expenses_photo_cloud}`}
                                               alt="Foto Pengeluaran"
                                               style={{
                                                 width: "100px",
@@ -691,7 +693,7 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({
                                               }}
                                               onClick={() =>
                                                 handleImageClick(
-                                                  `http://backend.sigapdriver.com/storage/${val.expenses_photo}`
+                                                  `${val.expenses_photo_cloud}`
                                                 )
                                               }
                                             />
