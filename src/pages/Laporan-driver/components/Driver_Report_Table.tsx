@@ -512,7 +512,6 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({
                                           const val = activity.find(
                                             (item) => item.city === city
                                           );
-                                          if (val.lat && val.long) {
                                             return (
                                               <tr key={city}>
                                                 <td>{city}</td>
@@ -532,8 +531,7 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({
                                                 </td>
                                               </tr>
                                             );
-                                          }
-                                          return null;
+                                          
                                         })
                                         .filter(Boolean)
                                     ) : (
