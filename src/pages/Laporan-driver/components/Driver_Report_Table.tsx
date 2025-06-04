@@ -100,15 +100,14 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({
     console.log("datadrivers2", data);
   }, []);
 
-  const handleLokasiClick = (lat: any, long: any) => {
-    if (lat && long) {
-      setSelectedLocation({ lat, long });
-      window.open(`maps/${lat}/${long}`, "_blank");
-      //setShow(true);
-    } else {
-      alert("Data lokasi tidak tersedia");
-    }
-  };
+const handleLokasiClick = (lat: any, long: any) => {
+  if (lat !== null && long !== null) {
+    setSelectedLocation({ lat, long });
+    window.open(`maps/${lat}/${long}`, "_blank");
+  } else {
+    alert("Data lokasi tidak tersedia");
+  }
+};
 
   const handleCloseModal = () => {
     setShow(false);
@@ -516,22 +515,18 @@ const DriverReportTable: React.FC<DriverReportTableProps> = ({
                                               <tr key={city}>
                                                 <td>{city}</td>
                                                 <td>{val.type}</td>
-                                                <td>
-                                                  <Button
-                                                    className="btn btn-dark btn-sm"
-                                                    onClick={() =>
-                                                      handleLokasiClick(
-                                                        val.lat,
-                                                        val.long
-                                                      )
-                                                    }
-                                                  >
-                                                    Lihat Lokasi
-                                                  </Button>
-                                                </td>
+                                              <td>
+  <Button
+    className="btn btn-dark btn-sm"
+    onClick={() => handleLokasiClick(val.lat, val.long)}
+  >
+    {val.lat !== null && val.long !== null ? "Lokasi" : "Lokasi Tidak Tersedia"}
+  </Button>
+</td>
                                               </tr>
                                             );
                                           
+                                          return null;
                                         })
                                         .filter(Boolean)
                                     ) : (
