@@ -811,24 +811,21 @@ const ContentHeader: React.FC = () => {
                       <td className="align-middle sticky-column">
                         {driver.company_names}
                       </td>
-                      {idCompany !== "33" &&
-                        datanopol?.map((val: any) => {
-                          if (val.full_name === driver.name) {
-                            return (
-                              <td
-                                className="align-middle sticky-column"
-                                key={driver.plat_nomor}
-                              >
-                                <a
-                                  href={`/admin/customer/costumer-detail/detail-mobil/${val.nopol}`}
-                                >
-                                  {val.nopol}
-                                </a>
-                              </td>
-                            );
-                          }
-                          return null; // Mengembalikan null jika kondisi tidak terpenuhi
-                        })}
+                    {idCompany !== "33" && (
+  <td className="align-middle sticky-column" key={driver.plat_nomor}>
+    {(() => {
+      const found = datanopol?.find((val: any) => val.full_name === driver.name);
+      return found ? (
+        <a href={`/admin/customer/costumer-detail/detail-mobil/${found.nopol}`}>
+          {found.nopol}
+        </a>
+      ) : (
+        "-"
+      );
+    })()}
+  </td>
+)}
+
 
                       {[
                         "monday",
