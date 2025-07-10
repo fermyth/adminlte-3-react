@@ -271,13 +271,13 @@ const Driver: React.FC = () => {
                 >
                   No
                 </th>
-                <th
+                {/* <th
                   scope="col"
                   className="text-center align-middle nowrap"
                   style={{ backgroundColor: "#009879", color: "white" }}
                 >
                   Foto
-                </th>
+                </th> */}
                 <th
                   scope="col"
                   className="text-center align-middle nowrap"
@@ -334,14 +334,14 @@ const Driver: React.FC = () => {
                     <th scope="row" className="text-center align-middle nowrap">
                       {item.no}
                     </th>
-                    <td className="text-center align-middle nowrap">
+                   {/* <td className="text-center align-middle nowrap">
                       <img
                         src={item.foto}
                         alt="Foto"
                         className="img-fluid"
                         style={{ width: "50px", height: "50px" }}
                       />
-                    </td>
+                    </td> */}
                     <td className="text-center align-middle nowrap">
                     <span
     onClick={() =>
