@@ -802,7 +802,7 @@ const ContentHeader: React.FC = () => {
               <tbody>
                 {tableData.length > 0 ? (
                   tableData
-                  .filter((driver: any) => driver.name !== "Daniel Martien Dwi Kusuma") // Filter nama yang tidak diinginkan
+                  .filter((driver: any) => driver.name !== "-") 
                   .map((driver: any, index) => (
                     <tr key={index}>
                       <td className="align-middle sticky-column">
