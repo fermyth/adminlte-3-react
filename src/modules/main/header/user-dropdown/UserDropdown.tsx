@@ -12,6 +12,7 @@ import { firebaseAuth } from "@app/firebase";
 import {} from "@app/index";
 import { useAppSelector } from "@app/store/store";
 import { DateTime } from "luxon";
+import { BsBoxArrowRight } from "react-icons/bs";
 
 const UserDropdown = () => {
   const navigate = useNavigate();
@@ -33,69 +34,92 @@ const UserDropdown = () => {
 
   return (
     <UserMenuDropdown isOpen={dropdownOpen} hideArrow>
-      <StyledSmallUserImage
-        slot="head"
-        src={currentUser?.photoURL}
-        fallbackSrc="https://portal.sigapdriver.com/icon_admin.png"
-        alt="User"
-        width={25}
-        height={25}
-        rounded
-      />
-      <div slot="body">
-        <UserHeader style={{ backgroundColor: "rgb(0, 152, 121)" }}>
-          <StyledBigUserImage
-            src={currentUser?.photoURL}
-            fallbackSrc="https://portal.sigapdriver.com/icon_admin.png"
-            alt="User"
-            width={90}
-            height={90}
-            rounded
-          />
-          <p style={{ color: "white" }}>
-            {currentUser?.email}
-            <small>
-              <span>Member since </span>
-              {currentUser?.metadata?.creationTime && (
-                <span>
-                  {DateTime.fromRFC2822(
-                    currentUser?.metadata?.creationTime
-                  ).toFormat("dd LLL yyyy")}
-                </span>
-              )}
-            </small>
-          </p>
-        </UserHeader>
-        {/* <UserBody>
-          <div className="row">
-            <div className="col-4 text-center">
-              <Link to="/">{t('header.user.followers')}</Link>
-            </div>
-            <div className="col-4 text-center">
-              <Link to="/">{t('header.user.sales')}</Link>
-            </div>
-            <div className="col-4 text-center">
-              <Link to="/">{t('header.user.friends')}</Link>
-            </div>
-          </div>
-        </UserBody> */}
-        <UserFooter>
-          {/* <button
-            type="button"
-            className="btn btn-default btn-flat"
-            onClick={navigateToProfile}
-          >
-            {t('header.user.profile')}
-          </button> */}
-          <button
-            type="button"
-            className="btn btn-default btn-flat float-right"
-            onClick={logOut}
-          >
-            {t("login.button.signOut")}
-          </button>
-        </UserFooter>
+  <div slot="head">
+  <div
+    title="Logout"
+    style={{
+      backgroundColor: "#000",
+      color: "#fff",
+      padding: "6px",
+      borderRadius: "50%",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      width: "36px",
+      height: "36px",
+      cursor: "pointer",
+      transition: "background 0.2s ease-in-out",
+    }}
+    onMouseEnter={(e) => {
+      e.currentTarget.style.backgroundColor = "#333";
+    }}
+    onMouseLeave={(e) => {
+      e.currentTarget.style.backgroundColor = "#000";
+    }}
+  >
+    <BsBoxArrowRight style={{ fontSize: "1.2rem" }} />
+  </div>
+</div>
+
+<div slot="body">
+  <UserHeader style={{ backgroundColor: "white", padding: "1rem", textAlign: "center" }}>
+    <div slot="head" style={{ marginBottom: "0.5rem", display: "flex", justifyContent: "flex-end" }}>
+      <div
+        title="Logout"
+        style={{
+          backgroundColor: "#000",
+          color: "#fff",
+          padding: "6px",
+          borderRadius: "50%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          width: "36px",
+          height: "36px",
+          cursor: "pointer",
+          transition: "background 0.2s ease-in-out",
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.backgroundColor = "#333";
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.backgroundColor = "#000";
+        }}
+        onClick={logOut}
+      >
+        <BsBoxArrowRight style={{ fontSize: "1.2rem" }} />
       </div>
+    </div>
+
+    <div style={{ color: "#222" }}>
+      <p style={{ margin: "0", fontWeight: 600 }}>{currentUser?.email}</p>
+      <small style={{ color: "#666", fontSize: "0.85rem" }}>
+        Member since{" "}
+        {currentUser?.metadata?.creationTime && (
+          <span>
+            {DateTime.fromRFC2822(currentUser.metadata.creationTime).toFormat("dd LLL yyyy")}
+          </span>
+        )}
+      </small>
+    </div>
+  </UserHeader>
+
+  <UserFooter style={{ padding: "0.75rem 1rem", backgroundColor: "#f9f9f9", textAlign: "right" }}>
+    <button
+      type="button"
+      className="btn btn-dark btn-sm"
+      onClick={logOut}
+      style={{
+        borderRadius: "5px",
+        padding: "6px 12px",
+        fontSize: "0.85rem",
+      }}
+    >
+      {t("login.button.signOut")}
+    </button>
+  </UserFooter>
+</div>
+
     </UserMenuDropdown>
   );
 };

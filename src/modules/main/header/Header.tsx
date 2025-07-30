@@ -31,7 +31,7 @@ const Header = () => {
 
   return (
     <>
-      <div className="fixed-top mb-4 pb-4">
+      <div className="fixed-top ">
         <nav
           className={getContainerClasses()}
           style={{ backgroundColor: "black" }}
@@ -46,7 +46,7 @@ const Header = () => {
                 <i className="fas fa-bars" style={{ color: "white" }} />
               </button>
             </li>
-            <li className="nav-item d-sm-inline-block mt-3">
+            <li className="nav-item d-sm-inline-block">
               <div className="">
                 <p
                   className=""
@@ -55,11 +55,11 @@ const Header = () => {
                     color: "white",
                     fontSize: "20px",
                   }}
-                ></p>
+                > </p>
               </div>
             </li>
           </ul>
-          <ul className="navbar-nav ml-auto">
+          <ul className="navbar-nav ml-auto ">
             <UserDropdown />
             {/* <li className="nav-item ">
           <button
