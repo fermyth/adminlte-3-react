@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Pagination } from "react-bootstrap";
+import { Pagination, Modal, Button } from "react-bootstrap";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import ApiConfig, { UrlServerRekruitmen } from "@app/libs/Api";
 import { Link, useNavigate } from "react-router-dom";
@@ -34,8 +34,26 @@ const DriverTimeSheets: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [idCompany, setIdCompany] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
+  
+  // Modal states
+  const [showModal, setShowModal] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<string>("");
+  const [modalTitle, setModalTitle] = useState<string>("");
 
   const url_backend = UrlServerRekruitmen();
+
+  // Modal handlers
+  const handleImageClick = (imageUrl: string, title: string) => {
+    setSelectedImage(imageUrl);
+    setModalTitle(title);
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setSelectedImage("");
+    setModalTitle("");
+  };
 
   useEffect(() => {
     console.log("open the use effect");
@@ -120,8 +138,6 @@ const DriverTimeSheets: React.FC = () => {
     fetchData();
   }, [currentPage]);
 
-
-  
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
   };
@@ -196,7 +212,35 @@ const DriverTimeSheets: React.FC = () => {
 
           .table-bordered th, .table-bordered td {
             vertical-align: middle;
-          } 
+          }
+          
+          .clickable-image {
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            border-radius: 5px;
+          }
+          
+          .clickable-image:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+          }
+          
+          .modal-image {
+            max-width: 100%;
+            max-height: 80vh;
+            object-fit: contain;
+            border-radius: 10px;
+          }
+          
+          .modal-header {
+            background-color: #009879;
+            color: white;
+            border-bottom: none;
+          }
+          
+          .modal-header .btn-close {
+            filter: brightness(0) invert(1);
+          }
         `}
       </style>
       
@@ -283,7 +327,6 @@ const DriverTimeSheets: React.FC = () => {
                 >
                   Status
                 </th>
-               
               </tr>
             </thead>
             <tbody>
@@ -320,40 +363,55 @@ const DriverTimeSheets: React.FC = () => {
                     <td className="align-middle ">{item.no_telp}</td>
                     <td className="align-middle ">{item.start_cutoff}</td>
                     <td className="align-middle ">{item.end_cutoff}</td>
-                    <td className="align-middle "> 
-                      {item.photo_timesheets1 !=null?(
-                      <img
-                        src={item.photo_timesheets1}
-                        alt="Foto"
-                        className="img-fluid"
-                        style={{ width: "50px", height: "50px" }}
-                      />
-                      ):(
+                    <td className="align-middle text-center"> 
+                      {item.photo_timesheets1 != null ? (
+                        <img
+                          src={item.photo_timesheets1}
+                          alt="Photo Timesheets 1"
+                          className="img-fluid clickable-image"
+                          style={{ width: "50px", height: "50px" }}
+                          onClick={() => handleImageClick(
+                            item.photo_timesheets1, 
+                            `Photo Timesheets 1 - ${item.Driver_Name}`
+                          )}
+                          title="Klik untuk memperbesar"
+                        />
+                      ) : (
                         <span>-</span>
                       )}
+                    </td>
+                    <td className="align-middle text-center">
+                      {item.photo_timesheets2 != '-' && item.photo_timesheets2 !== null ? (
+                        <img
+                          src={item.photo_timesheets2}
+                          alt="Photo Timesheets 2"
+                          className="img-fluid clickable-image"
+                          style={{ width: "50px", height: "50px" }}
+                          onClick={() => handleImageClick(
+                            item.photo_timesheets2, 
+                            `Photo Timesheets 2 - ${item.Driver_Name}`
+                          )}
+                          title="Klik untuk memperbesar"
+                        />
+                      ) : (
+                        <span>-</span>
+                      )}
+                    </td>
+                    {item.status == 1 ? (
+                      <td className="align-middle">
+                        <span className="badge bg-success">Sudah Upload</span>
                       </td>
-                    <td className="align-middle ">
-                    {item.photo_timesheets2 !='-' && item.photo_timesheets1 !==null ?(
-                      <img
-                        src={item.photo_timesheets2}
-                        alt="Foto"
-                        className="img-fluid"
-                        style={{ width: "50px", height: "50px" }}
-                      />
-                    ):(
-                      <span>-</span>
-                    )}
+                    ) : (
+                      <td className="align-middle">
+                        <span className="badge bg-danger">Belum Upload</span>
                       </td>
-                    {item.status == 1 ?(
-                      <td className="align-middle"><span className="alert-success">Sudah Upload</span></td>
-                    ):(
-                      <td className="align-middle "><span className="alert-danger">Belum Upload</span></td>
                     )}
                   </tr>
                 ))
               )}
             </tbody>
           </table>
+          
           {/* Pagination */}
           <div className="pagination">
             <Pagination>
@@ -379,6 +437,50 @@ const DriverTimeSheets: React.FC = () => {
             </Pagination>
           </div>
         </div>
+        
+        {/* Image Modal */}
+        <Modal 
+          show={showModal} 
+          onHide={handleCloseModal}
+          size="lg"
+          centered
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>{modalTitle}</Modal.Title>
+          </Modal.Header>
+          <Modal.Body className="text-center p-4">
+            {selectedImage && (
+              <img
+                src={selectedImage}
+                alt="Enlarged view"
+                className="modal-image"
+              />
+            )}
+          </Modal.Body>
+          <Modal.Footer>
+            <Button 
+              variant="secondary" 
+              onClick={handleCloseModal}
+              style={{ 
+                backgroundColor: "#6c757d", 
+                borderColor: "#6c757d" 
+              }}
+            >
+              Tutup
+            </Button>
+            <Button 
+              variant="primary" 
+              onClick={() => window.open(selectedImage, '_blank')}
+              style={{ 
+                backgroundColor: "#009879", 
+                borderColor: "#009879" 
+              }}
+            >
+              Buka di Tab Baru
+            </Button>
+          </Modal.Footer>
+        </Modal>
+        
         <Footer />
       </div>
     </>
