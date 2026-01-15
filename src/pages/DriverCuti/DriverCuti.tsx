@@ -35,7 +35,7 @@ const DriverCuti: React.FC = () => {
   const [idCompany, setIdCompany] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
 
-  const url_backend = UrlServerLaravel();
+  const url_backend = "https://api-invoice-mysql.sigapdriver.com/api/v1";
 
   useEffect(() => {
     console.log("open the use effect");

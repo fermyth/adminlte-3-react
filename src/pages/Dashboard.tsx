@@ -4,7 +4,9 @@ import MyChart from "./Cart";
 import { useAppSelector } from "@app/store/store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { EventEmitter } from "events";
-import ApiConfig from "@app/libs/Api";
+import ApiConfig from "@app/libs/ApiV3";
+import ApiConfig_v3 from "@app/libs/ApiV3";
+
 import Footer from "./Footer";
 import PayChart from "./PieChart";
 import PieChartCategory from "./PieChartCategory";

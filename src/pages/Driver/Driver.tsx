@@ -56,8 +56,7 @@ const Driver: React.FC = () => {
     const getDataDriver = async () => {
       setIsLoading(true);
       try {
-        const response = await ApiConfig.get(`drivers/${idCompany}`);
-
+        const response = await ApiConfig.get(`drivers_company/${idCompany}`);
         console.log("response.data.data:", response.data);
 
         if (response) {
